@@ -11,6 +11,7 @@ members = [
 
 [workspace.dependencies]
 pest = "2.7.11"
+pest_derive = "2.7.11"
 
 [dependencies]
 vnsl_compiler = { path = "crates/vnsl_compiler" }

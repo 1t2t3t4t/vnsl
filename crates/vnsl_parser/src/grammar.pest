@@ -23,7 +23,7 @@ command = { dialogue | action }
 identifier = @{ (ASCII_ALPHA | NUMBER)+ }
 stmt = { command }
 
-scene = { "scene" }
+scene = { "scene" ~ " "+ ~ #scene_name = identifier }
 
 indentation = _{ "\t" | " "{4} }
 block = {
@@ -32,7 +32,9 @@ block = {
     DROP
 }
 label_scope = {
-	"'" ~ identifier ~ ":"
+	"'" ~ identifier ~ ":" ~ block
 }
 
-script = { SOI ~ stmt+ ~ label_scope* ~ EOI }
+main_statement = { stmt+ }
+labels = { label_scope* }
+script = { SOI ~ scene ~ main_statement ~ labels ~ EOI }
