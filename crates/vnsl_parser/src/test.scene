@@ -1,0 +1,19 @@
+scene TestScene
+
+"test"
+"this is it"
+
+"Multiline
+test
+tset"
+
+[action]
+
+[action "abc" "DeF"]
+[action 1 10 .23 0.123]
+[action true  false]
+
+
+'testScope:
+    [doSomething]
+    "Yoooo"
