@@ -2,32 +2,37 @@ WHITESPACE = _{ NEWLINE }
 COMMENT = _{ "#" ~ (!"\n" ~ ANY)* }
 
 // Data Types
-string = ${ "\"" ~ inner ~ "\"" }
-inner = @{ char* }
 char = {
     !("\"" | "\\") ~ ANY
     | "\\" ~ ("\"" | "\\" | "/" | "b" | "f" | "n" | "r" | "t")
     | "\\" ~ ("u" ~ ASCII_HEX_DIGIT{4})
 }
+inner = @{ char* }
+string = { "\"" ~ inner ~ "\"" }
+number = @{ (NUMBER | ".")+ }
+bool = @{ "true" | "false" }
 
 // Commands
 dialogue = { string }
-action_arg = { string }
-action = { "[" ~ identifier ~ (" " ~ action_arg)* ~ "]" }
+action_arg = { string | number | bool }
+action = ${ "[" ~ identifier ~ (" "+ ~ action_arg)* ~ "]" }
+
+command = { dialogue | action }
 
 // Core
 identifier = @{ (ASCII_ALPHA | NUMBER)+ }
-stmt = { dialogue | action }
+stmt = { command }
 
-indentation = _{ "\t" | "    " }
+scene = { "scene" }
+
+indentation = _{ "\t" | " "{4} }
 block = {
 	PEEK_ALL ~ PUSH(indentation) ~ stmt ~
     (PEEK_ALL ~ stmt)* ~
     DROP
 }
-
 label_scope = {
-	"'" ~ identifier ~ ":" ~ block
+	"'" ~ identifier ~ ":"
 }
 
-script = { SOI ~ stmt* ~ label_scope* ~ EOI }
+script = { SOI ~ stmt+ ~ label_scope* ~ EOI }
