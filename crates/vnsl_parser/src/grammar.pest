@@ -1,0 +1,18 @@
+WHITESPACE = _{ NEWLINE }
+COMMENT = _{ "#" ~ (!"\n" ~ ANY)* }
+
+ident = @{ (ASCII_ALPHA | NUMBER)+ }
+stmt = { ASCII_ALPHA+ ~ ";" }
+
+indentation = { "\t" | "    " }
+block = {
+	PEEK_ALL ~ PUSH(indentation) ~ stmt ~
+    (PEEK_ALL ~ stmt)* ~
+    DROP
+}
+
+label_scope = {
+	"'" ~ ident ~ ":" ~ block
+}
+
+script = { SOI ~ stmt* ~ label_scope* ~ EOI }
