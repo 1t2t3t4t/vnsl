@@ -1,0 +1,15 @@
+[package]
+name = "vnsl"
+version = "0.1.0"
+edition = "2021"
+
+[workspace]
+members = [
+    "crates/vnsl_parser"
+]
+
+[workspace.dependencies]
+pest = "2.7.11"
+
+[dependencies]
+vnsl_parser = { path = "crates/vnsl_parser" }
