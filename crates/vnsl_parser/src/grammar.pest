@@ -1,10 +1,25 @@
 WHITESPACE = _{ NEWLINE }
 COMMENT = _{ "#" ~ (!"\n" ~ ANY)* }
 
-ident = @{ (ASCII_ALPHA | NUMBER)+ }
-stmt = { ASCII_ALPHA+ ~ ";" }
+// Data Types
+string = ${ "\"" ~ inner ~ "\"" }
+inner = @{ char* }
+char = {
+    !("\"" | "\\") ~ ANY
+    | "\\" ~ ("\"" | "\\" | "/" | "b" | "f" | "n" | "r" | "t")
+    | "\\" ~ ("u" ~ ASCII_HEX_DIGIT{4})
+}
 
-indentation = { "\t" | "    " }
+// Commands
+dialogue = { string }
+action_arg = { string }
+action = { "[" ~ identifier ~ (" " ~ action_arg)* ~ "]" }
+
+// Core
+identifier = @{ (ASCII_ALPHA | NUMBER)+ }
+stmt = { dialogue | action }
+
+indentation = _{ "\t" | "    " }
 block = {
 	PEEK_ALL ~ PUSH(indentation) ~ stmt ~
     (PEEK_ALL ~ stmt)* ~
@@ -12,7 +27,7 @@ block = {
 }
 
 label_scope = {
-	"'" ~ ident ~ ":" ~ block
+	"'" ~ identifier ~ ":" ~ block
 }
 
 script = { SOI ~ stmt* ~ label_scope* ~ EOI }
