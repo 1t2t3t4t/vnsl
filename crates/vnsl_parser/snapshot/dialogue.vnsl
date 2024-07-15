@@ -1,0 +1,13 @@
+scene TestDialogue
+
+"test"
+"this is it"
+
+"Multiline
+    test
+        tset"
+label testScope:
+    "single line text"
+    "Yoooo
+    this is it
+    This is what I'have been waiting for for a long time"

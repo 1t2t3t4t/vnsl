@@ -1,0 +1,9 @@
+scene ActionTest
+
+[actionParamless]
+
+[actionAllParamType "Str Param" 1 0.5 100 true false]
+[actionNamedParam str: "Str Please" num: 123.232 bool: true]
+
+label scope:
+    [actionInScope 123]

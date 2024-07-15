@@ -60,11 +60,24 @@ mod tests {
     use std::fs;
 
     #[test]
-    fn test_parsing() {
-        snapshot("spec");
+    fn test_parsing_snapshot() {
+        let dir = fs::read_dir("./snapshot").unwrap();
+        let mut results = vec![];
+        for entry in dir {
+            let os_name = entry.unwrap().file_name();
+            let file_name = os_name.to_str().unwrap();
+            if file_name.ends_with(".vnsl") {
+                let spec_name = file_name.trim_end_matches(".vnsl");
+                results.push(snapshot(spec_name));
+            }
+        }
+
+        assert!(results.iter().all(|b| b == &true))
     }
 
-    fn snapshot(name: &str) {
+    fn snapshot(name: &str) -> bool {
+        println!("Testing {name}");
+
         let script = fs::read_to_string(format!("./snapshot/{}.vnsl", name)).unwrap();
         let result = super::parse(&script).unwrap();
         
@@ -74,9 +87,11 @@ mod tests {
         if fs::metadata(&expect_path).is_ok() {
             let expect = fs::read_to_string(expect_path).unwrap();
             assert_eq!(expect, scn_str);
+            true
         } else {
             fs::write(expect_path, scn_str).unwrap();
-            assert!(false, "Recording snapshot for {}", name);
+            println!("Recording snapshot for {}", name);
+            false
         }
     }
 }

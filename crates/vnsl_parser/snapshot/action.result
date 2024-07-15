@@ -1,25 +1,10 @@
 VnslScene {
-    name: "TestScene",
+    name: "ActionTest",
     main_statements: [
-        Command(
-            Dialogue {
-                text: "test",
-            },
-        ),
-        Command(
-            Dialogue {
-                text: "this is it",
-            },
-        ),
-        Command(
-            Dialogue {
-                text: "Multiline\ntest\ntset",
-            },
-        ),
         Command(
             Action(
                 VnslAction {
-                    name: "action",
+                    name: "actionParamless",
                     args: [],
                 },
             ),
@@ -27,29 +12,14 @@ VnslScene {
         Command(
             Action(
                 VnslAction {
-                    name: "action",
+                    name: "actionAllParamType",
                     args: [
                         VnslActionArg {
                             name: None,
                             data_type: String(
-                                "abc",
+                                "Str Param",
                             ),
                         },
-                        VnslActionArg {
-                            name: None,
-                            data_type: String(
-                                "DeF",
-                            ),
-                        },
-                    ],
-                },
-            ),
-        ),
-        Command(
-            Action(
-                VnslAction {
-                    name: "action",
-                    args: [
                         VnslActionArg {
                             name: None,
                             data_type: Number(
@@ -59,30 +29,15 @@ VnslScene {
                         VnslActionArg {
                             name: None,
                             data_type: Number(
-                                10.0,
+                                0.5,
                             ),
                         },
                         VnslActionArg {
                             name: None,
                             data_type: Number(
-                                0.23,
+                                100.0,
                             ),
                         },
-                        VnslActionArg {
-                            name: None,
-                            data_type: Number(
-                                0.123,
-                            ),
-                        },
-                    ],
-                },
-            ),
-        ),
-        Command(
-            Action(
-                VnslAction {
-                    name: "action",
-                    args: [
                         VnslActionArg {
                             name: None,
                             data_type: Bool(
@@ -102,14 +57,30 @@ VnslScene {
         Command(
             Action(
                 VnslAction {
-                    name: "action",
+                    name: "actionNamedParam",
                     args: [
                         VnslActionArg {
                             name: Some(
-                                "namedArg",
+                                "str",
                             ),
                             data_type: String(
-                                "test",
+                                "Str Please",
+                            ),
+                        },
+                        VnslActionArg {
+                            name: Some(
+                                "num",
+                            ),
+                            data_type: Number(
+                                123.232,
+                            ),
+                        },
+                        VnslActionArg {
+                            name: Some(
+                                "bool",
+                            ),
+                            data_type: Bool(
+                                true,
                             ),
                         },
                     ],
@@ -119,21 +90,23 @@ VnslScene {
     ],
     labels: [
         VnslLabel {
-            name: "testScope",
+            name: "scope",
             block: VnslBlock {
                 statements: [
                     Command(
                         Action(
                             VnslAction {
-                                name: "doSomething",
-                                args: [],
+                                name: "actionInScope",
+                                args: [
+                                    VnslActionArg {
+                                        name: None,
+                                        data_type: Number(
+                                            123.0,
+                                        ),
+                                    },
+                                ],
                             },
                         ),
-                    ),
-                    Command(
-                        Dialogue {
-                            text: "Yoooo\nthis is it\nThis is what I'have been waiting for for a long time",
-                        },
                     ),
                 ],
             },

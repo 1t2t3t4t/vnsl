@@ -1,0 +1,39 @@
+VnslScene {
+    name: "TestDialogue",
+    main_statements: [
+        Command(
+            Dialogue {
+                text: "test",
+            },
+        ),
+        Command(
+            Dialogue {
+                text: "this is it",
+            },
+        ),
+        Command(
+            Dialogue {
+                text: "Multiline\n    test\n        tset",
+            },
+        ),
+    ],
+    labels: [
+        VnslLabel {
+            name: "testScope",
+            block: VnslBlock {
+                statements: [
+                    Command(
+                        Dialogue {
+                            text: "single line text",
+                        },
+                    ),
+                    Command(
+                        Dialogue {
+                            text: "Yoooo\nthis is it\nThis is what I'have been waiting for for a long time",
+                        },
+                    ),
+                ],
+            },
+        },
+    ],
+}
