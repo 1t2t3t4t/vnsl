@@ -20,3 +20,5 @@ tset"
     [doSomething]
     "Yoooo
     this is it"
+    'subScope:
+        "This is sub scope"

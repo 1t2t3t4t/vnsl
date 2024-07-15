@@ -24,5 +24,8 @@ pub fn parse_data_type(rule: Pair<Rule>) -> anyhow::Result<VnslDataType> {
 }
 
 pub fn parse_string(rule: Pair<Rule>) -> String {
-    rule.into_inner().next().unwrap().as_str().to_string()
+    rule.into_inner()
+        .map(|r| r.as_str().to_string())
+        .collect::<Vec<String>>()
+        .join("\n")
 }

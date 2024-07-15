@@ -9,13 +9,15 @@ tset"
 
 [action]
 
-[actionStr "abc" "DeF"]
-[actionNum 1 10 .23 0.123]
-[actionBool true  false]
+[action "abc" "DeF"]
+[action 1 10 .23 0.123]
+[action true  false]
 
-[actionName namedArg: "test" 123 boolArg: true]
+[action namedArg: "test"]
 
 
 'testScope:
     [doSomething]
-    "Yoooo"
+    "Yoooo
+    this is it
+    This is what I'have been waiting for for a long time"

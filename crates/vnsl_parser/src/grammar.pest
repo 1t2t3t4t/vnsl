@@ -7,12 +7,13 @@ spacer = _{ " "+ }
 
 // Data Types
 char = {
-    !("\"" | "\\") ~ ANY
-    | "\\" ~ ("\"" | "\\" | "/" | "b" | "f" | "n" | "r" | "t")
+    !("\"" | "\\" | NEWLINE) ~ ANY
+    | "\\" ~ ("\"" | "\\" | "/" | "b" | "f" | "t")
     | "\\" ~ ("u" ~ ASCII_HEX_DIGIT{4})
 }
-inner = @{ char* }
-string = { "\"" ~ inner ~ "\"" }
+line = @{ char* }
+lines = _{ line ~ (NEWLINE ~ PEEK_ALL ~ line)* }
+string = ${ "\"" ~ lines ~ "\"" }
 number = { (NUMBER | ".")+ }
 bool = { "true" | "false" }
 data_type = { string | number | bool }
