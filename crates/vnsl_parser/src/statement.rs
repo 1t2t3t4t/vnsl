@@ -1,8 +1,6 @@
 use pest::iterators::Pair;
 
-use crate::{
-    command, model::{VnslCommand, VnslStatement}, Rule
-};
+use crate::{command, model::VnslStatement, Rule};
 
 pub fn parse_statements(rule: Pair<Rule>) -> Vec<VnslStatement> {
     let inner = rule.into_inner();
@@ -24,9 +22,7 @@ pub fn parse_statement(rule: Pair<Rule>) -> VnslStatement {
     assert_eq!(inner.len(), 1);
     let rule = inner.next().unwrap();
     match rule.as_rule() {
-        Rule::command => {
-            VnslStatement::Command(command::parse_command(rule))
-        },
+        Rule::command => VnslStatement::Command(command::parse_command(rule)),
         _ => unreachable!(),
     }
 }

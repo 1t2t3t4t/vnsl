@@ -20,7 +20,7 @@ pub enum VnslStatement {
 pub enum VnslCommand {
     Dialogue { text: String },
     Action { identifier: String },
-    None
+    None,
 }
 
 impl VnslScene {

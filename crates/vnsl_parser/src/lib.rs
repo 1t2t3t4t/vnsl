@@ -37,9 +37,7 @@ pub fn parse(script: &str) -> anyhow::Result<()> {
                 let statements = statement::parse_statements(rule);
                 scene.main_statements = statements;
             }
-            Rule::labels => {
-
-            }
+            Rule::labels => {}
             Rule::EOI => (),
             _ => unreachable!("Got unexpected rule {:?} in main loop", rule.as_rule()),
         }
