@@ -16,9 +16,8 @@ tset"
 [action namedArg: "test"]
 
 
-'testScope:
+label testScope:
     [doSomething]
     "Yoooo
-    this is it"
-    'subScope:
-        "This is sub scope"
+    this is it
+    This is what I'have been waiting for for a long time"

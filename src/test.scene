@@ -16,7 +16,7 @@ tset"
 [action namedArg: "test"]
 
 
-'testScope:
+label testScope:
     [doSomething]
     "Yoooo
     this is it

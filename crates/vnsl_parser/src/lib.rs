@@ -57,9 +57,16 @@ fn parse_scene_name(rule: Pair<Rule>) -> String {
 
 #[cfg(test)]
 mod tests {
+    use std::fs;
+
+
     #[test]
     fn test_parsing() {
-        let example = include_str!("test.scene");
-        super::parse(example).unwrap();
+        let example = include_str!("../snapshot/spec.vnsl");
+        let result = super::parse(example).unwrap();
+        let scn_str = format!("{:#?}", result);
+        
+        let expect = fs::read_to_string("./snapshot/spec.result").unwrap();
+        assert_eq!(expect, scn_str);
     }
 }

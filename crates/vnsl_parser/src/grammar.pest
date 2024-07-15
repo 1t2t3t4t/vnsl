@@ -39,7 +39,7 @@ block = {
     DROP
 }
 label_scope = _{
-	"'" ~ identifier ~ ":" ~ block
+	"label" ~ spacer ~ identifier ~ ":" ~ block
 }
 
 main_statement = { stmt* }

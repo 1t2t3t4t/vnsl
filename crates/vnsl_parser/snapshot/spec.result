@@ -1,0 +1,142 @@
+VnslScene {
+    name: "TestScene",
+    main_statements: [
+        Command(
+            Dialogue {
+                text: "test",
+            },
+        ),
+        Command(
+            Dialogue {
+                text: "this is it",
+            },
+        ),
+        Command(
+            Dialogue {
+                text: "Multiline\ntest\ntset",
+            },
+        ),
+        Command(
+            Action(
+                VnslAction {
+                    name: "action",
+                    args: [],
+                },
+            ),
+        ),
+        Command(
+            Action(
+                VnslAction {
+                    name: "action",
+                    args: [
+                        VnslActionArg {
+                            name: None,
+                            data_type: String(
+                                "abc",
+                            ),
+                        },
+                        VnslActionArg {
+                            name: None,
+                            data_type: String(
+                                "DeF",
+                            ),
+                        },
+                    ],
+                },
+            ),
+        ),
+        Command(
+            Action(
+                VnslAction {
+                    name: "action",
+                    args: [
+                        VnslActionArg {
+                            name: None,
+                            data_type: Number(
+                                1.0,
+                            ),
+                        },
+                        VnslActionArg {
+                            name: None,
+                            data_type: Number(
+                                10.0,
+                            ),
+                        },
+                        VnslActionArg {
+                            name: None,
+                            data_type: Number(
+                                0.23,
+                            ),
+                        },
+                        VnslActionArg {
+                            name: None,
+                            data_type: Number(
+                                0.123,
+                            ),
+                        },
+                    ],
+                },
+            ),
+        ),
+        Command(
+            Action(
+                VnslAction {
+                    name: "action",
+                    args: [
+                        VnslActionArg {
+                            name: None,
+                            data_type: Bool(
+                                true,
+                            ),
+                        },
+                        VnslActionArg {
+                            name: None,
+                            data_type: Bool(
+                                false,
+                            ),
+                        },
+                    ],
+                },
+            ),
+        ),
+        Command(
+            Action(
+                VnslAction {
+                    name: "action",
+                    args: [
+                        VnslActionArg {
+                            name: Some(
+                                "namedArg",
+                            ),
+                            data_type: String(
+                                "test",
+                            ),
+                        },
+                    ],
+                },
+            ),
+        ),
+    ],
+    labels: [
+        VnslLabel {
+            name: "testScope",
+            block: VnslBlock {
+                statements: [
+                    Command(
+                        Action(
+                            VnslAction {
+                                name: "doSomething",
+                                args: [],
+                            },
+                        ),
+                    ),
+                    Command(
+                        Dialogue {
+                            text: "Yoooo\nthis is it\nThis is what I'have been waiting for for a long time",
+                        },
+                    ),
+                ],
+            },
+        },
+    ],
+}
