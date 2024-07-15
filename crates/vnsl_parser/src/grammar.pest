@@ -1,6 +1,8 @@
 WHITESPACE = _{ NEWLINE }
 COMMENT = _{ "#" ~ (!"\n" ~ ANY)* }
 
+spacer = _{ " "+ }
+
 // Data Types
 char = {
     !("\"" | "\\") ~ ANY
@@ -9,13 +11,14 @@ char = {
 }
 inner = @{ char* }
 string = { "\"" ~ inner ~ "\"" }
-number = @{ (NUMBER | ".")+ }
-bool = @{ "true" | "false" }
+number = { (NUMBER | ".")+ }
+bool = { "true" | "false" }
+data_type = { string | number | bool }
 
 // Commands
 dialogue = { string }
-action_arg = { string | number | bool }
-action = ${ "[" ~ identifier ~ (" "+ ~ action_arg)* ~ "]" }
+action_arg = { (identifier ~ ":" ~ spacer)? ~ data_type }
+action = { "[" ~ identifier ~ (spacer ~ action_arg)* ~ "]" }
 
 command = { dialogue | action }
 
@@ -23,7 +26,7 @@ command = { dialogue | action }
 identifier = @{ (ASCII_ALPHA | NUMBER)+ }
 stmt = { command }
 
-scene = { "scene" ~ " "+ ~ #scene_name = identifier }
+scene = { "scene" ~ spacer ~ #scene_name = identifier }
 
 indentation = _{ "\t" | " "{4} }
 block = {
