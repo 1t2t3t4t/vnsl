@@ -30,16 +30,16 @@ pub fn parse(script: &str) -> anyhow::Result<()> {
             Rule::scene => {
                 let scene_name = parse_scene_name(rule);
                 scene.name = scene_name;
-            },
+            }
             Rule::main_statement => {
                 let statements = statement::parse_statements(rule);
                 scene.main_statements = statements;
-            },
+            }
             Rule::labels => {
-
-            },
+                println!("{}", rule.as_str())
+            }
             Rule::EOI => (),
-            _ => unreachable!("Got unexpected rule {:?} in main loop", rule.as_rule())
+            _ => unreachable!("Got unexpected rule {:?} in main loop", rule.as_rule()),
         }
     }
 
@@ -48,11 +48,7 @@ pub fn parse(script: &str) -> anyhow::Result<()> {
 }
 
 fn parse_scene_name(rule: Pair<Rule>) -> String {
-    rule.into_inner()
-        .next()
-        .unwrap()
-        .as_str()
-        .to_string()
+    rule.into_inner().next().unwrap().as_str().to_string()
 }
 
 #[cfg(test)]
