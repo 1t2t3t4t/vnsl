@@ -12,6 +12,11 @@ members = [
 [workspace.dependencies]
 pest = "2.7.11"
 pest_derive = "2.7.11"
+anyhow = "1.0.86"
+thiserror = "1.0.62"
+
+vnsl_compiler = { path = "crates/vnsl_compiler" }
+vnsl_parser = { path = "crates/vnsl_parser" }
 
 [dependencies]
-vnsl_compiler = { path = "crates/vnsl_compiler" }
+vnsl_compiler.workspace = true

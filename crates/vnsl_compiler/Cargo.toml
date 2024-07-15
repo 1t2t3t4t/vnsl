@@ -4,4 +4,4 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-vnsl_parser = { path = "../vnsl_parser" }
+vnsl_parser.workspace = true
