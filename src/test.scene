@@ -9,11 +9,11 @@ tset"
 
 [action]
 
-[action "abc" "DeF"]
-[action 1 10 .23 0.123]
-[action true  false]
+[actionStr "abc" "DeF"]
+[actionNum 1 10 .23 0.123]
+[actionBool true  false]
 
-[action namedArg: "test"]
+[actionName namedArg: "test" 123 boolArg: true]
 
 
 'testScope:

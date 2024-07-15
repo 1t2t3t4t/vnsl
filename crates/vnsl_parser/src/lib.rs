@@ -22,7 +22,7 @@ pub enum ParseError {
     EmptyRule,
 }
 
-pub fn parse(script: &str) -> anyhow::Result<()> {
+pub fn parse(script: &str) -> anyhow::Result<VnslScene> {
     let scene = VnslParser::parse(Rule::script, script)?
         .next()
         .ok_or(ParseError::EmptyRule)?;
@@ -36,11 +36,11 @@ pub fn parse(script: &str) -> anyhow::Result<()> {
                 scene.name = scene_name;
             }
             Rule::main_statement => {
-                let statements = statement::parse_statements(rule);
+                let statements = statement::parse_statements(rule)?;
                 scene.main_statements = statements;
             }
             Rule::labels => {
-                let label = label::parse_label(rule);
+                let label = label::parse_label(rule)?;
                 scene.labels.push(label);
             }
             Rule::EOI => (),
@@ -48,8 +48,7 @@ pub fn parse(script: &str) -> anyhow::Result<()> {
         }
     }
 
-    println!("{:#?}", scene);
-    Ok(())
+    Ok(scene)
 }
 
 fn parse_scene_name(rule: Pair<Rule>) -> String {
