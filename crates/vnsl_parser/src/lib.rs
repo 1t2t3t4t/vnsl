@@ -59,14 +59,24 @@ fn parse_scene_name(rule: Pair<Rule>) -> String {
 mod tests {
     use std::fs;
 
-
     #[test]
     fn test_parsing() {
-        let example = include_str!("../snapshot/spec.vnsl");
-        let result = super::parse(example).unwrap();
+        snapshot("spec");
+    }
+
+    fn snapshot(name: &str) {
+        let script = fs::read_to_string(format!("./snapshot/{}.vnsl", name)).unwrap();
+        let result = super::parse(&script).unwrap();
+        
         let scn_str = format!("{:#?}", result);
         
-        let expect = fs::read_to_string("./snapshot/spec.result").unwrap();
-        assert_eq!(expect, scn_str);
+        let expect_path = format!("./snapshot/{}.result", name);
+        if fs::metadata(&expect_path).is_ok() {
+            let expect = fs::read_to_string(expect_path).unwrap();
+            assert_eq!(expect, scn_str);
+        } else {
+            fs::write(expect_path, scn_str).unwrap();
+            assert!(false, "Recording snapshot for {}", name);
+        }
     }
 }
