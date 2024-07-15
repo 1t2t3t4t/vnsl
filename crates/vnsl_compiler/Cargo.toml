@@ -5,3 +5,4 @@ edition = "2021"
 
 [dependencies]
 vnsl_parser.workspace = true
+anyhow.workspace = true
