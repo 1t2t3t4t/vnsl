@@ -18,4 +18,5 @@ tset"
 
 'testScope:
     [doSomething]
-    "Yoooo"
+    "Yoooo
+    this is it"

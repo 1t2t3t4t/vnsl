@@ -1,3 +1,5 @@
+script = { SOI ~ scene ~ main_statement ~ labels ~ EOI }
+
 WHITESPACE = _{ NEWLINE }
 COMMENT = _{ "#" ~ (!"\n" ~ ANY)* }
 
@@ -35,10 +37,9 @@ block = {
     (PEEK_ALL ~ stmt)* ~
     DROP
 }
-label_scope = {
+label_scope = _{
 	"'" ~ identifier ~ ":" ~ block
 }
 
-main_statement = { stmt+ }
+main_statement = { stmt* }
 labels = { label_scope* }
-script = { SOI ~ scene ~ main_statement ~ labels ~ EOI }

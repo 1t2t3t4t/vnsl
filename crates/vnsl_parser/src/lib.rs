@@ -6,8 +6,10 @@ use thiserror::Error;
 
 pub mod model;
 
+mod block;
 mod command;
 mod data_type;
+mod label;
 mod statement;
 
 #[derive(Parser)]
@@ -37,7 +39,10 @@ pub fn parse(script: &str) -> anyhow::Result<()> {
                 let statements = statement::parse_statements(rule);
                 scene.main_statements = statements;
             }
-            Rule::labels => {}
+            Rule::labels => {
+                let label = label::parse_label(rule);
+                scene.labels.push(label);
+            }
             Rule::EOI => (),
             _ => unreachable!("Got unexpected rule {:?} in main loop", rule.as_rule()),
         }
