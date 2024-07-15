@@ -17,8 +17,9 @@ data_type = { string | number | bool }
 
 // Commands
 dialogue = { string }
-action_arg = { (identifier ~ ":" ~ spacer)? ~ data_type }
-action = { "[" ~ identifier ~ (spacer ~ action_arg)* ~ "]" }
+action_arg = _{ (identifier ~ ":" ~ spacer)? ~ data_type }
+args = { (spacer ~ action_arg)* }
+action = { "[" ~ identifier ~ args ~ "]" }
 
 command = { dialogue | action }
 
