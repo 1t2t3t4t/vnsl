@@ -20,3 +20,4 @@ vnsl_parser = { path = "crates/vnsl_parser" }
 
 [dependencies]
 vnsl_compiler.workspace = true
+anyhow.workspace = true
