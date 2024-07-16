@@ -7,6 +7,15 @@ scene TestScene
 test
 tset"
 
+choices:
+    "Choice A":
+        "Hey!!! Stop right there scumm"
+        [PUNCH]
+        "This is not a joke
+        Go back to your mama!!!"
+    "Choice B":
+        "I love you..."
+
 [action]
 
 [action "abc" "DeF"]

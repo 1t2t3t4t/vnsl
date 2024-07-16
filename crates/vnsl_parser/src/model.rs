@@ -19,6 +19,7 @@ pub struct VnslBlock {
 #[derive(Debug, Clone, PartialEq)]
 pub enum VnslStatement {
     Command(VnslCommand),
+    Choices(VnslChoices),
 }
 
 #[derive(Debug, Clone, PartialEq, Default)]
@@ -38,6 +39,17 @@ pub enum VnslCommand {
     Dialogue { text: String },
     Action(VnslAction),
     None,
+}
+
+#[derive(Debug, Clone, PartialEq, Default)]
+pub struct VnslChoices {
+    pub choices: Vec<VnslChoice>,
+}
+
+#[derive(Debug, Clone, PartialEq, Default)]
+pub struct VnslChoice {
+    pub text: String,
+    pub block: VnslBlock,
 }
 
 #[derive(Debug, Clone, PartialEq)]

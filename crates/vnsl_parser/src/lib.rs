@@ -1,6 +1,7 @@
 pub mod model;
 
 mod block;
+mod choices;
 mod command;
 mod data_type;
 mod label;

@@ -1,7 +1,7 @@
 use anyhow::Ok;
 use pest::iterators::Pair;
 
-use crate::{command, model::VnslStatement, Rule};
+use crate::{choices, command, model::VnslStatement, Rule};
 
 pub fn parse_statements(rule: Pair<Rule>) -> anyhow::Result<Vec<VnslStatement>> {
     let inner = rule.into_inner();
@@ -24,6 +24,7 @@ pub fn parse_statement(rule: Pair<Rule>) -> anyhow::Result<VnslStatement> {
     let rule = inner.next().unwrap();
     match rule.as_rule() {
         Rule::command => Ok(VnslStatement::Command(command::parse_command(rule)?)),
+        Rule::choices => Ok(VnslStatement::Choices(choices::parse_choices(rule)?)),
         _ => unreachable!(),
     }
 }
