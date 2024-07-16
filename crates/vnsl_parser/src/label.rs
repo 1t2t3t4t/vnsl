@@ -10,11 +10,11 @@ pub fn parse_label(rule: Pair<Rule>) -> anyhow::Result<VnslLabel> {
         match rule.as_rule() {
             Rule::identifier => {
                 label.name = rule.as_str().to_string();
-            },
+            }
             Rule::block => {
                 label.block = block::parse_block(rule)?;
-            },
-            _ => unreachable!()
+            }
+            _ => unreachable!(),
         }
     }
     Ok(label)

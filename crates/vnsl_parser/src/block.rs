@@ -11,8 +11,8 @@ pub fn parse_block(rule: Pair<Rule>) -> anyhow::Result<VnslBlock> {
             Rule::stmt => {
                 let statement = statement::parse_statement(rule)?;
                 block.statements.push(statement);
-            },
-            _ => unreachable!()
+            }
+            _ => unreachable!(),
         }
     }
     Ok(block)

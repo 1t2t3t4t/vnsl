@@ -39,20 +39,22 @@ mod action {
     use anyhow::Ok;
     use pest::iterators::Pair;
 
-    use crate::{data_type, model::{VnslAction, VnslActionArg, VnslCommand, VnslDataType}, Rule};
+    use crate::{
+        data_type,
+        model::{VnslAction, VnslActionArg, VnslCommand, VnslDataType},
+        Rule,
+    };
 
     pub fn parse_action(rule: Pair<Rule>) -> anyhow::Result<VnslCommand> {
         let inner = rule.into_inner();
         let mut action = VnslAction::default();
         for rule in inner {
             match rule.as_rule() {
-                Rule::identifier => {
-                    action.name = rule.as_str().to_string()
-                },
+                Rule::identifier => action.name = rule.as_str().to_string(),
                 Rule::args => {
                     action.args = parse_action_args(rule)?;
-                },
-                _ => unreachable!()
+                }
+                _ => unreachable!(),
             }
         }
         Ok(VnslCommand::Action(action))
@@ -76,14 +78,17 @@ mod action {
             match a_rule.as_rule() {
                 Rule::identifier => {
                     name = Some(a_rule.as_str().to_string());
-                },
+                }
                 Rule::data_type => {
                     arg_data_type = data_type::parse_data_type(a_rule)?;
-                },
-                _ => unreachable!("Unexpected rules {:?} in arg", a_rule.as_rule())
+                }
+                _ => unreachable!("Unexpected rules {:?} in arg", a_rule.as_rule()),
             }
         }
 
-        Ok(VnslActionArg { name, data_type: arg_data_type })
+        Ok(VnslActionArg {
+            name,
+            data_type: arg_data_type,
+        })
     }
 }

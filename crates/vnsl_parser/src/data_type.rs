@@ -8,18 +8,16 @@ pub fn parse_data_type(rule: Pair<Rule>) -> anyhow::Result<VnslDataType> {
     assert_eq!(inner.len(), 1);
     let inner = inner.next().unwrap();
     match inner.as_rule() {
-        Rule::string => {
-            Ok(VnslDataType::String(parse_string(inner)))
-        },
+        Rule::string => Ok(VnslDataType::String(parse_string(inner))),
         Rule::number => {
             let num = inner.as_str().parse::<f64>()?;
             Ok(VnslDataType::Number(num))
-        },
+        }
         Rule::bool => {
             let bool_val = inner.as_str() == "true";
             Ok(VnslDataType::Bool(bool_val))
         }
-        _ => unreachable!()
+        _ => unreachable!(),
     }
 }
 

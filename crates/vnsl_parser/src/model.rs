@@ -24,13 +24,13 @@ pub enum VnslStatement {
 #[derive(Debug, Clone, PartialEq, Default)]
 pub struct VnslAction {
     pub name: String,
-    pub args: Vec<VnslActionArg>
+    pub args: Vec<VnslActionArg>,
 }
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct VnslActionArg {
     pub name: Option<String>,
-    pub data_type: VnslDataType
+    pub data_type: VnslDataType,
 }
 
 #[derive(Debug, Clone, PartialEq)]
@@ -44,7 +44,7 @@ pub enum VnslCommand {
 pub enum VnslDataType {
     String(String),
     Number(f64),
-    Bool(bool)
+    Bool(bool),
 }
 
 impl VnslScene {
