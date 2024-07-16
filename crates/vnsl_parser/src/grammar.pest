@@ -1,46 +1,57 @@
 script = { SOI ~ scene ~ main_statement ~ labels ~ EOI }
 
 WHITESPACE = _{ NEWLINE }
-COMMENT = _{ "#" ~ (!"\n" ~ ANY)* }
+COMMENT    = _{ "#" ~ (!"\n" ~ ANY)* }
 
 spacer = _{ " "+ }
 
 // Data Types
-char = {
+char      =  {
     !("\"" | "\\" | NEWLINE) ~ ANY
-    | "\\" ~ ("\"" | "\\" | "/" | "b" | "f" | "t")
-    | "\\" ~ ("u" ~ ASCII_HEX_DIGIT{4})
+  | "\\" ~ ("\"" | "\\" | "/" | "b" | "f" | "t")
+  | "\\" ~ ("u" ~ ASCII_HEX_DIGIT{4})
 }
-line = @{ char* }
-lines = _{ line ~ (NEWLINE ~ PEEK_ALL ~ line)* }
-string = ${ "\"" ~ lines ~ "\"" }
-number = { (NUMBER | ".")+ }
-bool = { "true" | "false" }
-data_type = { string | number | bool }
+line      = @{ char* }
+lines     = _{ line ~ (NEWLINE ~ PEEK_ALL ~ line)* }
+string    = ${ "\"" ~ lines ~ "\"" }
+number    =  { (NUMBER | ".")+ }
+bool      =  { "true" | "false" }
+data_type =  { string | number | bool }
 
 // Commands
-dialogue = { string }
+dialogue   = { string }
 action_arg = { (identifier ~ ":" ~ spacer)? ~ data_type }
-args = { (spacer ~ action_arg)* }
-action = { "[" ~ identifier ~ args ~ "]" }
+args       = { (spacer ~ action_arg)* }
+action     = { "[" ~ identifier ~ args ~ "]" }
+command    = { dialogue | action }
 
-command = { dialogue | action }
+choice        =  {
+    string ~ block
+}
+choices_block = _{
+    ":" ~ PEEK_ALL ~ PUSH(indentation) ~ choice
+    ~ (PEEK_ALL ~ choice)*
+    ~ DROP
+}
+choices       =  {
+    "choices" ~ choices_block
+}
 
 // Core
 identifier = @{ (ASCII_ALPHA | NUMBER)+ }
-stmt = { command }
+stmt       =  { command | choices }
 
 scene = { "scene" ~ spacer ~ #scene_name = identifier }
 
 indentation = _{ "\t" | " "{4} }
-block = {
-	PEEK_ALL ~ PUSH(indentation) ~ stmt ~
-    (PEEK_ALL ~ stmt)* ~
-    DROP
+block       =  {
+    ":" ~ PEEK_ALL ~ PUSH(indentation) ~ stmt
+    ~ (PEEK_ALL ~ stmt)*
+    ~ DROP
 }
-label_scope = _{
-	"label" ~ spacer ~ identifier ~ ":" ~ block
+label_scope =  _{
+    "label" ~ spacer ~ identifier ~ block
 }
 
 main_statement = { stmt* }
-labels = { label_scope* }
+labels         = { label_scope* }

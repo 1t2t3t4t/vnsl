@@ -14,7 +14,7 @@ pub fn parse_label(rule: Pair<Rule>) -> anyhow::Result<VnslLabel> {
             Rule::block => {
                 label.block = block::parse_block(rule)?;
             }
-            _ => unreachable!(),
+            _ => unreachable!("Unexpected rule {:?} found for label", rule.as_rule()),
         }
     }
     Ok(label)
