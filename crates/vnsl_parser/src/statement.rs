@@ -1,7 +1,10 @@
 use anyhow::Ok;
 use pest::iterators::Pair;
 
-use crate::{choices, command, model::VnslStatement, Rule};
+pub mod choices;
+pub mod command;
+
+use crate::{model::VnslStatement, Rule};
 
 pub fn parse_statements(rule: Pair<Rule>) -> anyhow::Result<Vec<VnslStatement>> {
     let inner = rule.into_inner();
