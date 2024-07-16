@@ -9,11 +9,11 @@ character [CharacterName]
 [ACTION: Action descriptions in square brackets]
 
 ## Special Commands:
-choice: Start a choice block
-if/elif/else: Check conditions and control flow
-set: Set a variable
-jump: Jump to another scene or label
-'label_name: Define a label (anchor point within a scene)
+# choice: Start a choice block
+# if/elif/else: Check conditions and control flow
+# set: Set a variable
+# jump: Jump to another scene or label
+# label label_name: Define a label (anchor point within a scene)
 
 ## Example Script:
 
@@ -24,7 +24,7 @@ scene Investigation
 character DETECTIVE
 "Let's see what we have here..."
 
-'evidence_search:
+label evidence_search:
     choice:
         "Check the window":
             character DETECTIVE
@@ -45,7 +45,7 @@ character DETECTIVE
         "I should take another look around."
         jump evidence_search
 
-'question_witness:
+label question_witness:
     character WITNESS
     "I saw something strange last night."
 
@@ -73,7 +73,7 @@ character DETECTIVE
 character DETECTIVE
 "I think I'm starting to piece this together."
 
-'case_summary:
+label case_summary:
     if clues >= 3 and (car_clue or victim_behavior == "nervous"):
         character DETECTIVE
         "Here's what we know so far..."
@@ -83,12 +83,3 @@ character DETECTIVE
         character DETECTIVE
         "Something's still missing. I should review the evidence."
         jump evidence_search
-
-scene Conclusion
-
-[ACTION: The detective presents findings to the chief]
-
-character DETECTIVE
-"Chief, I've solved the case."
-
-[ACTION: Fade to black]

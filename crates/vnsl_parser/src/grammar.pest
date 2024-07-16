@@ -32,7 +32,7 @@ choices_block = _{
     ":" ~ PEEK_ALL ~ PUSH(indentation) ~ choice ~ (PEEK_ALL ~ choice)* ~ DROP
 }
 choices       =  {
-    "choices" ~ choices_block
+    "choice" ~ choices_block
 }
 
 // Core

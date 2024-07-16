@@ -1,6 +1,6 @@
 scene ChoicesTest
 
-choices:
+choice:
     "choice A":
         "aaaa"
         [action 123]
@@ -9,7 +9,7 @@ choices:
         bbbbb
         bbbbb"
     "choice D":
-        choices:
+        choice:
             "sub choice":
                 "single
                 choice
@@ -18,10 +18,10 @@ choices:
 
 
 label testScope:
-    choices:
+    choice:
         "sub A":
             "test text"
         "sub B":
-            choices:
+            choice:
                 "sub sub A":
                     jump someLabel
