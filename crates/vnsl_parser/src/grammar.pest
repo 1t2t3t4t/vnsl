@@ -2,8 +2,7 @@ script = { SOI ~ scene ~ main_statement ~ labels ~ EOI }
 
 WHITESPACE = _{ NEWLINE }
 COMMENT    = _{ "#" ~ (!"\n" ~ ANY)* }
-
-spacer = _{ " "* }
+spacer     = _{ " "* }
 
 // Data Types
 char      =  {
@@ -29,7 +28,9 @@ choice        =  {
     string ~ block
 }
 choices_block = _{
-    ":" ~ PEEK_ALL ~ PUSH(indentation) ~ choice ~ (PEEK_ALL ~ choice)* ~ DROP
+    ":" ~ PEEK_ALL ~ PUSH(indentation) ~ choice
+    ~ (PEEK_ALL ~ choice)*
+    ~ DROP
 }
 choices       =  {
     "choices" ~ choices_block
@@ -43,9 +44,11 @@ scene = { "scene" ~ spacer ~ identifier }
 
 indentation = _{ "\t" | " "{4} }
 block       =  {
-    ":" ~ PEEK_ALL ~ PUSH(indentation) ~ stmt ~ (PEEK_ALL ~ stmt)* ~ DROP
+    ":" ~ PEEK_ALL ~ PUSH(indentation) ~ stmt
+    ~ (PEEK_ALL ~ stmt)*
+    ~ DROP
 }
-label_scope =  {
+label_scope = _{
     "label" ~ spacer ~ identifier ~ block
 }
 
