@@ -1,0 +1,13 @@
+scene JumpTest
+
+jump abc
+
+choices:
+    "a":
+        jump c
+
+label abc:
+    jump d
+
+label d:
+    jump abc

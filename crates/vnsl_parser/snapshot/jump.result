@@ -1,0 +1,42 @@
+VnslScene {
+    name: "JumpTest",
+    main_statements: [
+        Command(
+            Jump {
+                to_label: "abc",
+            },
+        ),
+        Choices(
+            VnslChoices {
+                choices: [
+                    VnslChoice {
+                        text: "a",
+                        block: VnslBlock {
+                            statements: [
+                                Command(
+                                    Jump {
+                                        to_label: "c",
+                                    },
+                                ),
+                            ],
+                        },
+                    },
+                ],
+            },
+        ),
+    ],
+    labels: [
+        VnslLabel {
+            name: "d",
+            block: VnslBlock {
+                statements: [
+                    Command(
+                        Jump {
+                            to_label: "abc",
+                        },
+                    ),
+                ],
+            },
+        },
+    ],
+}

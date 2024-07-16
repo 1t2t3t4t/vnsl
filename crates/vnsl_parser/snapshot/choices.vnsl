@@ -1,0 +1,27 @@
+scene ChoicesTest
+
+choices:
+    "choice A":
+        "aaaa"
+        [action 123]
+    "choice B":
+        "bbbb
+        bbbbb
+        bbbbb"
+    "choice D":
+        choices:
+            "sub choice":
+                "single
+                choice
+                is
+                enough"
+
+
+label testScope:
+    choices:
+        "sub A":
+            "test text"
+        "sub B":
+            choices:
+                "sub sub A":
+                    jump someLabel

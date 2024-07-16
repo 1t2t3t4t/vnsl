@@ -1,0 +1,127 @@
+VnslScene {
+    name: "ChoicesTest",
+    main_statements: [
+        Choices(
+            VnslChoices {
+                choices: [
+                    VnslChoice {
+                        text: "choice A",
+                        block: VnslBlock {
+                            statements: [
+                                Command(
+                                    Dialogue {
+                                        text: "aaaa",
+                                    },
+                                ),
+                                Command(
+                                    Action(
+                                        VnslAction {
+                                            name: "action",
+                                            args: [
+                                                VnslActionArg {
+                                                    name: None,
+                                                    data_type: Number(
+                                                        123.0,
+                                                    ),
+                                                },
+                                            ],
+                                        },
+                                    ),
+                                ),
+                            ],
+                        },
+                    },
+                    VnslChoice {
+                        text: "choice B",
+                        block: VnslBlock {
+                            statements: [
+                                Command(
+                                    Dialogue {
+                                        text: "bbbb\nbbbbb\nbbbbb",
+                                    },
+                                ),
+                            ],
+                        },
+                    },
+                    VnslChoice {
+                        text: "choice D",
+                        block: VnslBlock {
+                            statements: [
+                                Choices(
+                                    VnslChoices {
+                                        choices: [
+                                            VnslChoice {
+                                                text: "sub choice",
+                                                block: VnslBlock {
+                                                    statements: [
+                                                        Command(
+                                                            Dialogue {
+                                                                text: "single\nchoice\nis\nenough",
+                                                            },
+                                                        ),
+                                                    ],
+                                                },
+                                            },
+                                        ],
+                                    },
+                                ),
+                            ],
+                        },
+                    },
+                ],
+            },
+        ),
+    ],
+    labels: [
+        VnslLabel {
+            name: "testScope",
+            block: VnslBlock {
+                statements: [
+                    Choices(
+                        VnslChoices {
+                            choices: [
+                                VnslChoice {
+                                    text: "sub A",
+                                    block: VnslBlock {
+                                        statements: [
+                                            Command(
+                                                Dialogue {
+                                                    text: "test text",
+                                                },
+                                            ),
+                                        ],
+                                    },
+                                },
+                                VnslChoice {
+                                    text: "sub B",
+                                    block: VnslBlock {
+                                        statements: [
+                                            Choices(
+                                                VnslChoices {
+                                                    choices: [
+                                                        VnslChoice {
+                                                            text: "sub sub A",
+                                                            block: VnslBlock {
+                                                                statements: [
+                                                                    Command(
+                                                                        Jump {
+                                                                            to_label: "someLabel",
+                                                                        },
+                                                                    ),
+                                                                ],
+                                                            },
+                                                        },
+                                                    ],
+                                                },
+                                            ),
+                                        ],
+                                    },
+                                },
+                            ],
+                        },
+                    ),
+                ],
+            },
+        },
+    ],
+}
