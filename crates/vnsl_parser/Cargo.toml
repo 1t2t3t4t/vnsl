@@ -8,3 +8,6 @@ pest.workspace = true
 pest_derive.workspace = true
 anyhow.workspace = true
 thiserror.workspace = true
+
+[dev-dependencies]
+pretty_assertions.workspace = true

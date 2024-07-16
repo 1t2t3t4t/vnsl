@@ -17,6 +17,7 @@ struct VnslParser;
 
 #[cfg(test)]
 mod tests {
+    use pretty_assertions::assert_str_eq;
     use std::fs;
 
     #[test]
@@ -46,7 +47,7 @@ mod tests {
         let expect_path = format!("./snapshot/{}.result", name);
         if fs::metadata(&expect_path).is_ok() {
             let expect = fs::read_to_string(expect_path).unwrap();
-            assert_eq!(expect, scn_str);
+            assert_str_eq!(expect, scn_str);
             true
         } else {
             fs::write(expect_path, scn_str).unwrap();
