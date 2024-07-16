@@ -38,7 +38,7 @@ pub struct VnslActionArg {
 pub enum VnslCommand {
     Dialogue { text: String },
     Action(VnslAction),
-    None,
+    Jump { to_label: String },
 }
 
 #[derive(Debug, Clone, PartialEq, Default)]

@@ -22,15 +22,14 @@ dialogue   = { string }
 action_arg = { (identifier ~ ":" ~ spacer)? ~ data_type }
 args       = { (spacer ~ action_arg)* }
 action     = { "[" ~ identifier ~ args ~ "]" }
-command    = { dialogue | action }
+jump       = { "jump" ~ spacer ~ identifier }
+command    = { dialogue | action | jump }
 
 choice        =  {
     string ~ block
 }
 choices_block = _{
-    ":" ~ PEEK_ALL ~ PUSH(indentation) ~ choice
-    ~ (PEEK_ALL ~ choice)*
-    ~ DROP
+    ":" ~ PEEK_ALL ~ PUSH(indentation) ~ choice ~ (PEEK_ALL ~ choice)* ~ DROP
 }
 choices       =  {
     "choices" ~ choices_block
@@ -44,9 +43,7 @@ scene = { "scene" ~ spacer ~ identifier }
 
 indentation = _{ "\t" | " "{4} }
 block       =  {
-    ":" ~ PEEK_ALL ~ PUSH(indentation) ~ stmt
-    ~ (PEEK_ALL ~ stmt)*
-    ~ DROP
+    ":" ~ PEEK_ALL ~ PUSH(indentation) ~ stmt ~ (PEEK_ALL ~ stmt)* ~ DROP
 }
 label_scope = _{
     "label" ~ spacer ~ identifier ~ block

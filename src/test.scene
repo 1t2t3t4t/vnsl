@@ -24,6 +24,7 @@ choices:
 
 [action namedArg: "test"]
 
+jump testScope123
 
 label testScope:
     [doSomething]
