@@ -9,9 +9,11 @@ VnslScene {
                         block: VnslBlock {
                             statements: [
                                 Command(
-                                    Dialogue {
-                                        text: "aaaa",
-                                    },
+                                    Dialogue(
+                                        VnslDialogue {
+                                            text: "aaaa",
+                                        },
+                                    ),
                                 ),
                                 Command(
                                     Action(
@@ -36,9 +38,11 @@ VnslScene {
                         block: VnslBlock {
                             statements: [
                                 Command(
-                                    Dialogue {
-                                        text: "bbbb\nbbbbb\nbbbbb",
-                                    },
+                                    Dialogue(
+                                        VnslDialogue {
+                                            text: "bbbb\nbbbbb\nbbbbb",
+                                        },
+                                    ),
                                 ),
                             ],
                         },
@@ -55,9 +59,11 @@ VnslScene {
                                                 block: VnslBlock {
                                                     statements: [
                                                         Command(
-                                                            Dialogue {
-                                                                text: "single\nchoice\nis\nenough",
-                                                            },
+                                                            Dialogue(
+                                                                VnslDialogue {
+                                                                    text: "single\nchoice\nis\nenough",
+                                                                },
+                                                            ),
                                                         ),
                                                     ],
                                                 },
@@ -85,9 +91,11 @@ VnslScene {
                                     block: VnslBlock {
                                         statements: [
                                             Command(
-                                                Dialogue {
-                                                    text: "test text",
-                                                },
+                                                Dialogue(
+                                                    VnslDialogue {
+                                                        text: "test text",
+                                                    },
+                                                ),
                                             ),
                                         ],
                                     },
@@ -104,9 +112,11 @@ VnslScene {
                                                             block: VnslBlock {
                                                                 statements: [
                                                                     Command(
-                                                                        Jump {
-                                                                            to_label: "someLabel",
-                                                                        },
+                                                                        Jump(
+                                                                            VnslJump {
+                                                                                to_label: "someLabel",
+                                                                            },
+                                                                        ),
                                                                     ),
                                                                 ],
                                                             },

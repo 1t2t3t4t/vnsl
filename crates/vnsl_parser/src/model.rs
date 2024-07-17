@@ -22,6 +22,23 @@ pub enum VnslStatement {
     Choices(VnslChoices),
 }
 
+#[derive(Debug, Clone, PartialEq)]
+pub enum VnslCommand {
+    Dialogue(VnslDialogue),
+    Action(VnslAction),
+    Jump(VnslJump),
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct VnslDialogue {
+    pub text: String,
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct VnslJump {
+    pub to_label: String,
+}
+
 #[derive(Debug, Clone, PartialEq, Default)]
 pub struct VnslAction {
     pub name: String,
@@ -32,13 +49,6 @@ pub struct VnslAction {
 pub struct VnslActionArg {
     pub name: Option<String>,
     pub data_type: VnslDataType,
-}
-
-#[derive(Debug, Clone, PartialEq)]
-pub enum VnslCommand {
-    Dialogue { text: String },
-    Action(VnslAction),
-    Jump { to_label: String },
 }
 
 #[derive(Debug, Clone, PartialEq, Default)]

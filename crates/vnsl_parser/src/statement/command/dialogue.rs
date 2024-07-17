@@ -1,6 +1,10 @@
 use pest::iterators::Pair;
 
-use crate::{data_type, model::VnslCommand, Rule};
+use crate::{
+    data_type,
+    model::{VnslCommand, VnslDialogue},
+    Rule,
+};
 
 pub fn parse_dialogue(rule: Pair<Rule>) -> VnslCommand {
     let mut inner = rule.into_inner();
@@ -9,7 +13,7 @@ pub fn parse_dialogue(rule: Pair<Rule>) -> VnslCommand {
     match rule.as_rule() {
         Rule::string => {
             let text = data_type::parse_string(rule);
-            VnslCommand::Dialogue { text }
+            VnslCommand::Dialogue(VnslDialogue { text })
         }
         _ => unreachable!(),
     }

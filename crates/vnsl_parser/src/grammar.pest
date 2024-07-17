@@ -18,12 +18,13 @@ bool      =  { "true" | "false" }
 data_type =  { string | number | bool }
 
 // Commands
+command    = { dialogue | action | var | jump }
 dialogue   = { string }
-action_arg = { (identifier ~ ":" ~ spacer)? ~ data_type }
-args       = { (spacer ~ action_arg)* }
 action     = { "[" ~ identifier ~ args ~ "]" }
+args       = { (spacer ~ action_arg)* }
+action_arg = { (identifier ~ ":" ~ spacer)? ~ data_type }
 jump       = { "jump" ~ spacer ~ identifier }
-command    = { dialogue | action | jump }
+var        = { "var" ~ spacer ~ identifier ~ spacer ~ data_type }
 
 choice        =  {
     string ~ block

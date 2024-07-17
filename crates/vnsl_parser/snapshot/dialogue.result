@@ -2,19 +2,25 @@ VnslScene {
     name: "TestDialogue",
     main_statements: [
         Command(
-            Dialogue {
-                text: "test",
-            },
+            Dialogue(
+                VnslDialogue {
+                    text: "test",
+                },
+            ),
         ),
         Command(
-            Dialogue {
-                text: "this is it",
-            },
+            Dialogue(
+                VnslDialogue {
+                    text: "this is it",
+                },
+            ),
         ),
         Command(
-            Dialogue {
-                text: "Multiline\n    test\n        tset",
-            },
+            Dialogue(
+                VnslDialogue {
+                    text: "Multiline\n    test\n        tset",
+                },
+            ),
         ),
     ],
     labels: [
@@ -23,14 +29,18 @@ VnslScene {
             block: VnslBlock {
                 statements: [
                     Command(
-                        Dialogue {
-                            text: "single line text",
-                        },
+                        Dialogue(
+                            VnslDialogue {
+                                text: "single line text",
+                            },
+                        ),
                     ),
                     Command(
-                        Dialogue {
-                            text: "Yoooo\nthis is it\nThis is what I'have been waiting for for a long time",
-                        },
+                        Dialogue(
+                            VnslDialogue {
+                                text: "Yoooo\nthis is it\nThis is what I'have been waiting for for a long time",
+                            },
+                        ),
                     ),
                 ],
             },

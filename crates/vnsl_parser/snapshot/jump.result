@@ -2,9 +2,11 @@ VnslScene {
     name: "JumpTest",
     main_statements: [
         Command(
-            Jump {
-                to_label: "abc",
-            },
+            Jump(
+                VnslJump {
+                    to_label: "abc",
+                },
+            ),
         ),
         Choices(
             VnslChoices {
@@ -14,9 +16,11 @@ VnslScene {
                         block: VnslBlock {
                             statements: [
                                 Command(
-                                    Jump {
-                                        to_label: "c",
-                                    },
+                                    Jump(
+                                        VnslJump {
+                                            to_label: "c",
+                                        },
+                                    ),
                                 ),
                             ],
                         },
@@ -31,9 +35,11 @@ VnslScene {
             block: VnslBlock {
                 statements: [
                     Command(
-                        Jump {
-                            to_label: "abc",
-                        },
+                        Jump(
+                            VnslJump {
+                                to_label: "abc",
+                            },
+                        ),
                     ),
                 ],
             },

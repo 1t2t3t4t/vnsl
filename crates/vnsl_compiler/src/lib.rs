@@ -1,7 +1,6 @@
 use anyhow::Ok;
 
 pub fn compile(script: impl Into<String>) -> anyhow::Result<()> {
-    let scene = vnsl_parser::parse(&script.into())?;
-    println!("{:#?}", scene);
+    let _ = vnsl_parser::parse(&script.into()).expect("Success");
     Ok(())
 }
