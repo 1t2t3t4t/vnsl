@@ -16,6 +16,11 @@ choice:
                 is
                 enough"
 
+choice:
+    "this is
+    Multiple line
+    choice":
+        "it works"
 
 label testScope:
     choice:

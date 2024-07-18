@@ -77,6 +77,24 @@ VnslScene {
                 ],
             },
         ),
+        Choices(
+            VnslChoices {
+                choices: [
+                    VnslChoice {
+                        text: "this is\nMultiple line\nchoice",
+                        block: VnslBlock {
+                            statements: [
+                                Command(
+                                    Dialogue {
+                                        text: "it works",
+                                    },
+                                ),
+                            ],
+                        },
+                    },
+                ],
+            },
+        ),
     ],
     labels: [
         VnslLabel {

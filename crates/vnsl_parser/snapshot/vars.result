@@ -1,0 +1,73 @@
+VnslScene {
+    name: "VarsTestScene",
+    main_statements: [
+        Command(
+            Var(
+                VnslVar {
+                    name: "testString",
+                    value: String(
+                        "this is my string",
+                    ),
+                },
+            ),
+        ),
+        Command(
+            Var(
+                VnslVar {
+                    name: "testMultiline",
+                    value: String(
+                        "this\nIs multiline\nStr",
+                    ),
+                },
+            ),
+        ),
+        Command(
+            Var(
+                VnslVar {
+                    name: "testNumber",
+                    value: Number(
+                        123.0,
+                    ),
+                },
+            ),
+        ),
+        Command(
+            Var(
+                VnslVar {
+                    name: "testFloat",
+                    value: Number(
+                        20.44,
+                    ),
+                },
+            ),
+        ),
+        Command(
+            Var(
+                VnslVar {
+                    name: "testTrue",
+                    value: Bool(
+                        true,
+                    ),
+                },
+            ),
+        ),
+        Command(
+            Var(
+                VnslVar {
+                    name: "testFalse",
+                    value: Bool(
+                        false,
+                    ),
+                },
+            ),
+        ),
+    ],
+    labels: [
+        VnslLabel {
+            name: "",
+            block: VnslBlock {
+                statements: [],
+            },
+        },
+    ],
+}

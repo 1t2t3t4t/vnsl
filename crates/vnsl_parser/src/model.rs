@@ -27,6 +27,7 @@ pub enum VnslCommand {
     Dialogue(VnslDialogue),
     Action(VnslAction),
     Jump(VnslJump),
+    Var(VnslVar),
 }
 
 #[derive(Debug, Clone, PartialEq)]
@@ -49,6 +50,12 @@ pub struct VnslAction {
 pub struct VnslActionArg {
     pub name: Option<String>,
     pub data_type: VnslDataType,
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct VnslVar {
+    pub name: String,
+    pub value: VnslDataType,
 }
 
 #[derive(Debug, Clone, PartialEq, Default)]
