@@ -25,7 +25,7 @@ VnslScene {
         Command(
             Dialogue(
                 VnslDialogue {
-                    text: "split\nnew\nline\nstr\n",
+                    text: "split\nnew\nline\n\n\nstr",
                 },
             ),
         ),

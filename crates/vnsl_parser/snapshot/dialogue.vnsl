@@ -11,8 +11,12 @@ scene TestDialogue
 split
 new
 line
+
+
 str
-"
+
+
+    "
 
 label testScope:
     "single line text"

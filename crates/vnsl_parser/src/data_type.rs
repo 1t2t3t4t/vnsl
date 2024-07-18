@@ -26,4 +26,6 @@ pub fn parse_string(rule: Pair<Rule>) -> String {
         .map(|r| r.as_str().to_string())
         .collect::<Vec<String>>()
         .join("\n")
+        .trim()
+        .to_string()
 }
