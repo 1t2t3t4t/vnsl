@@ -29,6 +29,7 @@ pub fn extract_inners<const SIZE: usize>(
 
 #[cfg(debug_assertions)]
 fn ensure_map(map: &HashMap<Rule, Pair<Rule>>, rules: &[Rule]) {
+    assert_eq!(map.len(), rules.len(), "Map should contain same length");
     for rule in rules {
         assert!(map.contains_key(&rule), "Map should contain key {:?}", rule);
     }
