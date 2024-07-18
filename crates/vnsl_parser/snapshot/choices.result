@@ -85,9 +85,11 @@ VnslScene {
                         block: VnslBlock {
                             statements: [
                                 Command(
-                                    Dialogue {
-                                        text: "it works",
-                                    },
+                                    Dialogue(
+                                        VnslDialogue {
+                                            text: "it works",
+                                        },
+                                    ),
                                 ),
                             ],
                         },
