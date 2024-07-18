@@ -4,6 +4,13 @@ use pest::iterators::Pair;
 
 use crate::Rule;
 
+macro_rules! debug {
+    ($debug_stmt: stmt) => {
+        #[cfg(debug_assertions)]
+        $debug_stmt
+    };
+}
+
 pub fn extract_inner(rule: Pair<Rule>, as_rule: Rule) -> Pair<Rule> {
     let mut inner = rule.into_inner();
     debug_assert_eq!(inner.len(), 1);
@@ -23,14 +30,15 @@ pub fn extract_inners<const SIZE: usize>(
         }
     }
 
-    ensure_map(&map, &inner_rules);
+    debug!({
+        assert_eq!(
+            map.len(),
+            inner_rules.len(),
+            "Map should contain same length"
+        );
+        for rule in inner_rules {
+            assert!(map.contains_key(&rule), "Map should contain key {:?}", rule);
+        }
+    });
     map
-}
-
-#[cfg(debug_assertions)]
-fn ensure_map(map: &HashMap<Rule, Pair<Rule>>, rules: &[Rule]) {
-    assert_eq!(map.len(), rules.len(), "Map should contain same length");
-    for rule in rules {
-        assert!(map.contains_key(&rule), "Map should contain key {:?}", rule);
-    }
 }
