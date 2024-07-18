@@ -23,7 +23,8 @@ action_arg = { (identifier ~ ":" ~ spacer)? ~ data_type }
 args       = { (spacer ~ action_arg)* }
 action     = { "[" ~ identifier ~ args ~ "]" }
 jump       = { "jump" ~ spacer ~ identifier }
-command    = { dialogue | action | jump }
+var        = { "var" ~ spacer ~ identifier ~ spacer ~ data_type }
+command    = { dialogue | action | var | jump }
 
 choice        =  {
     string ~ block

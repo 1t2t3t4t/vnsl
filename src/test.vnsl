@@ -7,7 +7,9 @@ scene TestScene
 test
 tset"
 
-choices:
+var test "this is it"
+
+choice:
     "Choice A":
         "Hey!!! Stop right there scumm"
         [PUNCH]

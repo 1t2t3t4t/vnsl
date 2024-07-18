@@ -1,0 +1,12 @@
+scene VarsTestScene
+
+var testString "this is my string"
+var testMultiline "this
+Is multiline
+Str"
+
+var testNumber 123
+var testFloat 20.44
+
+var testTrue true
+var testFalse false
