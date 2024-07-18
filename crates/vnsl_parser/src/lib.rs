@@ -5,6 +5,7 @@ mod data_type;
 mod label;
 mod parser;
 mod statement;
+mod utils;
 
 pub use parser::parse;
 use pest_derive::Parser;

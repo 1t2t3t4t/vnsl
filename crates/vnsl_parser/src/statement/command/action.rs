@@ -5,11 +5,11 @@ use pest::iterators::Pair;
 
 use crate::{
     data_type,
-    model::{VnslAction, VnslActionArg, VnslCommand, VnslDataType},
+    model::{VnslAction, VnslActionArg, VnslDataType},
     Rule,
 };
 
-pub fn parse_action(rule: Pair<Rule>) -> anyhow::Result<VnslCommand> {
+pub fn parse_action(rule: Pair<Rule>) -> anyhow::Result<VnslAction> {
     let inner = rule.into_inner();
     let mut action = VnslAction::default();
     for rule in inner {
@@ -21,7 +21,7 @@ pub fn parse_action(rule: Pair<Rule>) -> anyhow::Result<VnslCommand> {
             _ => unreachable!(),
         }
     }
-    Ok(VnslCommand::Action(action))
+    Ok(action)
 }
 
 fn parse_action_args(rule: Pair<Rule>) -> anyhow::Result<Vec<VnslActionArg>> {
