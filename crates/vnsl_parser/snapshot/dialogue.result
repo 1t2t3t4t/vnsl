@@ -22,6 +22,13 @@ VnslScene {
                 },
             ),
         ),
+        Command(
+            Dialogue(
+                VnslDialogue {
+                    text: "split\nnew\nline\nstr\n",
+                },
+            ),
+        ),
     ],
     labels: [
         VnslLabel {

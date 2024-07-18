@@ -12,7 +12,7 @@ char      =  {
 }
 line      = @{ char* }
 lines     = _{ line ~ (NEWLINE ~ PEEK_ALL ~ line)* }
-string    = ${ "\"" ~ lines ~ "\"" }
+string    = ${ "\"" ~ NEWLINE? ~ lines ~ "\"" }
 number    =  { (NUMBER | ".")+ }
 bool      =  { "true" | "false" }
 data_type =  { string | number | bool }
