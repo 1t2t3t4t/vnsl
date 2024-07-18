@@ -10,3 +10,7 @@ var testFloat 20.44
 
 var testTrue true
 var testFalse false
+
+label test:
+    var multiline2 "this
+    is multi"
