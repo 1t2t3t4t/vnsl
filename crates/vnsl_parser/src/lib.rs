@@ -41,11 +41,13 @@ mod tests {
         let script = fs::read_to_string(format!("./snapshot/{}.vnsl", name)).unwrap();
         let result = super::parse(&script).unwrap();
 
-        let scn_str = format!("{:#?}", result);
+        let scn_str = format!("{:#?}", result).replace("\r\n", "\n");
 
         let expect_path = format!("./snapshot/{}.result", name);
         if fs::metadata(&expect_path).is_ok() {
-            let expect = fs::read_to_string(expect_path).unwrap();
+            let expect = fs::read_to_string(expect_path)
+                .unwrap()
+                .replace("\r\n", "\n");
             assert_str_eq!(expect, scn_str);
             true
         } else {
