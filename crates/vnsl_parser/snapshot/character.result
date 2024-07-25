@@ -1,0 +1,48 @@
+VnslScene {
+    name: "CharacterTest",
+    main_statements: [
+        Command(
+            SetCharacter(
+                VnslSetCharacter {
+                    id: "Boss",
+                },
+            ),
+        ),
+        Choices(
+            VnslChoices {
+                choices: [
+                    VnslChoice {
+                        text: "A",
+                        block: VnslBlock {
+                            statements: [
+                                Command(
+                                    SetCharacter(
+                                        VnslSetCharacter {
+                                            id: "Boss2",
+                                        },
+                                    ),
+                                ),
+                            ],
+                        },
+                    },
+                ],
+            },
+        ),
+    ],
+    labels: [
+        VnslLabel {
+            name: "test",
+            block: VnslBlock {
+                statements: [
+                    Command(
+                        SetCharacter(
+                            VnslSetCharacter {
+                                id: "Boss3",
+                            },
+                        ),
+                    ),
+                ],
+            },
+        },
+    ],
+}

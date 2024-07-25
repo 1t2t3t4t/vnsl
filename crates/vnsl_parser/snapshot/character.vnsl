@@ -1,0 +1,10 @@
+scene CharacterTest
+
+char Boss
+
+choice:
+    "A":
+        char Boss2
+
+label test:
+    char Boss3
