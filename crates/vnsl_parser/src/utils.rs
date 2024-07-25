@@ -2,14 +2,9 @@ use std::collections::HashMap;
 
 use pest::iterators::Pair;
 
-use crate::Rule;
+use crate::{debug, Rule};
 
-macro_rules! debug {
-    ($debug_stmt: stmt) => {
-        #[cfg(debug_assertions)]
-        $debug_stmt
-    };
-}
+mod macros;
 
 pub fn extract_inner(rule: Pair<Rule>, as_rule: Rule) -> Pair<Rule> {
     let mut inner = rule.into_inner();
