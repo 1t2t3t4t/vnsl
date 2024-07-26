@@ -1,14 +1,8 @@
-use crate::Rule;
+use crate::{error::IntoParsingResult, Rule};
 use anyhow::{Error, Ok};
 use pest::iterators::Pair;
 use thiserror::Error;
 use vnsl_core::model::VnslDataType;
-
-#[derive(Debug, Error)]
-pub enum ParseDataTypeError {
-    #[error("Cannot parse number {0} with error {1}")]
-    CannotParseNumber(String, Error),
-}
 
 pub fn parse_data_type(rule: Pair<Rule>) -> anyhow::Result<VnslDataType> {
     let mut inner = rule.into_inner();
@@ -18,15 +12,11 @@ pub fn parse_data_type(rule: Pair<Rule>) -> anyhow::Result<VnslDataType> {
         Rule::string => Ok(VnslDataType::String(parse_string(inner))),
         Rule::number => {
             let num_str = inner.as_str();
-            let num = match num_str.trim().parse::<f64>() {
-                std::result::Result::Ok(double) => Ok(double),
-                Err(err) => Err(ParseDataTypeError::CannotParseNumber(
-                    num_str.to_string(),
-                    err.into(),
-                )
-                .into()),
-            };
-            Ok(VnslDataType::Number(num?))
+            let num = num_str
+                .trim()
+                .parse::<f64>()
+                .into_parsing_result(inner.as_rule(), num_str.to_string())?;
+            Ok(VnslDataType::Number(num))
         }
         Rule::bool => {
             let bool_val = inner.as_str() == "true";

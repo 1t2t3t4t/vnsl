@@ -1,5 +1,6 @@
 mod block;
 mod data_type;
+mod error;
 mod label;
 mod parser;
 mod statement;
