@@ -7,3 +7,5 @@ edition = "2021"
 vnsl_core.workspace = true
 vnsl_parser.workspace = true
 anyhow.workspace = true
+rayon.workspace = true
+thiserror.workspace = true

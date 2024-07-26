@@ -1,0 +1,8 @@
+scene A
+
+char Boss
+"Hey... what the fuck are you doing here?"
+
+choice:
+    "I.. don't know?":
+        [kill]
