@@ -1,12 +1,9 @@
 use std::vec;
 
+use crate::{data_type, Rule};
 use anyhow::Ok;
 use pest::iterators::Pair;
 use vnsl_core::model::{VnslAction, VnslActionArg, VnslDataType};
-use crate::{
-    data_type,
-    Rule,
-};
 
 pub fn parse_action(rule: Pair<Rule>) -> anyhow::Result<VnslAction> {
     let inner = rule.into_inner();

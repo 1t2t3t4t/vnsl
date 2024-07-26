@@ -1,7 +1,7 @@
 mod command;
 
-pub use command::*;
 use crate::impl_deref;
+pub use command::*;
 
 #[derive(Debug, Clone, PartialEq, Default)]
 pub struct VnslScene {

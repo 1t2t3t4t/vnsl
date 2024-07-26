@@ -1,7 +1,7 @@
+use crate::Rule;
 use anyhow::Ok;
 use pest::iterators::Pair;
 use vnsl_core::model::VnslCommand;
-use crate::Rule;
 
 mod action;
 mod character;

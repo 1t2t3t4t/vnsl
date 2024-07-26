@@ -1,9 +1,6 @@
+use crate::{block, data_type, Rule};
 use pest::iterators::Pair;
 use vnsl_core::model::{VnslChoice, VnslChoices};
-use crate::{
-    block, data_type,
-    Rule,
-};
 
 pub fn parse_choices(rule: Pair<Rule>) -> anyhow::Result<VnslChoices> {
     let inner = rule.into_inner();

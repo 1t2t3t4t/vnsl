@@ -1,6 +1,6 @@
+use crate::{data_type, utils, Rule};
 use pest::iterators::Pair;
 use vnsl_core::model::VnslVar;
-use crate::{data_type, Rule, utils};
 
 pub fn parse_var(rule: Pair<Rule>) -> anyhow::Result<VnslVar> {
     let mut pairs = utils::extract_inners(rule, [Rule::identifier, Rule::data_type]);

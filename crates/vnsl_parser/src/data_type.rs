@@ -1,7 +1,7 @@
+use crate::Rule;
 use anyhow::Ok;
 use pest::iterators::Pair;
 use vnsl_core::model::VnslDataType;
-use crate::Rule;
 
 pub fn parse_data_type(rule: Pair<Rule>) -> anyhow::Result<VnslDataType> {
     let mut inner = rule.into_inner();

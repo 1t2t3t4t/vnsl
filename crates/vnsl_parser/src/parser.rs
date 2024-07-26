@@ -1,8 +1,8 @@
+use crate::{label, statement, Rule, VnslParser};
 use anyhow::Ok;
 use pest::{iterators::Pair, Parser};
 use thiserror::Error;
 use vnsl_core::model::VnslScene;
-use crate::{label, Rule, statement, VnslParser};
 
 #[derive(Debug, Clone, Copy, Error)]
 pub enum ParseError {

@@ -1,5 +1,5 @@
-use crate::impl_deref;
 use super::{VnslBlock, VnslDataType};
+use crate::impl_deref;
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct VnslDialogue {
