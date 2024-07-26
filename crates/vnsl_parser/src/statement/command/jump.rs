@@ -1,6 +1,6 @@
 use pest::iterators::Pair;
-
-use crate::{model::VnslJump, Rule};
+use vnsl_core::model::VnslJump;
+use crate::Rule;
 
 pub fn parse_jump(rule: Pair<Rule>) -> anyhow::Result<VnslJump> {
     let mut inner = rule.into_inner();

@@ -1,8 +1,7 @@
 use pest::iterators::Pair;
-
+use vnsl_core::model::{VnslChoice, VnslChoices};
 use crate::{
     block, data_type,
-    model::{VnslChoice, VnslChoices},
     Rule,
 };
 

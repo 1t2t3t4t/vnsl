@@ -1,10 +1,11 @@
 use anyhow::Ok;
 use pest::iterators::Pair;
+use vnsl_core::model::VnslStatement;
 
 pub mod choices;
 pub mod command;
 
-use crate::{model::VnslStatement, Rule};
+use crate::Rule;
 
 pub fn parse_statements(rule: Pair<Rule>) -> anyhow::Result<Vec<VnslStatement>> {
     let inner = rule.into_inner();

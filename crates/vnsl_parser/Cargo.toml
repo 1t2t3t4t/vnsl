@@ -4,6 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+vnsl_core.workspace = true
 pest.workspace = true
 pest_derive.workspace = true
 anyhow.workspace = true

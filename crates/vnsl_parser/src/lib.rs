@@ -1,5 +1,3 @@
-pub mod model;
-
 mod block;
 mod data_type;
 mod label;

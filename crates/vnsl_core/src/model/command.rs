@@ -1,5 +1,4 @@
 use crate::impl_deref;
-
 use super::{VnslBlock, VnslDataType};
 
 #[derive(Debug, Clone, PartialEq)]

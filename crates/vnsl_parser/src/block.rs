@@ -1,7 +1,7 @@
 use anyhow::Ok;
 use pest::iterators::Pair;
-
-use crate::{model::VnslBlock, statement, Rule};
+use vnsl_core::model::VnslBlock;
+use crate::{Rule, statement};
 
 pub fn parse_block(rule: Pair<Rule>) -> anyhow::Result<VnslBlock> {
     let inner = rule.into_inner();

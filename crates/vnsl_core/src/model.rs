@@ -1,7 +1,6 @@
 mod command;
 
 pub use command::*;
-
 use crate::impl_deref;
 
 #[derive(Debug, Clone, PartialEq, Default)]

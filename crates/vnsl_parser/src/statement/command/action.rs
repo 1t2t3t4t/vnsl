@@ -2,10 +2,9 @@ use std::vec;
 
 use anyhow::Ok;
 use pest::iterators::Pair;
-
+use vnsl_core::model::{VnslAction, VnslActionArg, VnslDataType};
 use crate::{
     data_type,
-    model::{VnslAction, VnslActionArg, VnslDataType},
     Rule,
 };
 
