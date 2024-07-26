@@ -26,7 +26,37 @@ VnslScene {
                 VnslVar {
                     name: "testNumber",
                     value: Number(
+                        0.0,
+                    ),
+                },
+            ),
+        ),
+        Command(
+            Var(
+                VnslVar {
+                    name: "testNumber",
+                    value: Number(
+                        0.0,
+                    ),
+                },
+            ),
+        ),
+        Command(
+            Var(
+                VnslVar {
+                    name: "testNumber",
+                    value: Number(
                         123.0,
+                    ),
+                },
+            ),
+        ),
+        Command(
+            Var(
+                VnslVar {
+                    name: "testFloat",
+                    value: Number(
+                        0.123,
                     ),
                 },
             ),

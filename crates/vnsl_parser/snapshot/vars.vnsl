@@ -5,7 +5,10 @@ var testMultiline "this
 Is multiline
 Str"
 
+var testNumber 0
+var testNumber 0.0
 var testNumber 123
+var testFloat 0.123
 var testFloat 20.44
 
 var testTrue true
