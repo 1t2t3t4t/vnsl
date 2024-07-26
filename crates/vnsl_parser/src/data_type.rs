@@ -1,7 +1,6 @@
 use crate::{error::IntoParsingResult, Rule};
-use anyhow::{Error, Ok};
+use anyhow::Ok;
 use pest::iterators::Pair;
-use thiserror::Error;
 use vnsl_core::model::VnslDataType;
 
 pub fn parse_data_type(rule: Pair<Rule>) -> anyhow::Result<VnslDataType> {
