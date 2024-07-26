@@ -1,9 +1,7 @@
 [package]
-name = "vnsl_compiler"
+name = "vnsl_runtime"
 version = "0.1.0"
 edition = "2021"
 
 [dependencies]
 vnsl_core.workspace = true
-vnsl_parser.workspace = true
-anyhow.workspace = true

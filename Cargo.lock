@@ -231,6 +231,7 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "vnsl_compiler",
+ "vnsl_runtime",
 ]
 
 [[package]]
@@ -238,8 +239,13 @@ name = "vnsl_compiler"
 version = "0.1.0"
 dependencies = [
  "anyhow",
+ "vnsl_core",
  "vnsl_parser",
 ]
+
+[[package]]
+name = "vnsl_core"
+version = "0.1.0"
 
 [[package]]
 name = "vnsl_parser"
@@ -250,6 +256,13 @@ dependencies = [
  "pest_derive",
  "pretty_assertions",
  "thiserror",
+]
+
+[[package]]
+name = "vnsl_runtime"
+version = "0.1.0"
+dependencies = [
+ "vnsl_core",
 ]
 
 [[package]]

@@ -6,7 +6,9 @@ edition = "2021"
 [workspace]
 members = [
     "crates/vnsl_compiler",
-    "crates/vnsl_parser"
+    "crates/vnsl_core",
+    "crates/vnsl_parser",
+    "crates/vnsl_runtime",
 ]
 
 [workspace.dependencies]
@@ -18,7 +20,10 @@ pretty_assertions = "1.4.0"
 
 vnsl_compiler = { path = "crates/vnsl_compiler" }
 vnsl_parser = { path = "crates/vnsl_parser" }
+vnsl_runtime = { path = "crates/vnsl_runtime" }
+vnsl_core = { path = "crates/vnsl_core" }
 
 [dependencies]
 vnsl_compiler.workspace = true
+vnsl_runtime.workspace = true
 anyhow.workspace = true
