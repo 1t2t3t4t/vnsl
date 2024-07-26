@@ -65,6 +65,7 @@ impl_parsing_error!(
     code: String: "Raw code string"
 );
 
+#[inline(always)]
 pub fn wrap_parsing_result<T>(
     rule_pair: Pair<Rule>,
     ops_fn: impl FnOnce(Pair<Rule>) -> anyhow::Result<T>,
