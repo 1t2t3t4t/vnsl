@@ -1,5 +1,5 @@
 use crate::{
-    error::{IntoParsingResult, ParsingResult},
+    error::{wrap_parsing_result, ParsingResult},
     Rule,
 };
 use pest::iterators::Pair;
@@ -11,14 +11,11 @@ pub fn parse_data_type(rule: Pair<Rule>) -> ParsingResult<VnslDataType> {
     let inner = inner.next().unwrap();
     match inner.as_rule() {
         Rule::string => Ok(VnslDataType::String(parse_string(inner))),
-        Rule::number => {
-            let num_str = inner.as_str();
-            let num = num_str
-                .trim()
-                .parse::<f64>()
-                .into_parsing_result(inner.as_rule(), num_str.to_string())?;
+        Rule::number => wrap_parsing_result(inner, |inner| {
+            let num_str = inner.as_str().trim();
+            let num = num_str.parse::<f64>()?;
             Ok(VnslDataType::Number(num))
-        }
+        }),
         Rule::bool => {
             let bool_val = inner.as_str() == "true";
             Ok(VnslDataType::Bool(bool_val))

@@ -1,3 +1,4 @@
+use pest::iterators::Pair;
 use thiserror::Error;
 
 use crate::Rule;
@@ -63,3 +64,12 @@ impl_parsing_error!(
     rule: Rule: "Rule",
     code: String: "Raw code string"
 );
+
+pub fn wrap_parsing_result<T>(
+    rule_pair: Pair<Rule>,
+    ops_fn: impl FnOnce(Pair<Rule>) -> anyhow::Result<T>,
+) -> ParsingResult<T> {
+    let rule = rule_pair.as_rule();
+    let code = rule_pair.as_str().to_string();
+    ops_fn(rule_pair).into_parsing_result(rule, code)
+}
