@@ -1,9 +1,11 @@
-use crate::{error::IntoParsingResult, Rule};
-use anyhow::Ok;
+use crate::{
+    error::{IntoParsingResult, ParsingResult},
+    Rule,
+};
 use pest::iterators::Pair;
 use vnsl_core::model::VnslDataType;
 
-pub fn parse_data_type(rule: Pair<Rule>) -> anyhow::Result<VnslDataType> {
+pub fn parse_data_type(rule: Pair<Rule>) -> ParsingResult<VnslDataType> {
     let mut inner = rule.into_inner();
     assert_eq!(inner.len(), 1);
     let inner = inner.next().unwrap();
