@@ -1,15 +1,15 @@
 scene VarsTestScene
 
-var testString "this is my string"
-var testMultiline "this
+global testString "this is my string"
+global testMultiline "this
 Is multiline
 Str"
 
-var testNumber 0
-var testNumber 0.0
-var testNumber 123
-var testFloat 0.123
-var testFloat 20.44
+global testNumber 0
+global testNumber 0.0
+global testNumber 123
+global testFloat 0.123
+global testFloat 20.44
 
-var testTrue true
-var testFalse false
+global testTrue true
+global testFalse false

@@ -16,7 +16,7 @@ pub fn parse_command(rule: Pair<Rule>) -> anyhow::Result<VnslCommand> {
         Rule::set_character => VnslCommand::SetCharacter(character::parse_set_character(inner)?),
         Rule::action => VnslCommand::Action(action::parse_action(inner)?),
         Rule::jump => VnslCommand::Jump(jump::parse_jump(inner)?),
-        Rule::var => VnslCommand::Var(var::parse_var(inner)?),
+        Rule::global => VnslCommand::Var(var::parse_global(inner)?),
         _ => unreachable!(),
     };
     Ok(cmd)

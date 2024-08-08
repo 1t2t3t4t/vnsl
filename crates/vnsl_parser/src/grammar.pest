@@ -50,9 +50,9 @@ action        = { "[" ~ identifier ~ args ~ "]" }
 args          = { (spacer ~ action_arg)* }
 action_arg    = { (identifier ~ ":" ~ spacer)? ~ data_type }
 jump          = { "jump" ~ spacer ~ identifier }
-var           = { "var" ~ spacer ~ identifier ~ spacer ~ data_type }
+global        = { "global" ~ spacer ~ identifier ~ spacer ~ data_type }
 set_character = { "char" ~ spacer ~ identifier }
-command       = { dialogue | set_character | action | var | jump }
+command       = { dialogue | set_character | action | global | jump }
 
 choice        =  {
     string ~ block
@@ -66,14 +66,14 @@ choices       =  {
 
 // Flow
 stmt        =  { command | choices | expr }
-block_stmt  = _{ !(var) ~ stmt }
+block_stmt  = _{ !(global) ~ stmt }
 block       =  {
     ":" ~ PEEK_ALL ~ PUSH(indentation) ~ block_stmt ~ (PEEK_ALL ~ block_stmt)* ~ DROP
 }
-label_scope = {
+label_scope =  {
     "label" ~ spacer ~ identifier ~ block
 }
 scene       =  { "scene" ~ spacer ~ identifier }
 
-main_statement = { stmt* }
+main_statement =  { stmt* }
 labels         = _{ label_scope* }

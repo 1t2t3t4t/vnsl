@@ -2,4 +2,4 @@ scene B
 
 "Heyyy long time no see dawg"
 
-var POINT 123
+global POINT 123
