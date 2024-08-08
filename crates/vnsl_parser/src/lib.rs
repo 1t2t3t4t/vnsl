@@ -18,6 +18,8 @@ mod tests {
     use pretty_assertions::assert_str_eq;
     use std::fs;
 
+    const FORCE_RECORD: bool = false;
+
     #[test]
     fn test_parsing_snapshot() {
         let dir = fs::read_dir("./snapshot").unwrap();
@@ -38,12 +40,14 @@ mod tests {
         println!("Testing {name}");
 
         let script = fs::read_to_string(format!("./snapshot/{}.vnsl", name)).unwrap();
-        let result = super::parse(&script).unwrap();
 
-        let scn_str = format!("{:#?}", result).replace("\r\n", "\n");
+        let scn_str = match super::parse(&script) {
+            Ok(result) => format!("{:#?}", result).replace("\r\n", "\n"),
+            Err(err) => format!("{err:?}").trim().to_string(),
+        };
 
         let expect_path = format!("./snapshot/{}.result", name);
-        if fs::metadata(&expect_path).is_ok() {
+        if fs::metadata(&expect_path).is_ok() && !FORCE_RECORD {
             let expect = fs::read_to_string(expect_path)
                 .unwrap()
                 .replace("\r\n", "\n");
