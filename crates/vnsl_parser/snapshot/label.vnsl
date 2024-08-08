@@ -1,0 +1,19 @@
+scene LabelTest
+
+label a:
+    char boss
+    "Yoo"
+
+label b:
+    "A
+    B
+    C
+    D
+    "
+
+label c:
+    choice:
+        "CA":
+            jump a
+        "CB":
+            jump d

@@ -1,0 +1,82 @@
+VnslScene {
+    name: "LabelTest",
+    main_statements: [],
+    labels: [
+        VnslLabel {
+            name: "a",
+            block: VnslBlock {
+                statements: [
+                    Command(
+                        SetCharacter(
+                            VnslSetCharacter {
+                                id: "boss",
+                            },
+                        ),
+                    ),
+                    Command(
+                        Dialogue(
+                            VnslDialogue {
+                                text: "Yoo",
+                            },
+                        ),
+                    ),
+                ],
+            },
+        },
+        VnslLabel {
+            name: "b",
+            block: VnslBlock {
+                statements: [
+                    Command(
+                        Dialogue(
+                            VnslDialogue {
+                                text: "A\nB\nC\nD",
+                            },
+                        ),
+                    ),
+                ],
+            },
+        },
+        VnslLabel {
+            name: "c",
+            block: VnslBlock {
+                statements: [
+                    Choices(
+                        VnslChoices {
+                            choices: [
+                                VnslChoice {
+                                    text: "CA",
+                                    block: VnslBlock {
+                                        statements: [
+                                            Command(
+                                                Jump(
+                                                    VnslJump {
+                                                        to_label: "a",
+                                                    },
+                                                ),
+                                            ),
+                                        ],
+                                    },
+                                },
+                                VnslChoice {
+                                    text: "CB",
+                                    block: VnslBlock {
+                                        statements: [
+                                            Command(
+                                                Jump(
+                                                    VnslJump {
+                                                        to_label: "d",
+                                                    },
+                                                ),
+                                            ),
+                                        ],
+                                    },
+                                },
+                            ],
+                        },
+                    ),
+                ],
+            },
+        },
+    ],
+}
