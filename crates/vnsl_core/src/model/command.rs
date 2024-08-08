@@ -29,7 +29,7 @@ pub struct VnslActionArg {
 }
 
 #[derive(Debug, Clone, PartialEq)]
-pub struct VnslVar {
+pub struct VnslGlobal {
     pub name: String,
     pub value: VnslDataType,
 }

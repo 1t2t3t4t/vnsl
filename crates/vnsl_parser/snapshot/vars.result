@@ -2,8 +2,8 @@ VnslScene {
     name: "VarsTestScene",
     main_statements: [
         Command(
-            Var(
-                VnslVar {
+            Global(
+                VnslGlobal {
                     name: "testString",
                     value: String(
                         "this is my string",
@@ -12,8 +12,8 @@ VnslScene {
             ),
         ),
         Command(
-            Var(
-                VnslVar {
+            Global(
+                VnslGlobal {
                     name: "testMultiline",
                     value: String(
                         "this\nIs multiline\nStr",
@@ -22,8 +22,8 @@ VnslScene {
             ),
         ),
         Command(
-            Var(
-                VnslVar {
+            Global(
+                VnslGlobal {
                     name: "testNumber",
                     value: Number(
                         0.0,
@@ -32,8 +32,8 @@ VnslScene {
             ),
         ),
         Command(
-            Var(
-                VnslVar {
+            Global(
+                VnslGlobal {
                     name: "testNumber",
                     value: Number(
                         0.0,
@@ -42,8 +42,8 @@ VnslScene {
             ),
         ),
         Command(
-            Var(
-                VnslVar {
+            Global(
+                VnslGlobal {
                     name: "testNumber",
                     value: Number(
                         123.0,
@@ -52,8 +52,8 @@ VnslScene {
             ),
         ),
         Command(
-            Var(
-                VnslVar {
+            Global(
+                VnslGlobal {
                     name: "testFloat",
                     value: Number(
                         0.123,
@@ -62,8 +62,8 @@ VnslScene {
             ),
         ),
         Command(
-            Var(
-                VnslVar {
+            Global(
+                VnslGlobal {
                     name: "testFloat",
                     value: Number(
                         20.44,
@@ -72,8 +72,8 @@ VnslScene {
             ),
         ),
         Command(
-            Var(
-                VnslVar {
+            Global(
+                VnslGlobal {
                     name: "testTrue",
                     value: Bool(
                         true,
@@ -82,8 +82,8 @@ VnslScene {
             ),
         ),
         Command(
-            Var(
-                VnslVar {
+            Global(
+                VnslGlobal {
                     name: "testFalse",
                     value: Bool(
                         false,

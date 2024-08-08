@@ -35,7 +35,7 @@ pub enum VnslCommand {
     SetCharacter(VnslSetCharacter),
     Action(VnslAction),
     Jump(VnslJump),
-    Var(VnslVar),
+    Global(VnslGlobal),
 }
 
 #[derive(Debug, Clone, PartialEq)]
