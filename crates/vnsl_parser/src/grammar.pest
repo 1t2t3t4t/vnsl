@@ -6,7 +6,7 @@ spacer      = _{ " "* }
 indentation = _{ "\t" | " "{4} }
 
 // Core
-identifier = @{ (ASCII_ALPHA | NUMBER | "_")+ }
+identifier = @{ (ASCII_ALPHA | "_") ~ (ASCII_ALPHANUMERIC | "_")* }
 
 // Data Types
 char      =  {
@@ -17,7 +17,7 @@ char      =  {
 line      = @{ char* }
 lines     = _{ line ~ (NEWLINE ~ PEEK_ALL ~ line)* }
 string    = ${ "\"" ~ lines ~ "\"" }
-number    =  { (NUMBER | ".")+ }
+number    = ${ (NUMBER | ".")+ }
 bool      =  { "true" | "false" }
 data_type =  { string | number | bool }
 
@@ -38,8 +38,8 @@ lte     = { "<=" }
 
 literal = { data_type }
 group   = { "(" ~ spacer ~ expr ~ spacer ~ ")" }
+atom    = { literal | group }
 
-atom        = { literal | group }
 op_expr     = { atom ~ spacer ~ ((arithmetic_op | comp_op) ~ spacer ~ expr ~ spacer)* }
 assign_expr = { identifier ~ spacer ~ "=" ~ spacer ~ expr }
 expr        = { op_expr | assign_expr }
@@ -65,7 +65,7 @@ choices       =  {
 }
 
 // Flow
-stmt        =  { command | choices }
+stmt        =  { command | choices | expr }
 block       =  {
     ":" ~ PEEK_ALL ~ PUSH(indentation) ~ stmt ~ (PEEK_ALL ~ stmt)* ~ DROP
 }
