@@ -11,7 +11,7 @@ pub fn parse_block(rule: Pair<Rule>) -> ParsingResult<VnslBlock> {
     for rule in inner {
         match rule.as_rule() {
             Rule::stmt => {
-                let statement = wrap_parsing_result(rule, |rule| statement::parse_statement(rule))?;
+                let statement = wrap_parsing_result(rule, statement::parse_statement)?;
                 block.statements.push(statement);
             }
             _ => unreachable!(),

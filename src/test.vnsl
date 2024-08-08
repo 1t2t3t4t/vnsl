@@ -9,7 +9,7 @@ char Boss
 test
 tset"
 
-var test "this is it"
+global test "this is it"
 
 choice:
     "Choice A":

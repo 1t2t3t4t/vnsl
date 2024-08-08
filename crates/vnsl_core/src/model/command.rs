@@ -1,5 +1,4 @@
-use super::{VnslBlock, VnslDataType};
-use crate::impl_deref;
+use super::VnslDataType;
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct VnslDialogue {
@@ -32,17 +31,4 @@ pub struct VnslActionArg {
 pub struct VnslGlobal {
     pub name: String,
     pub value: VnslDataType,
-}
-
-#[derive(Debug, Clone, PartialEq, Default)]
-pub struct VnslChoices {
-    pub choices: Vec<VnslChoice>,
-}
-
-impl_deref!(VnslChoices, [VnslChoice], choices);
-
-#[derive(Debug, Clone, PartialEq, Default)]
-pub struct VnslChoice {
-    pub text: String,
-    pub block: VnslBlock,
 }

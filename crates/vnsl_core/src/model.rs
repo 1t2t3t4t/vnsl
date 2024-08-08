@@ -1,7 +1,10 @@
 mod command;
+mod statement;
 
 use crate::impl_deref;
+
 pub use command::*;
+pub use statement::*;
 
 #[derive(Debug, Clone, PartialEq, Default)]
 pub struct VnslScene {
@@ -20,23 +23,7 @@ pub struct VnslLabel {
 pub struct VnslBlock {
     pub statements: Vec<VnslStatement>,
 }
-
 impl_deref!(VnslBlock, [VnslStatement], statements);
-
-#[derive(Debug, Clone, PartialEq)]
-pub enum VnslStatement {
-    Command(VnslCommand),
-    Choices(VnslChoices),
-}
-
-#[derive(Debug, Clone, PartialEq)]
-pub enum VnslCommand {
-    Dialogue(VnslDialogue),
-    SetCharacter(VnslSetCharacter),
-    Action(VnslAction),
-    Jump(VnslJump),
-    Global(VnslGlobal),
-}
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum VnslDataType {
