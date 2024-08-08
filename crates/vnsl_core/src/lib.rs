@@ -1,4 +1,5 @@
 pub mod model;
+pub mod utils;
 
 #[macro_export]
 macro_rules! impl_deref {
