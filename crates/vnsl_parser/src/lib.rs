@@ -47,6 +47,7 @@ mod tests {
             let expect = fs::read_to_string(expect_path)
                 .unwrap()
                 .replace("\r\n", "\n");
+            let expect = expect.trim();
             assert_str_eq!(expect, scn_str);
             true
         } else {

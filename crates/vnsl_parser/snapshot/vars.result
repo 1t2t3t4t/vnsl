@@ -92,23 +92,5 @@ VnslScene {
             ),
         ),
     ],
-    labels: [
-        VnslLabel {
-            name: "test",
-            block: VnslBlock {
-                statements: [
-                    Command(
-                        Var(
-                            VnslVar {
-                                name: "multiline2",
-                                value: String(
-                                    "this\nis multi",
-                                ),
-                            },
-                        ),
-                    ),
-                ],
-            },
-        },
-    ],
+    labels: [],
 }

@@ -31,6 +31,20 @@ VnslScene {
     ],
     labels: [
         VnslLabel {
+            name: "abc",
+            block: VnslBlock {
+                statements: [
+                    Command(
+                        Jump(
+                            VnslJump {
+                                to_label: "d",
+                            },
+                        ),
+                    ),
+                ],
+            },
+        },
+        VnslLabel {
             name: "d",
             block: VnslBlock {
                 statements: [

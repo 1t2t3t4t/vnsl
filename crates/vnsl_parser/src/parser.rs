@@ -27,7 +27,7 @@ pub fn parse(script: &str) -> anyhow::Result<VnslScene> {
                 let statements = statement::parse_statements(rule)?;
                 scene.main_statements = statements;
             }
-            Rule::labels => {
+            Rule::label_scope => {
                 let label = label::parse_label(rule)?;
                 scene.labels.push(label);
             }
