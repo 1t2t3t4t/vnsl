@@ -66,6 +66,7 @@ choices       =  {
 
 // Flow
 stmt        =  { command | choices | expr }
+block_stmt = _{!(var) ~ stmt}
 block       =  {
     ":" ~ PEEK_ALL ~ PUSH(indentation) ~ stmt ~ (PEEK_ALL ~ stmt)* ~ DROP
 }
