@@ -1,6 +1,15 @@
 use super::VnslDataType;
 
 #[derive(Debug, Clone, PartialEq)]
+pub enum VnslCommand {
+    Dialogue(VnslDialogue),
+    SetCharacter(VnslSetCharacter),
+    Action(VnslAction),
+    Jump(VnslJump),
+    Global(VnslGlobal),
+}
+
+#[derive(Debug, Clone, PartialEq)]
 pub struct VnslDialogue {
     pub text: String,
 }
