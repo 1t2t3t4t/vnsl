@@ -28,7 +28,7 @@ subtract      =  { "-" }
 multiply      =  { "*" }
 divide        =  { "/" }
 
-comp_op = { eq | n_eq | gt | gte | lt | lte }
+comp_op = { eq | n_eq | gte | gt | lte | lt }
 eq      = { "==" }
 n_eq    = { "!=" }
 gt      = { ">" }
@@ -39,9 +39,10 @@ lte     = { "<=" }
 literal = { data_type }
 group   = { "(" ~ spacer ~ expr ~ spacer ~ ")" }
 
-atom    = _{ literal | group }
-op_expr =  { atom ~ spacer ~ ((arithmetic_op | comp_op) ~ spacer ~ expr ~ spacer)* }
-expr    =  { op_expr }
+atom        = { literal | group }
+op_expr     = { atom ~ spacer ~ ((arithmetic_op | comp_op) ~ spacer ~ expr ~ spacer)* }
+assign_expr = { identifier ~ spacer ~ "=" ~ spacer ~ expr }
+expr        = { op_expr | assign_expr }
 
 // Commands
 dialogue      = { string }
