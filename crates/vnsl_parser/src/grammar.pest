@@ -22,11 +22,11 @@ bool      =  { "true" | "false" }
 data_type =  { string | number | bool }
 
 // Expressions
-arithmetic_op = _{ add | subtract | multiply | divide }
-add           =  { "+" }
-subtract      =  { "-" }
-multiply      =  { "*" }
-divide        =  { "/" }
+arithmetic_op = { add | subtract | multiply | divide }
+add           = { "+" }
+subtract      = { "-" }
+multiply      = { "*" }
+divide        = { "/" }
 
 comp_op = { eq | n_eq | gte | gt | lte | lt }
 eq      = { "==" }
@@ -40,7 +40,8 @@ literal = { data_type }
 group   = { "(" ~ spacer ~ expr ~ spacer ~ ")" }
 atom    = { literal | group }
 
-op_expr     = { atom ~ spacer ~ ((arithmetic_op | comp_op) ~ spacer ~ expr ~ spacer)* }
+ops         = { arithmetic_op | comp_op }
+op_expr     = { atom ~ spacer ~ (ops ~ spacer ~ expr ~ spacer)* }
 assign_expr = { identifier ~ spacer ~ "=" ~ spacer ~ expr }
 expr        = { op_expr | assign_expr }
 
