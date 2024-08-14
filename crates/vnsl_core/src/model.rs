@@ -4,28 +4,29 @@ mod statement;
 use crate::impl_deref;
 
 pub use command::*;
+use serde::{Deserialize, Serialize};
 pub use statement::*;
 
-#[derive(Debug, Clone, PartialEq, Default)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct VnslScene {
     pub name: String,
     pub main_statements: Vec<VnslStatement>,
     pub labels: Vec<VnslLabel>,
 }
 
-#[derive(Debug, Clone, PartialEq, Default)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct VnslLabel {
     pub name: String,
     pub block: VnslBlock,
 }
 
-#[derive(Debug, Clone, PartialEq, Default)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct VnslBlock {
     pub statements: Vec<VnslStatement>,
 }
 impl_deref!(VnslBlock, [VnslStatement], statements);
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum VnslDataType {
     String(String),
     Number(f64),
