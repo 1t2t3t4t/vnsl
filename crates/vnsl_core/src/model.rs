@@ -27,6 +27,7 @@ pub struct VnslBlock {
 impl_deref!(VnslBlock, [VnslStatement], statements);
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(tag = "type", content = "content")]
 pub enum VnslDataType {
     String(String),
     Number(f64),

@@ -28,3 +28,4 @@ vnsl_core = { path = "crates/vnsl_core" }
 vnsl_compiler.workspace = true
 vnsl_runtime.workspace = true
 anyhow.workspace = true
+serde_json = "1.0.128"

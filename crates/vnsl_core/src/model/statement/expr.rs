@@ -3,23 +3,27 @@ use serde::{Deserialize, Serialize};
 use crate::model::VnslDataType;
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(tag = "type", content = "content")]
 pub enum VnslAtom {
     Literal(VnslDataType),
     Group(Box<VnslExpr>),
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(tag = "type", content = "content")]
 pub enum VnslExpr {
     Op(VnslOpExpr),
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(tag = "type", content = "content")]
 pub enum VnslOps {
     Arithmetic(VnslArithOps),
     Comparison(VnslCompareOps),
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(tag = "type", content = "content")]
 pub enum VnslArithOps {
     Add,
     Subtract,
@@ -28,6 +32,7 @@ pub enum VnslArithOps {
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(tag = "type", content = "content")]
 pub enum VnslCompareOps {
     Eq,
     NEq,

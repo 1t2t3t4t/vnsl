@@ -3,6 +3,7 @@ use serde::{Deserialize, Serialize};
 use super::VnslDataType;
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(tag = "type", content = "content")]
 pub enum VnslCommand {
     Dialogue(VnslDialogue),
     SetCharacter(VnslSetCharacter),

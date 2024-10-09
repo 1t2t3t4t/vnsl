@@ -54,7 +54,6 @@ mod ops_expr {
             let rhs = Box::new(parse_expr(expr)?);
             ops_expr.rhs_op = Some(VnslRhsOp { op, rhs });
         }
-        println!("{ops_expr:#?}");
         Ok(ops_expr)
     }
 
