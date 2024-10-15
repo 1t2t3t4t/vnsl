@@ -1,10 +1,15 @@
 use clap::Parser;
-use cli::Cli;
+use model::Cli;
 
-mod cli;
+mod command;
+mod model;
 
 fn main() {
     let Cli { command } = Cli::parse();
 
-    println!("{:#?}", command);
+    match command {
+        model::Command::Compile { mode, options } => {
+            command::handle_compile(mode, options);
+        }
+    }
 }

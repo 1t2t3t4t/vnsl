@@ -1,5 +1,5 @@
 use clap::Parser;
-use clap_derive::{Subcommand, ValueEnum};
+use clap_derive::{Args, Subcommand, ValueEnum};
 
 #[derive(Debug, Parser)]
 #[command(name = "vnsl")]
@@ -10,12 +10,12 @@ pub struct Cli {
 }
 
 #[derive(Debug, Clone, Copy, ValueEnum)]
-pub enum Mode {
+pub enum CompileMode {
     Json,
     Csv,
 }
 
-impl ToString for Mode {
+impl ToString for CompileMode {
     fn to_string(&self) -> String {
         format!("{:?}", self).to_lowercase()
     }
@@ -25,11 +25,17 @@ impl ToString for Mode {
 pub enum Command {
     /// Compile Vnsl sources
     Compile {
-        #[arg(short, long)]
-        /// Specify output path of compiled source.
-        output: Option<String>,
+        #[arg(short, long, default_value_t = CompileMode::Json)]
+        mode: CompileMode,
 
-        #[arg(short, long, default_value_t = Mode::Json)]
-        mode: Mode,
+        #[command(flatten)]
+        options: CompileOptions,
     },
+}
+
+#[derive(Debug, Args)]
+pub struct CompileOptions {
+    #[arg(short, long)]
+    /// Specify output path of compiled source.
+    output: Option<String>,
 }
