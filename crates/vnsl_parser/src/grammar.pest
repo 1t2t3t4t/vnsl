@@ -65,8 +65,24 @@ choices       =  {
     "choice" ~ choices_block
 }
 
+condition_stmt = {
+    if_stmt ~ (elif_stmt)* ~ else_stmt?
+}
+if_stmt        = {
+    "if" ~ spacer ~ condition_iden ~ spacer ~ block
+}
+elif_stmt      = {
+    "elif" ~ spacer ~ condition_iden ~ spacer ~ block
+}
+else_stmt      = {
+    "else" ~ spacer ~ block
+}
+condition_iden = {
+    "(" ~ spacer ~ identifier ~ spacer ~ ")"
+}
+
 // Flow
-stmt        =  { command | choices | expr }
+stmt        =  { command | choices | condition_stmt | expr }
 block_stmt  = _{ !(global) ~ stmt }
 block       =  {
     ":" ~ PEEK_ALL ~ PUSH(indentation) ~ block_stmt ~ (PEEK_ALL ~ block_stmt)* ~ DROP
