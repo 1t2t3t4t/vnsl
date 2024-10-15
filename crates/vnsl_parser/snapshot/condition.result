@@ -1,0 +1,154 @@
+VnslScene {
+    name: "ConditionTest",
+    main_statements: [
+        Condition(
+            VnslCondition {
+                if_block: VnslConditionBlock {
+                    iden: "conditionA",
+                    block: VnslBlock {
+                        statements: [
+                            Command(
+                                Dialogue(
+                                    VnslDialogue {
+                                        text: "A",
+                                    },
+                                ),
+                            ),
+                            Command(
+                                Dialogue(
+                                    VnslDialogue {
+                                        text: "AA",
+                                    },
+                                ),
+                            ),
+                            Command(
+                                Dialogue(
+                                    VnslDialogue {
+                                        text: "A\nAAA\nAAAAAA",
+                                    },
+                                ),
+                            ),
+                        ],
+                    },
+                },
+                elif_block: [],
+                else_block: None,
+            },
+        ),
+        Condition(
+            VnslCondition {
+                if_block: VnslConditionBlock {
+                    iden: "conditionA",
+                    block: VnslBlock {
+                        statements: [
+                            Command(
+                                Dialogue(
+                                    VnslDialogue {
+                                        text: "A",
+                                    },
+                                ),
+                            ),
+                        ],
+                    },
+                },
+                elif_block: [
+                    VnslConditionBlock {
+                        iden: "conditionB",
+                        block: VnslBlock {
+                            statements: [
+                                Command(
+                                    Dialogue(
+                                        VnslDialogue {
+                                            text: "B",
+                                        },
+                                    ),
+                                ),
+                            ],
+                        },
+                    },
+                ],
+                else_block: None,
+            },
+        ),
+        Condition(
+            VnslCondition {
+                if_block: VnslConditionBlock {
+                    iden: "conditionA",
+                    block: VnslBlock {
+                        statements: [
+                            Command(
+                                Dialogue(
+                                    VnslDialogue {
+                                        text: "A",
+                                    },
+                                ),
+                            ),
+                        ],
+                    },
+                },
+                elif_block: [
+                    VnslConditionBlock {
+                        iden: "conditionB",
+                        block: VnslBlock {
+                            statements: [
+                                Command(
+                                    Dialogue(
+                                        VnslDialogue {
+                                            text: "B",
+                                        },
+                                    ),
+                                ),
+                            ],
+                        },
+                    },
+                ],
+                else_block: Some(
+                    VnslBlock {
+                        statements: [
+                            Command(
+                                Dialogue(
+                                    VnslDialogue {
+                                        text: "C",
+                                    },
+                                ),
+                            ),
+                        ],
+                    },
+                ),
+            },
+        ),
+        Condition(
+            VnslCondition {
+                if_block: VnslConditionBlock {
+                    iden: "conditionA",
+                    block: VnslBlock {
+                        statements: [
+                            Command(
+                                Dialogue(
+                                    VnslDialogue {
+                                        text: "A",
+                                    },
+                                ),
+                            ),
+                        ],
+                    },
+                },
+                elif_block: [],
+                else_block: Some(
+                    VnslBlock {
+                        statements: [
+                            Command(
+                                Dialogue(
+                                    VnslDialogue {
+                                        text: "B",
+                                    },
+                                ),
+                            ),
+                        ],
+                    },
+                ),
+            },
+        ),
+    ],
+    labels: [],
+}

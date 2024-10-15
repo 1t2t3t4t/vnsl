@@ -1,0 +1,27 @@
+scene ConditionTest
+
+if (   conditionA ):
+    "A"
+    "AA"
+    "A
+    AAA
+    AAAAAA"
+
+
+if (conditionA):
+    "A"
+elif (conditionB):
+    "B"
+
+
+if (conditionA):
+    "A"
+elif (conditionB):
+    "B"
+else:
+    "C"
+
+if (conditionA) :
+    "A"
+else    :
+    "B"
