@@ -4,6 +4,7 @@ use vnsl_core::model::VnslStatement;
 
 pub mod choices;
 pub mod command;
+pub mod condition;
 pub mod expr;
 
 use crate::Rule;
@@ -30,6 +31,7 @@ pub fn parse_statement(rule: Pair<Rule>) -> anyhow::Result<VnslStatement> {
     match rule.as_rule() {
         Rule::command => Ok(VnslStatement::Command(command::parse_command(rule)?)),
         Rule::choices => Ok(VnslStatement::Choices(choices::parse_choices(rule)?)),
+        Rule::condition => Ok(VnslStatement::Condition(condition::parse_condition(rule)?)),
         Rule::expr => Ok(VnslStatement::Expr(expr::parse_expr(rule)?)),
         _ => unreachable!(),
     }

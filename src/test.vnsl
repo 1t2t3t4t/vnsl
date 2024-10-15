@@ -32,6 +32,13 @@ choice:
 
 jump testScope123
 
+if ( thisIsCond):
+    "A"
+elif (cond2):
+    "B"
+else:
+    "C"
+
 label testScope:
     [doSomething]
     "Yoooo

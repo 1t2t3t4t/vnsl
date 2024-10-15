@@ -10,6 +10,7 @@ use serde::{Deserialize, Serialize};
 pub enum VnslStatement {
     Command(VnslCommand),
     Choices(VnslChoices),
+    Condition(VnslCondition),
     Expr(VnslExpr),
 }
 
@@ -22,5 +23,18 @@ impl_deref!(VnslChoices, [VnslChoice], choices);
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct VnslChoice {
     pub text: String,
+    pub block: VnslBlock,
+}
+
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct VnslCondition {
+    pub if_block: VnslConditionBlock,
+    pub elif_block: Vec<VnslConditionBlock>,
+    pub else_block: Option<VnslBlock>,
+}
+
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct VnslConditionBlock {
+    pub iden: String,
     pub block: VnslBlock,
 }
