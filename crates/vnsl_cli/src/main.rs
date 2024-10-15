@@ -4,5 +4,7 @@ use cli::Cli;
 mod cli;
 
 fn main() {
-    let _ = Cli::parse();
+    let Cli { command } = Cli::parse();
+
+    println!("{:#?}", command);
 }

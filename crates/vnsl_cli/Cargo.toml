@@ -7,3 +7,5 @@ edition = "2021"
 clap = { version = "4.5.20", features = ["derive"] }
 clap_derive = "4.5.18"
 serde_json.workspace = true
+vnsl_compiler.workspace = true
+vnsl_core.workspace = true
