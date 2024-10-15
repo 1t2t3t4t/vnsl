@@ -12,7 +12,6 @@ pub struct Cli {
 #[derive(Debug, Clone, Copy, ValueEnum)]
 pub enum CompileMode {
     Json,
-    Csv,
 }
 
 impl ToString for CompileMode {
@@ -36,6 +35,10 @@ pub enum Command {
 #[derive(Debug, Args)]
 pub struct CompileOptions {
     #[arg(short, long)]
+    /// Specify input path of compiled source.
+    pub input: Option<String>,
+
+    #[arg(short, long)]
     /// Specify output path of compiled source.
-    output: Option<String>,
+    pub output: Option<String>,
 }

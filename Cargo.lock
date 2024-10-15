@@ -452,6 +452,7 @@ dependencies = [
 name = "vnsl_cli"
 version = "0.1.0"
 dependencies = [
+ "anyhow",
  "clap",
  "clap_derive",
  "serde_json",
