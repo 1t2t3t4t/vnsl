@@ -1,6 +1,7 @@
 use std::{fs, path::Path};
 
 use anyhow::Result;
+use rayon::iter::{IntoParallelIterator, ParallelIterator};
 use vnsl_core::model::VnslScene;
 
 use crate::model::CompileOptions;
@@ -13,7 +14,7 @@ pub fn compile_json(scenes: Vec<VnslScene>, options: CompileOptions) -> Result<(
     }
 
     let json_scenes: Result<Vec<(VnslScene, String)>> =
-        scenes.into_iter().map(transform_scene_json).collect();
+        scenes.into_par_iter().map(transform_scene_json).collect();
 
     for scene in json_scenes? {
         let name = scene.0.name;
@@ -24,6 +25,6 @@ pub fn compile_json(scenes: Vec<VnslScene>, options: CompileOptions) -> Result<(
 }
 
 fn transform_scene_json(scene: VnslScene) -> Result<(VnslScene, String)> {
-    let result = serde_json::to_string_pretty(&scene)?;
+    let result: String = serde_json::to_string_pretty(&scene)?;
     Ok((scene, result))
 }

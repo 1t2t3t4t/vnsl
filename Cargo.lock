@@ -455,6 +455,7 @@ dependencies = [
  "anyhow",
  "clap",
  "clap_derive",
+ "rayon",
  "serde_json",
  "vnsl_compiler",
  "vnsl_core",
