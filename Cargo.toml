@@ -8,6 +8,7 @@ members = [
     "crates/vnsl_cli",
     "crates/vnsl_compiler",
     "crates/vnsl_core",
+    "crates/vnsl_godot",
     "crates/vnsl_parser",
     "crates/vnsl_runtime",
 ]
@@ -19,6 +20,7 @@ anyhow = "1.0.86"
 thiserror = "1.0.62"
 pretty_assertions = "1.4.0"
 rayon = "1.10.0"
+serde_json = "1.0.128"
 
 vnsl_compiler = { path = "crates/vnsl_compiler" }
 vnsl_parser = { path = "crates/vnsl_parser" }
