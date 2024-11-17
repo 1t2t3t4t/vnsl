@@ -1,35 +1,37 @@
 VnslScene {
     name: "TestDialogue",
-    main_statements: [
-        Command(
-            Dialogue(
-                VnslDialogue {
-                    text: "test",
-                },
+    main_block: VnslBlock {
+        statements: [
+            Command(
+                Dialogue(
+                    VnslDialogue {
+                        text: "test",
+                    },
+                ),
             ),
-        ),
-        Command(
-            Dialogue(
-                VnslDialogue {
-                    text: "this is it",
-                },
+            Command(
+                Dialogue(
+                    VnslDialogue {
+                        text: "this is it",
+                    },
+                ),
             ),
-        ),
-        Command(
-            Dialogue(
-                VnslDialogue {
-                    text: "Multiline\n    test\n        tset",
-                },
+            Command(
+                Dialogue(
+                    VnslDialogue {
+                        text: "Multiline\n    test\n        tset",
+                    },
+                ),
             ),
-        ),
-        Command(
-            Dialogue(
-                VnslDialogue {
-                    text: "split\nnew\nline\n\n\nstr",
-                },
+            Command(
+                Dialogue(
+                    VnslDialogue {
+                        text: "split\nnew\nline\n\n\nstr",
+                    },
+                ),
             ),
-        ),
-    ],
+        ],
+    },
     labels: [
         VnslLabel {
             name: "testScope",

@@ -42,7 +42,4 @@ impl Vnsl {
         file.store_string(&result_str);
         file.flush();
     }
-
-    #[func]
-    fn take_control(&self, vnsl: Gd<Vnsl>) {}
 }

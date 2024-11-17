@@ -1,93 +1,95 @@
 VnslScene {
     name: "ActionTest",
-    main_statements: [
-        Command(
-            Action(
-                VnslAction {
-                    name: "actionParamless",
-                    args: [],
-                },
+    main_block: VnslBlock {
+        statements: [
+            Command(
+                Action(
+                    VnslAction {
+                        name: "actionParamless",
+                        args: [],
+                    },
+                ),
             ),
-        ),
-        Command(
-            Action(
-                VnslAction {
-                    name: "actionAllParamType",
-                    args: [
-                        VnslActionArg {
-                            name: None,
-                            data_type: String(
-                                "Str Param",
-                            ),
-                        },
-                        VnslActionArg {
-                            name: None,
-                            data_type: Number(
-                                1.0,
-                            ),
-                        },
-                        VnslActionArg {
-                            name: None,
-                            data_type: Number(
-                                0.5,
-                            ),
-                        },
-                        VnslActionArg {
-                            name: None,
-                            data_type: Number(
-                                100.0,
-                            ),
-                        },
-                        VnslActionArg {
-                            name: None,
-                            data_type: Bool(
-                                true,
-                            ),
-                        },
-                        VnslActionArg {
-                            name: None,
-                            data_type: Bool(
-                                false,
-                            ),
-                        },
-                    ],
-                },
+            Command(
+                Action(
+                    VnslAction {
+                        name: "actionAllParamType",
+                        args: [
+                            VnslActionArg {
+                                name: None,
+                                data_type: String(
+                                    "Str Param",
+                                ),
+                            },
+                            VnslActionArg {
+                                name: None,
+                                data_type: Number(
+                                    1.0,
+                                ),
+                            },
+                            VnslActionArg {
+                                name: None,
+                                data_type: Number(
+                                    0.5,
+                                ),
+                            },
+                            VnslActionArg {
+                                name: None,
+                                data_type: Number(
+                                    100.0,
+                                ),
+                            },
+                            VnslActionArg {
+                                name: None,
+                                data_type: Bool(
+                                    true,
+                                ),
+                            },
+                            VnslActionArg {
+                                name: None,
+                                data_type: Bool(
+                                    false,
+                                ),
+                            },
+                        ],
+                    },
+                ),
             ),
-        ),
-        Command(
-            Action(
-                VnslAction {
-                    name: "actionNamedParam",
-                    args: [
-                        VnslActionArg {
-                            name: Some(
-                                "str",
-                            ),
-                            data_type: String(
-                                "Str Please",
-                            ),
-                        },
-                        VnslActionArg {
-                            name: Some(
-                                "num",
-                            ),
-                            data_type: Number(
-                                123.232,
-                            ),
-                        },
-                        VnslActionArg {
-                            name: Some(
-                                "bool",
-                            ),
-                            data_type: Bool(
-                                true,
-                            ),
-                        },
-                    ],
-                },
+            Command(
+                Action(
+                    VnslAction {
+                        name: "actionNamedParam",
+                        args: [
+                            VnslActionArg {
+                                name: Some(
+                                    "str",
+                                ),
+                                data_type: String(
+                                    "Str Please",
+                                ),
+                            },
+                            VnslActionArg {
+                                name: Some(
+                                    "num",
+                                ),
+                                data_type: Number(
+                                    123.232,
+                                ),
+                            },
+                            VnslActionArg {
+                                name: Some(
+                                    "bool",
+                                ),
+                                data_type: Bool(
+                                    true,
+                                ),
+                            },
+                        ],
+                    },
+                ),
             ),
-        ),
-    ],
+        ],
+    },
     labels: [
         VnslLabel {
             name: "scope",

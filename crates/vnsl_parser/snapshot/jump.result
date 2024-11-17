@@ -1,34 +1,36 @@
 VnslScene {
     name: "JumpTest",
-    main_statements: [
-        Command(
-            Jump(
-                VnslJump {
-                    to_label: "abc",
+    main_block: VnslBlock {
+        statements: [
+            Command(
+                Jump(
+                    VnslJump {
+                        to_label: "abc",
+                    },
+                ),
+            ),
+            Choices(
+                VnslChoices {
+                    choices: [
+                        VnslChoice {
+                            text: "a",
+                            block: VnslBlock {
+                                statements: [
+                                    Command(
+                                        Jump(
+                                            VnslJump {
+                                                to_label: "c",
+                                            },
+                                        ),
+                                    ),
+                                ],
+                            },
+                        },
+                    ],
                 },
             ),
-        ),
-        Choices(
-            VnslChoices {
-                choices: [
-                    VnslChoice {
-                        text: "a",
-                        block: VnslBlock {
-                            statements: [
-                                Command(
-                                    Jump(
-                                        VnslJump {
-                                            to_label: "c",
-                                        },
-                                    ),
-                                ),
-                            ],
-                        },
-                    },
-                ],
-            },
-        ),
-    ],
+        ],
+    },
     labels: [
         VnslLabel {
             name: "abc",

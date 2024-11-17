@@ -1,6 +1,8 @@
 VnslScene {
     name: "LabelTest",
-    main_statements: [],
+    main_block: VnslBlock {
+        statements: [],
+    },
     labels: [
         VnslLabel {
             name: "a",

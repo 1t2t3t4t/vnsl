@@ -1,103 +1,105 @@
 VnslScene {
     name: "ChoicesTest",
-    main_statements: [
-        Choices(
-            VnslChoices {
-                choices: [
-                    VnslChoice {
-                        text: "choice A",
-                        block: VnslBlock {
-                            statements: [
-                                Command(
-                                    Dialogue(
-                                        VnslDialogue {
-                                            text: "aaaa",
-                                        },
+    main_block: VnslBlock {
+        statements: [
+            Choices(
+                VnslChoices {
+                    choices: [
+                        VnslChoice {
+                            text: "choice A",
+                            block: VnslBlock {
+                                statements: [
+                                    Command(
+                                        Dialogue(
+                                            VnslDialogue {
+                                                text: "aaaa",
+                                            },
+                                        ),
                                     ),
-                                ),
-                                Command(
-                                    Action(
-                                        VnslAction {
-                                            name: "action",
-                                            args: [
-                                                VnslActionArg {
-                                                    name: None,
-                                                    data_type: Number(
-                                                        123.0,
-                                                    ),
+                                    Command(
+                                        Action(
+                                            VnslAction {
+                                                name: "action",
+                                                args: [
+                                                    VnslActionArg {
+                                                        name: None,
+                                                        data_type: Number(
+                                                            123.0,
+                                                        ),
+                                                    },
+                                                ],
+                                            },
+                                        ),
+                                    ),
+                                ],
+                            },
+                        },
+                        VnslChoice {
+                            text: "choice B",
+                            block: VnslBlock {
+                                statements: [
+                                    Command(
+                                        Dialogue(
+                                            VnslDialogue {
+                                                text: "bbbb\nbbbbb\nbbbbb",
+                                            },
+                                        ),
+                                    ),
+                                ],
+                            },
+                        },
+                        VnslChoice {
+                            text: "choice D",
+                            block: VnslBlock {
+                                statements: [
+                                    Choices(
+                                        VnslChoices {
+                                            choices: [
+                                                VnslChoice {
+                                                    text: "sub choice",
+                                                    block: VnslBlock {
+                                                        statements: [
+                                                            Command(
+                                                                Dialogue(
+                                                                    VnslDialogue {
+                                                                        text: "single\nchoice\nis\nenough",
+                                                                    },
+                                                                ),
+                                                            ),
+                                                        ],
+                                                    },
                                                 },
                                             ],
                                         },
                                     ),
-                                ),
-                            ],
+                                ],
+                            },
                         },
-                    },
-                    VnslChoice {
-                        text: "choice B",
-                        block: VnslBlock {
-                            statements: [
-                                Command(
-                                    Dialogue(
-                                        VnslDialogue {
-                                            text: "bbbb\nbbbbb\nbbbbb",
-                                        },
-                                    ),
-                                ),
-                            ],
-                        },
-                    },
-                    VnslChoice {
-                        text: "choice D",
-                        block: VnslBlock {
-                            statements: [
-                                Choices(
-                                    VnslChoices {
-                                        choices: [
-                                            VnslChoice {
-                                                text: "sub choice",
-                                                block: VnslBlock {
-                                                    statements: [
-                                                        Command(
-                                                            Dialogue(
-                                                                VnslDialogue {
-                                                                    text: "single\nchoice\nis\nenough",
-                                                                },
-                                                            ),
-                                                        ),
-                                                    ],
-                                                },
+                    ],
+                },
+            ),
+            Choices(
+                VnslChoices {
+                    choices: [
+                        VnslChoice {
+                            text: "this is\nMultiple line\nchoice",
+                            block: VnslBlock {
+                                statements: [
+                                    Command(
+                                        Dialogue(
+                                            VnslDialogue {
+                                                text: "it works",
                                             },
-                                        ],
-                                    },
-                                ),
-                            ],
-                        },
-                    },
-                ],
-            },
-        ),
-        Choices(
-            VnslChoices {
-                choices: [
-                    VnslChoice {
-                        text: "this is\nMultiple line\nchoice",
-                        block: VnslBlock {
-                            statements: [
-                                Command(
-                                    Dialogue(
-                                        VnslDialogue {
-                                            text: "it works",
-                                        },
+                                        ),
                                     ),
-                                ),
-                            ],
+                                ],
+                            },
                         },
-                    },
-                ],
-            },
-        ),
-    ],
+                    ],
+                },
+            ),
+        ],
+    },
     labels: [
         VnslLabel {
             name: "testScope",

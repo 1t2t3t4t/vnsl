@@ -2,7 +2,7 @@ use crate::{label, statement, Rule, VnslParser};
 use anyhow::Ok;
 use pest::{iterators::Pair, Parser};
 use thiserror::Error;
-use vnsl_core::model::VnslScene;
+use vnsl_core::model::{VnslBlock, VnslScene};
 
 #[derive(Debug, Clone, Copy, Error)]
 pub enum ParseError {
@@ -25,7 +25,7 @@ pub fn parse(script: &str) -> anyhow::Result<VnslScene> {
             }
             Rule::main_statement => {
                 let statements = statement::parse_statements(rule)?;
-                scene.main_statements = statements;
+                scene.main_block = VnslBlock { statements };
             }
             Rule::label_scope => {
                 let label = label::parse_label(rule)?;

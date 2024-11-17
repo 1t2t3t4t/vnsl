@@ -1,96 +1,98 @@
 VnslScene {
     name: "VarsTestScene",
-    main_statements: [
-        Command(
-            Global(
-                VnslGlobal {
-                    name: "testString",
-                    value: String(
-                        "this is my string",
-                    ),
-                },
+    main_block: VnslBlock {
+        statements: [
+            Command(
+                Global(
+                    VnslGlobal {
+                        name: "testString",
+                        value: String(
+                            "this is my string",
+                        ),
+                    },
+                ),
             ),
-        ),
-        Command(
-            Global(
-                VnslGlobal {
-                    name: "testMultiline",
-                    value: String(
-                        "this\nIs multiline\nStr",
-                    ),
-                },
+            Command(
+                Global(
+                    VnslGlobal {
+                        name: "testMultiline",
+                        value: String(
+                            "this\nIs multiline\nStr",
+                        ),
+                    },
+                ),
             ),
-        ),
-        Command(
-            Global(
-                VnslGlobal {
-                    name: "testNumber",
-                    value: Number(
-                        0.0,
-                    ),
-                },
+            Command(
+                Global(
+                    VnslGlobal {
+                        name: "testNumber",
+                        value: Number(
+                            0.0,
+                        ),
+                    },
+                ),
             ),
-        ),
-        Command(
-            Global(
-                VnslGlobal {
-                    name: "testNumber",
-                    value: Number(
-                        0.0,
-                    ),
-                },
+            Command(
+                Global(
+                    VnslGlobal {
+                        name: "testNumber",
+                        value: Number(
+                            0.0,
+                        ),
+                    },
+                ),
             ),
-        ),
-        Command(
-            Global(
-                VnslGlobal {
-                    name: "testNumber",
-                    value: Number(
-                        123.0,
-                    ),
-                },
+            Command(
+                Global(
+                    VnslGlobal {
+                        name: "testNumber",
+                        value: Number(
+                            123.0,
+                        ),
+                    },
+                ),
             ),
-        ),
-        Command(
-            Global(
-                VnslGlobal {
-                    name: "testFloat",
-                    value: Number(
-                        0.123,
-                    ),
-                },
+            Command(
+                Global(
+                    VnslGlobal {
+                        name: "testFloat",
+                        value: Number(
+                            0.123,
+                        ),
+                    },
+                ),
             ),
-        ),
-        Command(
-            Global(
-                VnslGlobal {
-                    name: "testFloat",
-                    value: Number(
-                        20.44,
-                    ),
-                },
+            Command(
+                Global(
+                    VnslGlobal {
+                        name: "testFloat",
+                        value: Number(
+                            20.44,
+                        ),
+                    },
+                ),
             ),
-        ),
-        Command(
-            Global(
-                VnslGlobal {
-                    name: "testTrue",
-                    value: Bool(
-                        true,
-                    ),
-                },
+            Command(
+                Global(
+                    VnslGlobal {
+                        name: "testTrue",
+                        value: Bool(
+                            true,
+                        ),
+                    },
+                ),
             ),
-        ),
-        Command(
-            Global(
-                VnslGlobal {
-                    name: "testFalse",
-                    value: Bool(
-                        false,
-                    ),
-                },
+            Command(
+                Global(
+                    VnslGlobal {
+                        name: "testFalse",
+                        value: Bool(
+                            false,
+                        ),
+                    },
+                ),
             ),
-        ),
-    ],
+        ],
+    },
     labels: [],
 }

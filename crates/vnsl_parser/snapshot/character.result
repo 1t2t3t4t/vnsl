@@ -1,34 +1,36 @@
 VnslScene {
     name: "CharacterTest",
-    main_statements: [
-        Command(
-            SetCharacter(
-                VnslSetCharacter {
-                    id: "Boss",
+    main_block: VnslBlock {
+        statements: [
+            Command(
+                SetCharacter(
+                    VnslSetCharacter {
+                        id: "Boss",
+                    },
+                ),
+            ),
+            Choices(
+                VnslChoices {
+                    choices: [
+                        VnslChoice {
+                            text: "A",
+                            block: VnslBlock {
+                                statements: [
+                                    Command(
+                                        SetCharacter(
+                                            VnslSetCharacter {
+                                                id: "Boss2",
+                                            },
+                                        ),
+                                    ),
+                                ],
+                            },
+                        },
+                    ],
                 },
             ),
-        ),
-        Choices(
-            VnslChoices {
-                choices: [
-                    VnslChoice {
-                        text: "A",
-                        block: VnslBlock {
-                            statements: [
-                                Command(
-                                    SetCharacter(
-                                        VnslSetCharacter {
-                                            id: "Boss2",
-                                        },
-                                    ),
-                                ),
-                            ],
-                        },
-                    },
-                ],
-            },
-        ),
-    ],
+        ],
+    },
     labels: [
         VnslLabel {
             name: "test",
