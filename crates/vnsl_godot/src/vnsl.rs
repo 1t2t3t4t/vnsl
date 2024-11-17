@@ -3,7 +3,7 @@ use std::path::Path;
 use godot::{
     classes::{file_access::ModeFlags, DirAccess, FileAccess, INode, Node},
     meta::ToGodot,
-    obj::{Base, Gd},
+    obj::Base,
     prelude::{godot_api, GodotClass},
 };
 

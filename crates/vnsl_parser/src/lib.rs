@@ -18,7 +18,7 @@ mod tests {
     use pretty_assertions::assert_str_eq;
     use std::fs;
 
-    const FORCE_RECORD: bool = true;
+    const FORCE_RECORD: bool = false;
 
     #[test]
     fn test_parsing_snapshot() {
