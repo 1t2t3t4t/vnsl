@@ -1,20 +1,24 @@
-use vnsl_core::model::VnslBlock;
+use crate::block_runner::BlockRunner;
 
 #[derive(Debug, Default)]
-pub struct BlockStack {
-    blocks: Vec<VnslBlock>,
+pub struct RunStack {
+    blocks: Vec<BlockRunner>,
 }
 
-impl BlockStack {
-    pub fn top(&self) -> Option<&VnslBlock> {
+impl RunStack {
+    pub fn top(&self) -> Option<&BlockRunner> {
         self.blocks.last()
     }
 
-    pub fn push(&mut self, block: VnslBlock) {
+    pub fn top_mut(&mut self) -> Option<&mut BlockRunner> {
+        self.blocks.last_mut()
+    }
+
+    pub fn push(&mut self, block: BlockRunner) {
         self.blocks.push(block);
     }
 
-    pub fn pop(&mut self) -> Option<VnslBlock> {
+    pub fn pop(&mut self) -> Option<BlockRunner> {
         self.blocks.pop()
     }
 
