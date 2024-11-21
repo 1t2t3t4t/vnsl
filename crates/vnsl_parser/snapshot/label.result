@@ -47,6 +47,7 @@ VnslScene {
                         VnslChoices {
                             choices: [
                                 VnslChoice {
+                                    id: 660b2e52-a992-4083-aa51-34a3070d6f9a,
                                     text: "CA",
                                     block: VnslBlock {
                                         statements: [
@@ -61,6 +62,7 @@ VnslScene {
                                     },
                                 },
                                 VnslChoice {
+                                    id: 3acd3129-06b9-4959-bf3b-fa1458cafeef,
                                     text: "CB",
                                     block: VnslBlock {
                                         statements: [

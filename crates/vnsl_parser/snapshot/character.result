@@ -13,6 +13,7 @@ VnslScene {
                 VnslChoices {
                     choices: [
                         VnslChoice {
+                            id: 796bfacc-e9c5-493d-bafb-7181a2983446,
                             text: "A",
                             block: VnslBlock {
                                 statements: [

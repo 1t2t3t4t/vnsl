@@ -4,6 +4,7 @@ use super::{VnslBlock, VnslCommand};
 use crate::impl_deref;
 pub use expr::*;
 use serde::{Deserialize, Serialize};
+use uuid::Uuid;
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(tag = "type", content = "content")]
@@ -20,10 +21,21 @@ pub struct VnslChoices {
 }
 impl_deref!(VnslChoices, [VnslChoice], choices);
 
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct VnslChoice {
+    pub id: Uuid,
     pub text: String,
     pub block: VnslBlock,
+}
+
+impl Default for VnslChoice {
+    fn default() -> Self {
+        Self {
+            id: Uuid::new_v4(),
+            text: String::default(),
+            block: VnslBlock::default(),
+        }
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
