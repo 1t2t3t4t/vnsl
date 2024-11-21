@@ -5,8 +5,12 @@ use vnsl_core::model::VnslScene;
 mod block_runner;
 mod block_stack;
 
+pub trait RuntimeDelegateHandler {
+    fn check_condition(&self, condition_id: &str, context: &RunContext) -> bool;
+}
+
 #[derive(Debug, Default)]
-struct RunContext {}
+pub struct RunContext {}
 
 #[derive(Debug)]
 pub struct Runtime {
@@ -33,8 +37,11 @@ impl Runtime {
         }
     }
 
-    pub fn step(&mut self) -> RuntimeCommand {
-        let _ = self.run_stack.top_mut().map(|s| s.step(&mut self.context));
+    pub fn step(&mut self, delegate_handler: &impl RuntimeDelegateHandler) -> RuntimeCommand {
+        let _ = self
+            .run_stack
+            .top_mut()
+            .map(|s| s.step(&mut self.context, delegate_handler));
         RuntimeCommand::None
     }
 }
