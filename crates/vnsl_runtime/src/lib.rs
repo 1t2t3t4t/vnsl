@@ -1,6 +1,6 @@
-use block_runner::BlockRunner;
+use block_runner::{BlockCommand, BlockRunner};
 use block_stack::RunStack;
-use vnsl_core::model::VnslScene;
+use vnsl_core::model::{VnslBlock, VnslScene};
 
 mod block_runner;
 mod block_stack;
@@ -38,10 +38,40 @@ impl Runtime {
     }
 
     pub fn step(&mut self, delegate_handler: &impl RuntimeDelegateHandler) -> RuntimeCommand {
-        let _ = self
+        let Some(cmd) = self
             .run_stack
             .top_mut()
-            .map(|s| s.step(&mut self.context, delegate_handler));
-        RuntimeCommand::None
+            .map(|s| s.step(&mut self.context, delegate_handler))
+        else {
+            return RuntimeCommand::None;
+        };
+
+        match cmd {
+            BlockCommand::ForkBlock(vnsl_block) => {
+                self.fork_block(vnsl_block);
+                self.step(delegate_handler);
+                RuntimeCommand::None
+            }
+            BlockCommand::Jump(vnsl_jump) => {
+                let Some(label) = self.current_scene.labels.get(&vnsl_jump.to_label) else {
+                    todo!("Handle missing label")
+                };
+                self.fork_block(label.block.clone());
+                RuntimeCommand::None
+            }
+            BlockCommand::Global(vnsl_global) => todo!(),
+
+            BlockCommand::DisplayText(vnsl_dialogue) => todo!(),
+            BlockCommand::SetCharacter(vnsl_set_character) => todo!(),
+            BlockCommand::Action(vnsl_action) => todo!(),
+            BlockCommand::Choices(vnsl_choices) => todo!(),
+            BlockCommand::EndOfStack => todo!(),
+            BlockCommand::None => todo!(),
+        }
+    }
+
+    fn fork_block(&mut self, block: VnslBlock) {
+        let runner = BlockRunner::new(block);
+        self.run_stack.push(runner);
     }
 }

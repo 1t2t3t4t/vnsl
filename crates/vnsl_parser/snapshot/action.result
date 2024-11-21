@@ -90,8 +90,8 @@ VnslScene {
             ),
         ],
     },
-    labels: [
-        VnslLabel {
+    labels: {
+        "scope": VnslLabel {
             name: "scope",
             block: VnslBlock {
                 statements: [
@@ -113,5 +113,5 @@ VnslScene {
                 ],
             },
         },
-    ],
+    },
 }

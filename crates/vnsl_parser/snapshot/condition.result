@@ -152,5 +152,5 @@ VnslScene {
             ),
         ],
     },
-    labels: [],
+    labels: {},
 }

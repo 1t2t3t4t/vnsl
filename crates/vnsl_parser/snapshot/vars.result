@@ -94,5 +94,5 @@ VnslScene {
             ),
         ],
     },
-    labels: [],
+    labels: {},
 }

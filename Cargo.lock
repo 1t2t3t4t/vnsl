@@ -714,7 +714,6 @@ name = "vnsl_core"
 version = "0.1.0"
 dependencies = [
  "serde",
- "uuid",
 ]
 
 [[package]]
@@ -736,6 +735,7 @@ dependencies = [
  "pest_derive",
  "pretty_assertions",
  "thiserror",
+ "uuid",
  "vnsl_core",
 ]
 

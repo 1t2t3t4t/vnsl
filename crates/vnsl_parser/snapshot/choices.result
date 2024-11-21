@@ -6,7 +6,7 @@ VnslScene {
                 VnslChoices {
                     choices: [
                         VnslChoice {
-                            id: 5941adaf-66f9-453c-982e-71d800128d9d,
+                            id: "TestUuid",
                             text: "choice A",
                             block: VnslBlock {
                                 statements: [
@@ -36,7 +36,7 @@ VnslScene {
                             },
                         },
                         VnslChoice {
-                            id: 2c3a78d6-924b-4e05-857b-fd5b9a987962,
+                            id: "TestUuid",
                             text: "choice B",
                             block: VnslBlock {
                                 statements: [
@@ -51,7 +51,7 @@ VnslScene {
                             },
                         },
                         VnslChoice {
-                            id: 1af9603c-25b3-4e26-9849-6c0e13205a18,
+                            id: "TestUuid",
                             text: "choice D",
                             block: VnslBlock {
                                 statements: [
@@ -59,7 +59,7 @@ VnslScene {
                                         VnslChoices {
                                             choices: [
                                                 VnslChoice {
-                                                    id: 98b858a7-f9ce-4eca-b426-863bb95bda64,
+                                                    id: "TestUuid",
                                                     text: "sub choice",
                                                     block: VnslBlock {
                                                         statements: [
@@ -86,7 +86,7 @@ VnslScene {
                 VnslChoices {
                     choices: [
                         VnslChoice {
-                            id: cbf69665-e25e-448f-b388-3860f70b0a44,
+                            id: "TestUuid",
                             text: "this is\nMultiple line\nchoice",
                             block: VnslBlock {
                                 statements: [
@@ -105,8 +105,8 @@ VnslScene {
             ),
         ],
     },
-    labels: [
-        VnslLabel {
+    labels: {
+        "testScope": VnslLabel {
             name: "testScope",
             block: VnslBlock {
                 statements: [
@@ -114,7 +114,7 @@ VnslScene {
                         VnslChoices {
                             choices: [
                                 VnslChoice {
-                                    id: dfb64240-8cbf-4cd2-be78-09086de59722,
+                                    id: "TestUuid",
                                     text: "sub A",
                                     block: VnslBlock {
                                         statements: [
@@ -129,7 +129,7 @@ VnslScene {
                                     },
                                 },
                                 VnslChoice {
-                                    id: 50bb3e31-0d32-4d7d-a58b-483f38502546,
+                                    id: "TestUuid",
                                     text: "sub B",
                                     block: VnslBlock {
                                         statements: [
@@ -137,7 +137,7 @@ VnslScene {
                                                 VnslChoices {
                                                     choices: [
                                                         VnslChoice {
-                                                            id: d155a4e8-7262-4ade-b0bd-2a9f6a575435,
+                                                            id: "TestUuid",
                                                             text: "sub sub A",
                                                             block: VnslBlock {
                                                                 statements: [
@@ -163,5 +163,5 @@ VnslScene {
                 ],
             },
         },
-    ],
+    },
 }

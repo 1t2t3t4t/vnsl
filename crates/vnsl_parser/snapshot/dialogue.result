@@ -32,8 +32,8 @@ VnslScene {
             ),
         ],
     },
-    labels: [
-        VnslLabel {
+    labels: {
+        "testScope": VnslLabel {
             name: "testScope",
             block: VnslBlock {
                 statements: [
@@ -54,5 +54,5 @@ VnslScene {
                 ],
             },
         },
-    ],
+    },
 }

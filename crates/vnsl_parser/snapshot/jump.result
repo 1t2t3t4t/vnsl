@@ -13,7 +13,7 @@ VnslScene {
                 VnslChoices {
                     choices: [
                         VnslChoice {
-                            id: 762b4037-297f-469c-ab74-a671f1ffdef5,
+                            id: "TestUuid",
                             text: "a",
                             block: VnslBlock {
                                 statements: [
@@ -32,8 +32,8 @@ VnslScene {
             ),
         ],
     },
-    labels: [
-        VnslLabel {
+    labels: {
+        "abc": VnslLabel {
             name: "abc",
             block: VnslBlock {
                 statements: [
@@ -47,7 +47,7 @@ VnslScene {
                 ],
             },
         },
-        VnslLabel {
+        "d": VnslLabel {
             name: "d",
             block: VnslBlock {
                 statements: [
@@ -61,5 +61,5 @@ VnslScene {
                 ],
             },
         },
-    ],
+    },
 }

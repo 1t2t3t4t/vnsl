@@ -3,8 +3,8 @@ VnslScene {
     main_block: VnslBlock {
         statements: [],
     },
-    labels: [
-        VnslLabel {
+    labels: {
+        "a": VnslLabel {
             name: "a",
             block: VnslBlock {
                 statements: [
@@ -25,7 +25,7 @@ VnslScene {
                 ],
             },
         },
-        VnslLabel {
+        "b": VnslLabel {
             name: "b",
             block: VnslBlock {
                 statements: [
@@ -39,7 +39,7 @@ VnslScene {
                 ],
             },
         },
-        VnslLabel {
+        "c": VnslLabel {
             name: "c",
             block: VnslBlock {
                 statements: [
@@ -47,7 +47,7 @@ VnslScene {
                         VnslChoices {
                             choices: [
                                 VnslChoice {
-                                    id: 660b2e52-a992-4083-aa51-34a3070d6f9a,
+                                    id: "TestUuid",
                                     text: "CA",
                                     block: VnslBlock {
                                         statements: [
@@ -62,7 +62,7 @@ VnslScene {
                                     },
                                 },
                                 VnslChoice {
-                                    id: 3acd3129-06b9-4959-bf3b-fa1458cafeef,
+                                    id: "TestUuid",
                                     text: "CB",
                                     block: VnslBlock {
                                         statements: [
@@ -82,5 +82,5 @@ VnslScene {
                 ],
             },
         },
-    ],
+    },
 }

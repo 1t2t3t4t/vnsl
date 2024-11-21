@@ -1,6 +1,15 @@
 use crate::{block, data_type, Rule};
 use pest::iterators::Pair;
+use uuid::Uuid;
 use vnsl_core::model::{VnslChoice, VnslChoices};
+
+fn gen_uuid() -> String {
+    if cfg!(test) {
+        "TestUuid".to_string()
+    } else {
+        Uuid::new_v4().to_string()
+    }
+}
 
 pub fn parse_choices(rule: Pair<Rule>) -> anyhow::Result<VnslChoices> {
     let inner = rule.into_inner();
@@ -19,6 +28,7 @@ pub fn parse_choices(rule: Pair<Rule>) -> anyhow::Result<VnslChoices> {
 fn parse_choice(rule: Pair<Rule>) -> anyhow::Result<VnslChoice> {
     let inner = rule.into_inner();
     let mut choice = VnslChoice::default();
+    choice.id = gen_uuid();
     for rule in inner {
         match rule.as_rule() {
             Rule::string => {

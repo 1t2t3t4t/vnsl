@@ -1,6 +1,8 @@
 mod command;
 mod statement;
 
+use std::collections::{BTreeMap, HashMap};
+
 use crate::impl_deref;
 
 pub use command::*;
@@ -11,7 +13,7 @@ pub use statement::*;
 pub struct VnslScene {
     pub name: String,
     pub main_block: VnslBlock,
-    pub labels: Vec<VnslLabel>,
+    pub labels: BTreeMap<String, VnslLabel>,
 }
 
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
@@ -39,7 +41,7 @@ impl VnslScene {
         Self {
             name: name.to_string(),
             main_block: VnslBlock::default(),
-            labels: vec![],
+            labels: BTreeMap::new(),
         }
     }
 }

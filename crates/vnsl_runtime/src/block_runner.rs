@@ -1,6 +1,6 @@
 use vnsl_core::model::{
-    VnslAction, VnslBlock, VnslChoices, VnslCommand, VnslCondition, VnslConditionBlock,
-    VnslDialogue, VnslGlobal, VnslJump, VnslSetCharacter, VnslStatement,
+    VnslAction, VnslBlock, VnslChoices, VnslCommand, VnslCondition, VnslDialogue, VnslGlobal,
+    VnslJump, VnslSetCharacter, VnslStatement,
 };
 
 use crate::{RunContext, RuntimeDelegateHandler};

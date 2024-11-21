@@ -29,7 +29,7 @@ pub fn parse(script: &str) -> anyhow::Result<VnslScene> {
             }
             Rule::label_scope => {
                 let label = label::parse_label(rule)?;
-                scene.labels.push(label);
+                scene.labels.insert(label.name.clone(), label);
             }
             Rule::EOI => (),
             _ => unreachable!("Got unexpected rule {:?} in main loop", rule.as_rule()),
