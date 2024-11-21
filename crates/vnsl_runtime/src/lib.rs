@@ -1,6 +1,8 @@
+use std::collections::HashMap;
+
 use block_runner::{BlockCommand, BlockRunner};
 use block_stack::RunStack;
-use vnsl_core::model::{VnslBlock, VnslScene};
+use vnsl_core::model::{VnslBlock, VnslDataType, VnslScene};
 
 mod block_runner;
 mod block_stack;
@@ -10,7 +12,9 @@ pub trait RuntimeDelegateHandler {
 }
 
 #[derive(Debug, Default)]
-pub struct RunContext {}
+pub struct RunContext {
+    variables: HashMap<String, VnslDataType>,
+}
 
 #[derive(Debug)]
 pub struct Runtime {
@@ -19,6 +23,7 @@ pub struct Runtime {
     run_stack: RunStack,
 }
 
+#[derive(Debug, Clone, PartialEq)]
 pub enum RuntimeCommand {
     SetCharacterId(String),
     EndOfStack,
@@ -59,7 +64,12 @@ impl Runtime {
                 self.fork_block(label.block.clone());
                 RuntimeCommand::None
             }
-            BlockCommand::Global(vnsl_global) => todo!(),
+            BlockCommand::Global(vnsl_global) => {
+                self.context
+                    .variables
+                    .insert(vnsl_global.name.clone(), vnsl_global.value.clone());
+                RuntimeCommand::None
+            }
 
             BlockCommand::DisplayText(vnsl_dialogue) => todo!(),
             BlockCommand::SetCharacter(vnsl_set_character) => todo!(),
