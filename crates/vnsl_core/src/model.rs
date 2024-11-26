@@ -1,7 +1,11 @@
 mod command;
 mod statement;
 
-use std::collections::{BTreeMap, HashMap};
+#[cfg(debug_assertions)]
+use std::collections::BTreeMap;
+
+#[cfg(not(debug_assertions))]
+use std::collections::HashMap;
 
 use crate::impl_deref;
 
@@ -13,7 +17,11 @@ pub use statement::*;
 pub struct VnslScene {
     pub name: String,
     pub main_block: VnslBlock,
+    #[cfg(debug_assertions)]
     pub labels: BTreeMap<String, VnslLabel>,
+
+    #[cfg(not(debug_assertions))]
+    pub labels: HashMap<String, VnslLabel>,
 }
 
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
@@ -41,7 +49,7 @@ impl VnslScene {
         Self {
             name: name.to_string(),
             main_block: VnslBlock::default(),
-            labels: BTreeMap::new(),
+            labels: Default::default(),
         }
     }
 }
