@@ -1,6 +1,5 @@
-use std::process::exit;
-
-use mlua::{FromLuaMulti, IntoLua, Lua, Table};
+use mlua::{FromLuaMulti, IntoLua, Lua, Table, Value};
+use vnsl_core::model::VnslDataType;
 
 use crate::runtime_result::{RuntimeError, RuntimeResult};
 
@@ -43,6 +42,14 @@ impl LuaRuntime {
         Ok(())
     }
 
+    pub fn set_globals_val_data_type(&self, key: &str, val: VnslDataType) -> RuntimeResult<()> {
+        self.ensure_globals()?;
+        let global_table = self.lua.globals().get::<Table>(GLOBAL_KEY)?;
+        global_table
+            .set(key, val.to_lua(&self.lua)?)
+            .map_err(|e| RuntimeError::LuaEvalError(e))
+    }
+
     pub fn set_globals_val<T: IntoLua>(&self, key: &str, val: T) -> RuntimeResult<()> {
         self.ensure_globals()?;
         let global_table = self.lua.globals().get::<Table>(GLOBAL_KEY)?;
@@ -56,5 +63,19 @@ impl LuaRuntime {
             .load(expr)
             .eval::<T>()
             .map_err(|e| RuntimeError::LuaEvalError(e))
+    }
+}
+
+pub trait ToLua {
+    fn to_lua(self, lua: &Lua) -> mlua::Result<Value>;
+}
+
+impl ToLua for VnslDataType {
+    fn to_lua(self, lua: &Lua) -> mlua::Result<Value> {
+        match self {
+            VnslDataType::String(s) => s.into_lua(lua),
+            VnslDataType::Number(n) => n.into_lua(lua),
+            VnslDataType::Bool(b) => b.into_lua(lua),
+        }
     }
 }

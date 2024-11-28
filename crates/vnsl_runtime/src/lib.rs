@@ -1,23 +1,18 @@
-use std::collections::HashMap;
-
 use block_runner::{BlockCommand, BlockRunner};
 use block_stack::RunStack;
-use lua_runtime::LuaRuntime;
+use lua_runtime::{LuaRuntime, ToLua};
 use runtime_result::RuntimeResult;
-use vnsl_core::model::{VnslBlock, VnslDataType, VnslScene};
+use vnsl_core::model::{VnslBlock, VnslScene};
 
 mod block_runner;
 mod block_stack;
 mod lua_runtime;
 mod runtime_result;
 
-pub trait RuntimeDelegateHandler {
-    fn check_condition(&self, condition_id: &str, context: &RunContext) -> bool;
-}
+pub trait RuntimeDelegateHandler {}
 
 #[derive(Debug, Default)]
 pub struct RunContext {
-    variables: HashMap<String, VnslDataType>,
     lua_runtime: LuaRuntime,
 }
 
@@ -62,7 +57,7 @@ impl Runtime {
         match cmd? {
             BlockCommand::ForkBlock(vnsl_block) => {
                 self.fork_block(vnsl_block);
-                self.step(delegate_handler);
+                self.step(delegate_handler)?;
                 Ok(RuntimeCommand::None)
             }
             BlockCommand::Jump(vnsl_jump) => {
@@ -74,8 +69,8 @@ impl Runtime {
             }
             BlockCommand::Global(vnsl_global) => {
                 self.context
-                    .variables
-                    .insert(vnsl_global.name.clone(), vnsl_global.value.clone());
+                    .lua_runtime
+                    .set_globals_val_data_type(&vnsl_global.name, vnsl_global.value.clone())?;
                 Ok(RuntimeCommand::None)
             }
 

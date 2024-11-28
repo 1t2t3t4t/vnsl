@@ -97,19 +97,9 @@ mod test {
         VnslLuaEvalType, VnslStatement,
     };
 
-    use crate::{block_runner::BlockCommand, RunContext, RuntimeDelegateHandler};
+    use crate::{block_runner::BlockCommand, RunContext};
 
     use super::exec_condition;
-
-    struct MockRuntimeDelegateHandler {
-        true_cond_id: String,
-    }
-
-    impl RuntimeDelegateHandler for MockRuntimeDelegateHandler {
-        fn check_condition(&self, condition_id: &str, _context: &crate::RunContext) -> bool {
-            self.true_cond_id == condition_id
-        }
-    }
 
     fn create_block(label: &str) -> VnslBlock {
         VnslBlock {
