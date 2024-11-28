@@ -140,7 +140,7 @@ mod test {
             else_block: None,
         };
 
-        context.lua_runtime.set_global("cond", 1).unwrap();
+        context.lua_runtime.set_globals_val("cond", 1).unwrap();
         assert_eq!(
             exec_condition(&condition, &context).unwrap(),
             BlockCommand::ForkBlock(create_block("if block"))
@@ -168,13 +168,13 @@ mod test {
             else_block: None,
         };
 
-        context.lua_runtime.set_global("cond", 2).unwrap();
+        context.lua_runtime.set_globals_val("cond", 2).unwrap();
         assert_eq!(
             exec_condition(&condition, &context).unwrap(),
             BlockCommand::ForkBlock(create_block("elif block"))
         );
 
-        context.lua_runtime.set_global("cond", 3).unwrap();
+        context.lua_runtime.set_globals_val("cond", 3).unwrap();
         assert_eq!(
             exec_condition(&condition, &context).unwrap(),
             BlockCommand::ForkBlock(create_block("elif block 2"))
@@ -184,7 +184,7 @@ mod test {
     #[test]
     fn test_condition_else() {
         let context = RunContext::default();
-        context.lua_runtime.set_global("cond", 300).unwrap();
+        context.lua_runtime.set_globals_val("cond", 300).unwrap();
         let condition = VnslCondition {
             if_block: VnslConditionBlock {
                 condition: create_expr("globals.cond == 1"),
@@ -206,7 +206,7 @@ mod test {
     #[test]
     fn test_condition_none() {
         let context = RunContext::default();
-        context.lua_runtime.set_global("cond", 300).unwrap();
+        context.lua_runtime.set_globals_val("cond", 300).unwrap();
         let condition = VnslCondition {
             if_block: VnslConditionBlock {
                 condition: create_expr("globals.cond == 1"),

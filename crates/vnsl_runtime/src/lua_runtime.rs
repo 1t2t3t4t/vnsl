@@ -1,6 +1,10 @@
+use std::process::exit;
+
 use mlua::{FromLuaMulti, IntoLua, Lua, Table};
 
 use crate::runtime_result::{RuntimeError, RuntimeResult};
+
+const GLOBAL_KEY: &str = "globals";
 
 #[derive(Debug)]
 pub struct LuaRuntime {
@@ -11,14 +15,37 @@ impl Default for LuaRuntime {
     fn default() -> Self {
         let lua = Lua::new();
         let globals_table = lua.create_table().expect("create globals table");
-        lua.globals().set("globals", globals_table).unwrap();
+        lua.globals()
+            .set(GLOBAL_KEY, globals_table)
+            .expect("assign globals table");
         Self { lua }
     }
 }
 
 impl LuaRuntime {
-    pub fn set_global<T: IntoLua>(&self, key: &str, val: T) -> RuntimeResult<()> {
-        let global_table = self.lua.globals().get::<Table>("globals")?;
+    fn ensure_globals(&self) -> RuntimeResult<()> {
+        let exist = self
+            .lua
+            .globals()
+            .contains_key(GLOBAL_KEY)
+            .map_err(|e| RuntimeError::LuaEvalError(e))?;
+        if !exist {
+            let globals_table = self
+                .lua
+                .create_table()
+                .map_err(|e| RuntimeError::LuaEvalError(e))?;
+            self.lua
+                .globals()
+                .set(GLOBAL_KEY, globals_table)
+                .map_err(|e| RuntimeError::LuaEvalError(e))?;
+        }
+
+        Ok(())
+    }
+
+    pub fn set_globals_val<T: IntoLua>(&self, key: &str, val: T) -> RuntimeResult<()> {
+        self.ensure_globals()?;
+        let global_table = self.lua.globals().get::<Table>(GLOBAL_KEY)?;
         global_table
             .set(key, val)
             .map_err(|e| RuntimeError::LuaEvalError(e))
