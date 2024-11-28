@@ -3,11 +3,13 @@ use std::collections::HashMap;
 use block_runner::{BlockCommand, BlockRunner};
 use block_stack::RunStack;
 use lua_runtime::LuaRuntime;
+use runtime_result::RuntimeResult;
 use vnsl_core::model::{VnslBlock, VnslDataType, VnslScene};
 
 mod block_runner;
 mod block_stack;
 mod lua_runtime;
+mod runtime_result;
 
 pub trait RuntimeDelegateHandler {
     fn check_condition(&self, condition_id: &str, context: &RunContext) -> bool;
@@ -45,34 +47,36 @@ impl Runtime {
         }
     }
 
-    pub fn step(&mut self, delegate_handler: &impl RuntimeDelegateHandler) -> RuntimeCommand {
+    pub fn step(
+        &mut self,
+        delegate_handler: &impl RuntimeDelegateHandler,
+    ) -> RuntimeResult<RuntimeCommand> {
         let Some(cmd) = self
             .run_stack
             .top_mut()
             .map(|s| s.step(&mut self.context, delegate_handler))
         else {
-            return RuntimeCommand::None;
+            return Ok(RuntimeCommand::None);
         };
 
-        self.context.lua_runtime.hi();
-        match cmd {
+        match cmd? {
             BlockCommand::ForkBlock(vnsl_block) => {
                 self.fork_block(vnsl_block);
                 self.step(delegate_handler);
-                RuntimeCommand::None
+                Ok(RuntimeCommand::None)
             }
             BlockCommand::Jump(vnsl_jump) => {
                 let Some(label) = self.current_scene.labels.get(&vnsl_jump.to_label) else {
                     todo!("Handle missing label")
                 };
                 self.fork_block(label.block.clone());
-                RuntimeCommand::None
+                Ok(RuntimeCommand::None)
             }
             BlockCommand::Global(vnsl_global) => {
                 self.context
                     .variables
                     .insert(vnsl_global.name.clone(), vnsl_global.value.clone());
-                RuntimeCommand::None
+                Ok(RuntimeCommand::None)
             }
 
             BlockCommand::DisplayText(vnsl_dialogue) => todo!(),

@@ -1,4 +1,6 @@
-use mlua::Lua;
+use mlua::{FromLuaMulti, Lua};
+
+use crate::runtime_result::{RuntimeError, RuntimeResult};
 
 #[derive(Debug)]
 pub struct LuaRuntime {
@@ -12,7 +14,10 @@ impl Default for LuaRuntime {
 }
 
 impl LuaRuntime {
-    pub fn hi(&self) {
-        println!("{:?}", self.lua)
+    pub fn eval_expr<T: FromLuaMulti>(&self, expr: &str) -> RuntimeResult<T> {
+        self.lua
+            .load(expr)
+            .eval::<T>()
+            .map_err(|e| RuntimeError::LuaEvalError(e))
     }
 }

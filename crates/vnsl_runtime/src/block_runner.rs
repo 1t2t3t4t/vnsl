@@ -3,7 +3,7 @@ use vnsl_core::model::{
     VnslJump, VnslSetCharacter, VnslStatement,
 };
 
-use crate::{RunContext, RuntimeDelegateHandler};
+use crate::{runtime_result::RuntimeResult, RunContext, RuntimeDelegateHandler};
 
 #[derive(Debug)]
 pub struct BlockRunner {
@@ -35,17 +35,15 @@ impl BlockRunner {
     pub fn step(
         &mut self,
         context: &mut RunContext,
-        delegate_handler: &impl RuntimeDelegateHandler,
-    ) -> BlockCommand {
+        _delegate_handler: &impl RuntimeDelegateHandler,
+    ) -> RuntimeResult<BlockCommand> {
         let Some(stmt) = self.block.statements.get(self.current_stmt) else {
-            return BlockCommand::EndOfStack;
+            return Ok(BlockCommand::EndOfStack);
         };
         let result = match stmt {
-            VnslStatement::Command(vnsl_command) => exec_command(vnsl_command),
-            VnslStatement::Choices(vnsl_choices) => BlockCommand::Choices(vnsl_choices.clone()),
-            VnslStatement::Condition(vnsl_condition) => {
-                exec_condition(vnsl_condition, context, delegate_handler)
-            }
+            VnslStatement::Command(vnsl_command) => Ok(exec_command(vnsl_command)),
+            VnslStatement::Choices(vnsl_choices) => Ok(BlockCommand::Choices(vnsl_choices.clone())),
+            VnslStatement::Condition(vnsl_condition) => exec_condition(vnsl_condition, context),
         };
 
         self.current_stmt += 1;
@@ -57,27 +55,27 @@ impl BlockRunner {
 fn exec_condition(
     vnsl_condition: &VnslCondition,
     context: &RunContext,
-    delegate_handler: &impl RuntimeDelegateHandler,
-) -> BlockCommand {
-    let check_cond = |condition: &str| delegate_handler.check_condition(condition, context);
+) -> RuntimeResult<BlockCommand> {
+    if context
+        .lua_runtime
+        .eval_expr(&vnsl_condition.if_block.condition.code)?
+    {
+        return Ok(BlockCommand::ForkBlock(
+            vnsl_condition.if_block.block.clone(),
+        ));
+    }
 
-    // if check_cond(&vnsl_condition.if_block.iden) {
-    //     return BlockCommand::ForkBlock(vnsl_condition.if_block.block.clone());
-    // }
+    for block in &vnsl_condition.elif_block {
+        if context.lua_runtime.eval_expr(&block.condition.code)? {
+            return Ok(BlockCommand::ForkBlock(block.block.clone()));
+        }
+    }
 
-    // if let Some(elif_block) = vnsl_condition
-    //     .elif_block
-    //     .iter()
-    //     .find(|c| check_cond(&c.iden))
-    // {
-    //     return BlockCommand::ForkBlock(elif_block.block.clone());
-    // }
+    if let Some(else_block) = &vnsl_condition.else_block {
+        return Ok(BlockCommand::ForkBlock(else_block.clone()));
+    }
 
-    // if let Some(else_block) = &vnsl_condition.else_block {
-    //     return BlockCommand::ForkBlock(else_block.clone());
-    // }
-
-    BlockCommand::None
+    Ok(BlockCommand::None)
 }
 
 fn exec_command(cmd: &VnslCommand) -> BlockCommand {
