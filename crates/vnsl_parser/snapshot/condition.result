@@ -5,7 +5,10 @@ VnslScene {
             Condition(
                 VnslCondition {
                     if_block: VnslConditionBlock {
-                        iden: "conditionA",
+                        condition: VnslLuaEvalExpr {
+                            code: "globals.y == 20",
+                            return_type: Bool,
+                        },
                         block: VnslBlock {
                             statements: [
                                 Command(
@@ -39,7 +42,10 @@ VnslScene {
             Condition(
                 VnslCondition {
                     if_block: VnslConditionBlock {
-                        iden: "conditionA",
+                        condition: VnslLuaEvalExpr {
+                            code: "globals.y == 20",
+                            return_type: Bool,
+                        },
                         block: VnslBlock {
                             statements: [
                                 Command(
@@ -54,7 +60,10 @@ VnslScene {
                     },
                     elif_block: [
                         VnslConditionBlock {
-                            iden: "conditionB",
+                            condition: VnslLuaEvalExpr {
+                                code: "(x + y) > 30 or (x and z)",
+                                return_type: Bool,
+                            },
                             block: VnslBlock {
                                 statements: [
                                     Command(
@@ -74,7 +83,10 @@ VnslScene {
             Condition(
                 VnslCondition {
                     if_block: VnslConditionBlock {
-                        iden: "conditionA",
+                        condition: VnslLuaEvalExpr {
+                            code: "globals.y == 20",
+                            return_type: Bool,
+                        },
                         block: VnslBlock {
                             statements: [
                                 Command(
@@ -89,7 +101,10 @@ VnslScene {
                     },
                     elif_block: [
                         VnslConditionBlock {
-                            iden: "conditionB",
+                            condition: VnslLuaEvalExpr {
+                                code: "globals.y == 20",
+                                return_type: Bool,
+                            },
                             block: VnslBlock {
                                 statements: [
                                     Command(
@@ -121,7 +136,10 @@ VnslScene {
             Condition(
                 VnslCondition {
                     if_block: VnslConditionBlock {
-                        iden: "conditionA",
+                        condition: VnslLuaEvalExpr {
+                            code: "globals.y == 20",
+                            return_type: Bool,
+                        },
                         block: VnslBlock {
                             statements: [
                                 Command(

@@ -1,8 +1,5 @@
-mod expr;
-
 use super::{VnslBlock, VnslCommand};
 use crate::impl_deref;
-pub use expr::*;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -11,7 +8,6 @@ pub enum VnslStatement {
     Command(VnslCommand),
     Choices(VnslChoices),
     Condition(VnslCondition),
-    Expr(VnslExpr),
 }
 
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
@@ -37,15 +33,26 @@ impl Default for VnslChoice {
     }
 }
 
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct VnslCondition {
     pub if_block: VnslConditionBlock,
     pub elif_block: Vec<VnslConditionBlock>,
     pub else_block: Option<VnslBlock>,
 }
 
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum VnslLuaEvalType {
+    Bool,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct VnslLuaEvalExpr {
+    pub code: String,
+    pub return_type: VnslLuaEvalType,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct VnslConditionBlock {
-    pub iden: String,
+    pub condition: VnslLuaEvalExpr,
     pub block: VnslBlock,
 }

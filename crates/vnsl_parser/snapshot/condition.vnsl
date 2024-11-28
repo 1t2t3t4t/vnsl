@@ -1,6 +1,6 @@
 scene ConditionTest
 
-if (   conditionA ):
+if |   globals.y == 20   |:
     "A"
     "AA"
     "A
@@ -8,20 +8,20 @@ if (   conditionA ):
     AAAAAA"
 
 
-if (conditionA):
+if |globals.y == 20|:
     "A"
-elif (conditionB):
+elif |(x + y) > 30 or (x and z)|:
     "B"
 
 
-if (conditionA):
+if |globals.y == 20|:
     "A"
-elif (conditionB):
+elif |globals.y == 20|:
     "B"
 else:
     "C"
 
-if (conditionA) :
+if |globals.y == 20| :
     "A"
 else    :
     "B"

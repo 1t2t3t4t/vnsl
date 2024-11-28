@@ -1,7 +1,9 @@
 use anyhow::Ok;
 use pest::iterators::Pair;
 use thiserror::Error;
-use vnsl_core::model::{VnslBlock, VnslCondition, VnslConditionBlock};
+use vnsl_core::model::{
+    VnslBlock, VnslCondition, VnslConditionBlock, VnslLuaEvalExpr, VnslLuaEvalType,
+};
 
 use crate::{block::parse_block, utils, Rule};
 
@@ -47,8 +49,19 @@ pub fn parse_condition(rule: Pair<Rule>) -> anyhow::Result<VnslCondition> {
 }
 
 fn parse_condition_iden(rule: Pair<Rule>) -> anyhow::Result<VnslConditionBlock> {
-    let inners = utils::extract_inners(rule, [Rule::identifier, Rule::block]);
-    let iden = inners.get(&Rule::identifier).unwrap().as_str().to_string();
+    let inners = utils::extract_inners(rule, [Rule::eval_expr, Rule::block]);
+    let code = inners
+        .get(&Rule::eval_expr)
+        .unwrap()
+        .as_str()
+        .trim()
+        .to_string();
     let block = parse_block(inners.get(&Rule::block).unwrap().clone())?;
-    Ok(VnslConditionBlock { iden, block })
+    Ok(VnslConditionBlock {
+        condition: VnslLuaEvalExpr {
+            code,
+            return_type: VnslLuaEvalType::Bool,
+        },
+        block,
+    })
 }

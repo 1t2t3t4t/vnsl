@@ -22,28 +22,8 @@ bool      =  { "true" | "false" }
 data_type =  { string | number | bool }
 
 // Expressions
-arithmetic_op = { add | subtract | multiply | divide }
-add           = { "+" }
-subtract      = { "-" }
-multiply      = { "*" }
-divide        = { "/" }
-
-comp_op = { eq | n_eq | gte | gt | lte | lt }
-eq      = { "==" }
-n_eq    = { "!=" }
-gt      = { ">" }
-gte     = { ">=" }
-lt      = { "<" }
-lte     = { "<=" }
-
-literal = { data_type }
-group   = { "(" ~ spacer ~ expr ~ spacer ~ ")" }
-atom    = { literal | group }
-
-ops         = { arithmetic_op | comp_op }
-op_expr     = { atom ~ spacer ~ (ops ~ spacer ~ expr ~ spacer)* }
-assign_expr = { identifier ~ spacer ~ "=" ~ spacer ~ expr }
-expr        = { op_expr | assign_expr }
+eval_expr     = @{ (ASCII_ALPHANUMERIC | " " | "+" | "-" | "*" | "/" | ">" | "<" | "=" | "(" | ")" | ".")+ }
+lua_eval_expr = _{ "|" ~ spacer ~ eval_expr ~ spacer ~ "|" }
 
 // Commands
 dialogue      = { string }
@@ -78,11 +58,11 @@ else_block      =  {
     "else" ~ spacer ~ block
 }
 condition_block = _{
-    "(" ~ spacer ~ identifier ~ spacer ~ ")"
+    lua_eval_expr
 }
 
 // Flow
-stmt        =  { command | choices | condition | expr }
+stmt        =  { command | choices | condition }
 block_stmt  = _{ !(global) ~ stmt }
 block       =  {
     ":" ~ PEEK_ALL ~ PUSH(indentation) ~ block_stmt ~ (PEEK_ALL ~ block_stmt)* ~ DROP
