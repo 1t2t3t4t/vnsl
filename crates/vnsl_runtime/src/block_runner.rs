@@ -90,118 +90,138 @@ fn exec_command(cmd: &VnslCommand) -> BlockCommand {
     }
 }
 
-// #[cfg(test)]
-// mod test {
-//     use vnsl_core::model::{
-//         VnslBlock, VnslCondition, VnslConditionBlock, VnslDialogue, VnslLuaEvalExpr, VnslStatement
-//     };
+#[cfg(test)]
+mod test {
+    use vnsl_core::model::{
+        VnslBlock, VnslCondition, VnslConditionBlock, VnslDialogue, VnslLuaEvalExpr,
+        VnslLuaEvalType, VnslStatement,
+    };
 
-//     use crate::{block_runner::BlockCommand, RunContext, RuntimeDelegateHandler};
+    use crate::{block_runner::BlockCommand, RunContext, RuntimeDelegateHandler};
 
-//     use super::exec_condition;
+    use super::exec_condition;
 
-//     struct MockRuntimeDelegateHandler {
-//         true_cond_id: String,
-//     }
+    struct MockRuntimeDelegateHandler {
+        true_cond_id: String,
+    }
 
-//     impl RuntimeDelegateHandler for MockRuntimeDelegateHandler {
-//         fn check_condition(&self, condition_id: &str, _context: &crate::RunContext) -> bool {
-//             self.true_cond_id == condition_id
-//         }
-//     }
+    impl RuntimeDelegateHandler for MockRuntimeDelegateHandler {
+        fn check_condition(&self, condition_id: &str, _context: &crate::RunContext) -> bool {
+            self.true_cond_id == condition_id
+        }
+    }
 
-//     fn create_block(label: &str) -> VnslBlock {
-//         VnslBlock {
-//             statements: vec![VnslStatement::Command(
-//                 vnsl_core::model::VnslCommand::Dialogue(VnslDialogue {
-//                     text: label.to_string(),
-//                 }),
-//             )],
-//         }
-//     }
+    fn create_block(label: &str) -> VnslBlock {
+        VnslBlock {
+            statements: vec![VnslStatement::Command(
+                vnsl_core::model::VnslCommand::Dialogue(VnslDialogue {
+                    text: label.to_string(),
+                }),
+            )],
+        }
+    }
 
-//     fn setup_condition(else_block: Option<VnslBlock>) -> VnslCondition {
-//         VnslCondition {
-//             if_block: VnslConditionBlock {
-//                 condition: VnslLuaEvalExpr {
-//                     code: todo!(),
-//                     return_type: vnsl_core::model::VnslLuaEvalType::Bool,
-//                 },
-//                 block: create_block("if block"),
-//             },
-//             elif_block: vec![
-//                 VnslConditionBlock {
-//                     iden: "elif_cond1".to_string(),
-//                     block: create_block("elif block1"),
-//                 },
-//                 VnslConditionBlock {
-//                     iden: "elif_cond2".to_string(),
-//                     block: create_block("elif block2"),
-//                 },
-//             ],
-//             else_block,
-//         }
-//     }
+    fn create_expr(code: &str) -> VnslLuaEvalExpr {
+        VnslLuaEvalExpr {
+            code: code.to_string(),
+            return_type: VnslLuaEvalType::Bool,
+        }
+    }
 
-//     #[test]
-//     fn test_condition_if() {
-//         let condition = setup_condition(None);
-//         let context = RunContext::default();
-//         let handler = MockRuntimeDelegateHandler {
-//             true_cond_id: "if_cond".to_string(),
-//         };
+    #[test]
+    fn test_condition_if() {
+        let context = RunContext::default();
+        let condition = VnslCondition {
+            if_block: VnslConditionBlock {
+                condition: create_expr("globals.cond == 1"),
+                block: create_block("if block"),
+            },
+            elif_block: vec![],
+            else_block: None,
+        };
 
-//         assert_eq!(
-//             exec_condition(&condition, &context, &handler),
-//             BlockCommand::ForkBlock(create_block("if block"))
-//         );
-//     }
+        context.lua_runtime.set_global("cond", 1).unwrap();
+        assert_eq!(
+            exec_condition(&condition, &context).unwrap(),
+            BlockCommand::ForkBlock(create_block("if block"))
+        );
+    }
 
-//     #[test]
-//     fn test_condition_elif() {
-//         let condition = setup_condition(None);
-//         let context = RunContext::default();
-//         let mut handler = MockRuntimeDelegateHandler {
-//             true_cond_id: "elif_cond1".to_string(),
-//         };
+    #[test]
+    fn test_condition_elif() {
+        let context = RunContext::default();
+        let condition = VnslCondition {
+            if_block: VnslConditionBlock {
+                condition: create_expr("globals.cond == 1"),
+                block: create_block("if block"),
+            },
+            elif_block: vec![
+                VnslConditionBlock {
+                    condition: create_expr("globals.cond == 2"),
+                    block: create_block("elif block"),
+                },
+                VnslConditionBlock {
+                    condition: create_expr("globals.cond == 3"),
+                    block: create_block("elif block 2"),
+                },
+            ],
+            else_block: None,
+        };
 
-//         assert_eq!(
-//             exec_condition(&condition, &context, &handler),
-//             BlockCommand::ForkBlock(create_block("elif block1"))
-//         );
+        context.lua_runtime.set_global("cond", 2).unwrap();
+        assert_eq!(
+            exec_condition(&condition, &context).unwrap(),
+            BlockCommand::ForkBlock(create_block("elif block"))
+        );
 
-//         handler.true_cond_id = "elif_cond2".to_string();
-//         assert_eq!(
-//             exec_condition(&condition, &context, &handler),
-//             BlockCommand::ForkBlock(create_block("elif block2"))
-//         );
-//     }
+        context.lua_runtime.set_global("cond", 3).unwrap();
+        assert_eq!(
+            exec_condition(&condition, &context).unwrap(),
+            BlockCommand::ForkBlock(create_block("elif block 2"))
+        );
+    }
 
-//     #[test]
-//     fn test_condition_else() {
-//         let condition = setup_condition(Some(create_block("else block")));
-//         let context = RunContext::default();
-//         let handler = MockRuntimeDelegateHandler {
-//             true_cond_id: "none".to_string(),
-//         };
+    #[test]
+    fn test_condition_else() {
+        let context = RunContext::default();
+        context.lua_runtime.set_global("cond", 300).unwrap();
+        let condition = VnslCondition {
+            if_block: VnslConditionBlock {
+                condition: create_expr("globals.cond == 1"),
+                block: create_block("if block"),
+            },
+            elif_block: vec![VnslConditionBlock {
+                condition: create_expr("globals.cond == 2"),
+                block: create_block("elif block"),
+            }],
+            else_block: Some(create_block("else")),
+        };
 
-//         assert_eq!(
-//             exec_condition(&condition, &context, &handler),
-//             BlockCommand::ForkBlock(create_block("else block"))
-//         );
-//     }
+        assert_eq!(
+            exec_condition(&condition, &context).unwrap(),
+            BlockCommand::ForkBlock(create_block("else"))
+        );
+    }
 
-//     #[test]
-//     fn test_condition_none() {
-//         let condition = setup_condition(None);
-//         let context = RunContext::default();
-//         let handler = MockRuntimeDelegateHandler {
-//             true_cond_id: "none".to_string(),
-//         };
+    #[test]
+    fn test_condition_none() {
+        let context = RunContext::default();
+        context.lua_runtime.set_global("cond", 300).unwrap();
+        let condition = VnslCondition {
+            if_block: VnslConditionBlock {
+                condition: create_expr("globals.cond == 1"),
+                block: create_block("if block"),
+            },
+            elif_block: vec![VnslConditionBlock {
+                condition: create_expr("globals.cond == 2"),
+                block: create_block("elif block"),
+            }],
+            else_block: None,
+        };
 
-//         assert_eq!(
-//             exec_condition(&condition, &context, &handler),
-//             BlockCommand::None
-//         );
-//     }
-// }
+        assert_eq!(
+            exec_condition(&condition, &context).unwrap(),
+            BlockCommand::None
+        );
+    }
+}
