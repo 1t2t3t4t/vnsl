@@ -13,3 +13,10 @@ global testFloat 20.44
 
 global testTrue true
 global testFalse false
+
+label test:
+    global testNumber 0
+    global testNumber 0.0
+    global testNumber 123
+    global testFloat 0.123
+    global testFloat 20.44

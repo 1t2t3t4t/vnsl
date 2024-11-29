@@ -94,5 +94,63 @@ VnslScene {
             ),
         ],
     },
-    labels: {},
+    labels: {
+        "test": VnslLabel {
+            name: "test",
+            block: VnslBlock {
+                statements: [
+                    Command(
+                        Global(
+                            VnslGlobal {
+                                name: "testNumber",
+                                value: Number(
+                                    0.0,
+                                ),
+                            },
+                        ),
+                    ),
+                    Command(
+                        Global(
+                            VnslGlobal {
+                                name: "testNumber",
+                                value: Number(
+                                    0.0,
+                                ),
+                            },
+                        ),
+                    ),
+                    Command(
+                        Global(
+                            VnslGlobal {
+                                name: "testNumber",
+                                value: Number(
+                                    123.0,
+                                ),
+                            },
+                        ),
+                    ),
+                    Command(
+                        Global(
+                            VnslGlobal {
+                                name: "testFloat",
+                                value: Number(
+                                    0.123,
+                                ),
+                            },
+                        ),
+                    ),
+                    Command(
+                        Global(
+                            VnslGlobal {
+                                name: "testFloat",
+                                value: Number(
+                                    20.44,
+                                ),
+                            },
+                        ),
+                    ),
+                ],
+            },
+        },
+    },
 }

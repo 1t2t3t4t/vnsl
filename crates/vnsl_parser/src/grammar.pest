@@ -63,7 +63,7 @@ condition_block = _{
 
 // Flow
 stmt        =  { command | choices | condition }
-block_stmt  = _{ !(global) ~ stmt }
+block_stmt  = _{ stmt }
 block       =  {
     ":" ~ PEEK_ALL ~ PUSH(indentation) ~ block_stmt ~ (PEEK_ALL ~ block_stmt)* ~ DROP
 }

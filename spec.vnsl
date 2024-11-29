@@ -35,6 +35,7 @@ label evidence_search:
             character DETECTIVE
             "Hmm, the window's locked from the inside."
             jump question_witness
+            global clues 1
         "Examine the floor":
             character DETECTIVE
             "Interesting footprints here."
@@ -74,8 +75,8 @@ label case_summary:
     if |clues >= 3 and (car_clue or victim_behavior == "nervous")|:
         character DETECTIVE
         "Here's what we know so far..."
-        [ACTION: Detective summarizes the findings]
-        jump scene Conclusion
+        [ACTION "Detective summarizes the findings"]
+        jump Conclusion
     else:
         character DETECTIVE
         "Something's still missing. I should review the evidence."
