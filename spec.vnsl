@@ -3,20 +3,20 @@
 ## Basic Structure:
 scene SceneName
 
-character CharacterName
+character Boss
+
 "Dialogue goes here."
-"Dialogue
-Can
-Be
-Multi-line"
+
+"This is not good...
+We should do better than this."
 
 [ACTION "Action descriptions in square brackets"]
 
 ## Special Commands:
 # choice: Start a choice block
 # if/elif/else: Check conditions and control flow
-# set: Set a variable
-# jump: Jump to another scene or label
+# global: Set a variable
+# jump: Jump to another label
 # label label_name: Define a label (anchor point within a scene)
 
 ## Example Script:
