@@ -21,8 +21,6 @@ Multi-line"
 
 ## Example Script:
 
-scene Investigation
-
 [ACTION "The detective surveys the area, notebook in hand"]
 
 character DETECTIVE
@@ -36,18 +34,15 @@ label evidence_search:
         "Check the window":
             character DETECTIVE
             "Hmm, the window's locked from the inside."
-            set clues += 1
             jump question_witness
         "Examine the floor":
             character DETECTIVE
             "Interesting footprints here."
-            set clues += 1
         "Look at the desk":
             character DETECTIVE
             "A half-written letter... could be important."
-            set clues += 1
 
-    if clues < 3:
+    if |globals.clues < 3|:
         character DETECTIVE
         "I should take another look around."
         jump evidence_search
@@ -60,16 +55,14 @@ label question_witness:
         "Ask about the strange occurrence":
             character WITNESS
             "There was a car parked outside for hours."
-            set car_clue = true
         "Inquire about the victim":
             character WITNESS
             "They seemed nervous lately."
-            set victim_behavior = "nervous"
 
-    if car_clue:
+    if |car_clue|:
         character DETECTIVE
         "That car might be crucial to the case."
-    elif victim_behavior == "nervous":
+    elif |victim_behavior == 2|:
         character DETECTIVE
         "The victim's behavior could be a key factor."
     else:
@@ -78,7 +71,7 @@ label question_witness:
         jump evidence_search
 
 label case_summary:
-    if clues >= 3 and (car_clue or victim_behavior == "nervous"):
+    if |clues >= 3 and (car_clue or victim_behavior == "nervous")|:
         character DETECTIVE
         "Here's what we know so far..."
         [ACTION: Detective summarizes the findings]

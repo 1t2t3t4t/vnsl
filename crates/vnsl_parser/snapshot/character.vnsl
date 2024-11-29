@@ -4,7 +4,7 @@ char Boss
 
 choice:
     "A":
-        char Boss2
+        character Boss2
 
 label test:
     char Boss3

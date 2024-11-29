@@ -22,7 +22,7 @@ bool      =  { "true" | "false" }
 data_type =  { string | number | bool }
 
 // Expressions
-eval_expr     = @{ (ASCII_ALPHANUMERIC | " " | "+" | "-" | "*" | "/" | ">" | "<" | "=" | "(" | ")" | ".")+ }
+eval_expr     = @{ (ASCII_ALPHANUMERIC | "\"" | "_" | " " | "+" | "-" | "*" | "/" | ">" | "<" | "=" | "(" | ")" | ".")+ }
 lua_eval_expr = _{ "|" ~ spacer ~ eval_expr ~ spacer ~ "|" }
 
 // Commands
@@ -32,7 +32,7 @@ args          = { (spacer ~ action_arg)* }
 action_arg    = { (identifier ~ ":" ~ spacer)? ~ data_type }
 jump          = { "jump" ~ spacer ~ identifier }
 global        = { "global" ~ spacer ~ identifier ~ spacer ~ data_type }
-set_character = { "char" ~ spacer ~ identifier }
+set_character = { ("character" | "char") ~ spacer ~ identifier }
 command       = { dialogue | set_character | action | global | jump }
 
 choice        =  {
@@ -46,7 +46,7 @@ choices       =  {
 }
 
 condition       =  {
-    if_block ~ (elif_block)* ~ else_block?
+    if_block ~ (PEEK_ALL ~ elif_block)* ~ (PEEK_ALL ~ else_block)?
 }
 if_block        =  {
     "if" ~ spacer ~ condition_block ~ spacer ~ block

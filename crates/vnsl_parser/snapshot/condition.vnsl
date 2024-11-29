@@ -25,3 +25,19 @@ if |globals.y == 20| :
     "A"
 else    :
     "B"
+
+label test:
+    if |globals.y == 20|:
+        "A"
+    elif |globals.y == 20|:
+        "B"
+    else:
+        "C"
+
+label nested_if:
+    if |cond_1 == 1|:
+        if |cond_2 ==2|:
+            if |cond_3 == 3|:
+                "Lol"
+        else:
+            "else of 2"

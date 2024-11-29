@@ -170,5 +170,140 @@ VnslScene {
             ),
         ],
     },
-    labels: {},
+    labels: {
+        "nested_if": VnslLabel {
+            name: "nested_if",
+            block: VnslBlock {
+                statements: [
+                    Condition(
+                        VnslCondition {
+                            if_block: VnslConditionBlock {
+                                condition: VnslLuaEvalExpr {
+                                    code: "cond_1 == 1",
+                                    return_type: Bool,
+                                },
+                                block: VnslBlock {
+                                    statements: [
+                                        Condition(
+                                            VnslCondition {
+                                                if_block: VnslConditionBlock {
+                                                    condition: VnslLuaEvalExpr {
+                                                        code: "cond_2 ==2",
+                                                        return_type: Bool,
+                                                    },
+                                                    block: VnslBlock {
+                                                        statements: [
+                                                            Condition(
+                                                                VnslCondition {
+                                                                    if_block: VnslConditionBlock {
+                                                                        condition: VnslLuaEvalExpr {
+                                                                            code: "cond_3 == 3",
+                                                                            return_type: Bool,
+                                                                        },
+                                                                        block: VnslBlock {
+                                                                            statements: [
+                                                                                Command(
+                                                                                    Dialogue(
+                                                                                        VnslDialogue {
+                                                                                            text: "Lol",
+                                                                                        },
+                                                                                    ),
+                                                                                ),
+                                                                            ],
+                                                                        },
+                                                                    },
+                                                                    elif_block: [],
+                                                                    else_block: None,
+                                                                },
+                                                            ),
+                                                        ],
+                                                    },
+                                                },
+                                                elif_block: [],
+                                                else_block: Some(
+                                                    VnslBlock {
+                                                        statements: [
+                                                            Command(
+                                                                Dialogue(
+                                                                    VnslDialogue {
+                                                                        text: "else of 2",
+                                                                    },
+                                                                ),
+                                                            ),
+                                                        ],
+                                                    },
+                                                ),
+                                            },
+                                        ),
+                                    ],
+                                },
+                            },
+                            elif_block: [],
+                            else_block: None,
+                        },
+                    ),
+                ],
+            },
+        },
+        "test": VnslLabel {
+            name: "test",
+            block: VnslBlock {
+                statements: [
+                    Condition(
+                        VnslCondition {
+                            if_block: VnslConditionBlock {
+                                condition: VnslLuaEvalExpr {
+                                    code: "globals.y == 20",
+                                    return_type: Bool,
+                                },
+                                block: VnslBlock {
+                                    statements: [
+                                        Command(
+                                            Dialogue(
+                                                VnslDialogue {
+                                                    text: "A",
+                                                },
+                                            ),
+                                        ),
+                                    ],
+                                },
+                            },
+                            elif_block: [
+                                VnslConditionBlock {
+                                    condition: VnslLuaEvalExpr {
+                                        code: "globals.y == 20",
+                                        return_type: Bool,
+                                    },
+                                    block: VnslBlock {
+                                        statements: [
+                                            Command(
+                                                Dialogue(
+                                                    VnslDialogue {
+                                                        text: "B",
+                                                    },
+                                                ),
+                                            ),
+                                        ],
+                                    },
+                                },
+                            ],
+                            else_block: Some(
+                                VnslBlock {
+                                    statements: [
+                                        Command(
+                                            Dialogue(
+                                                VnslDialogue {
+                                                    text: "C",
+                                                },
+                                            ),
+                                        ),
+                                    ],
+                                },
+                            ),
+                        },
+                    ),
+                ],
+            },
+        },
+    },
 }
