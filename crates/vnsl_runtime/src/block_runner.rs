@@ -123,7 +123,7 @@ mod test {
         let context = RunContext::default();
         let condition = VnslCondition {
             if_block: VnslConditionBlock {
-                condition: create_expr("globals.cond == 1"),
+                condition: create_expr("cond == 1"),
                 block: create_block("if block"),
             },
             elif_block: vec![],
@@ -142,16 +142,16 @@ mod test {
         let context = RunContext::default();
         let condition = VnslCondition {
             if_block: VnslConditionBlock {
-                condition: create_expr("globals.cond == 1"),
+                condition: create_expr("cond == 1"),
                 block: create_block("if block"),
             },
             elif_block: vec![
                 VnslConditionBlock {
-                    condition: create_expr("globals.cond == 2"),
+                    condition: create_expr("cond == 2"),
                     block: create_block("elif block"),
                 },
                 VnslConditionBlock {
-                    condition: create_expr("globals.cond == 3"),
+                    condition: create_expr("cond == 3"),
                     block: create_block("elif block 2"),
                 },
             ],
@@ -177,11 +177,11 @@ mod test {
         context.lua_runtime.set_globals_val("cond", 300).unwrap();
         let condition = VnslCondition {
             if_block: VnslConditionBlock {
-                condition: create_expr("globals.cond == 1"),
+                condition: create_expr("cond == 1"),
                 block: create_block("if block"),
             },
             elif_block: vec![VnslConditionBlock {
-                condition: create_expr("globals.cond == 2"),
+                condition: create_expr("cond == 2"),
                 block: create_block("elif block"),
             }],
             else_block: Some(create_block("else")),
@@ -199,11 +199,11 @@ mod test {
         context.lua_runtime.set_globals_val("cond", 300).unwrap();
         let condition = VnslCondition {
             if_block: VnslConditionBlock {
-                condition: create_expr("globals.cond == 1"),
+                condition: create_expr("cond == 1"),
                 block: create_block("if block"),
             },
             elif_block: vec![VnslConditionBlock {
-                condition: create_expr("globals.cond == 2"),
+                condition: create_expr("cond == 2"),
                 block: create_block("elif block"),
             }],
             else_block: None,

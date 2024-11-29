@@ -54,7 +54,7 @@ label question_witness:
 
     choice:
         "Ask about the strange occurrence":
-            character WITNESS
+            char WITNESS
             "There was a car parked outside for hours."
         "Inquire about the victim":
             character WITNESS
