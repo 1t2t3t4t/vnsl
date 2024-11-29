@@ -1,4 +1,0 @@
-scene NoGlobalInLabel
-
-label test:
-    global test 1234

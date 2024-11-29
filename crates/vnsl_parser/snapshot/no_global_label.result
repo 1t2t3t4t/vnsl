@@ -1,6 +1,0 @@
---> 4:17
-  |
-4 |     global test 1234
-  |                 ^---
-  |
-  = unexpected number
