@@ -31,8 +31,10 @@ label test:
         "A"
     elif |globals.y == 20|:
         "B"
-    else:
+    elif |globals.y == 30|:
         "C"
+    else:
+        "D"
 
 label nested_if:
     if |cond_1 == 1|:
