@@ -1,0 +1,27 @@
+SetCharacterId(
+    "Boss",
+)
+ExecuteAction(
+    VnslAction {
+        name: "action",
+        args: [
+            VnslActionArg {
+                name: None,
+                data_type: Number(
+                    123.0,
+                ),
+            },
+        ],
+    },
+)
+ShowText(
+    "Hello",
+)
+ShowText(
+    "World",
+)
+Select choice A
+ShowText(
+    "A",
+)
+EndOfScene

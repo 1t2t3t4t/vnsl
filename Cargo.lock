@@ -940,6 +940,8 @@ name = "vnsl_runtime"
 version = "0.1.0"
 dependencies = [
  "mlua",
+ "pretty_assertions",
+ "vnsl_compiler",
  "vnsl_core",
 ]
 

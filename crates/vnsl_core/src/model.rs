@@ -44,6 +44,15 @@ pub enum VnslDataType {
     Bool(bool),
 }
 
+impl VnslDataType {
+    pub fn get_number(self) -> f64 {
+        match self {
+            VnslDataType::Number(n) => n,
+            _ => panic!("Data type {:?} is not a number", self),
+        }
+    }
+}
+
 impl VnslScene {
     pub fn new(name: &str) -> Self {
         Self {

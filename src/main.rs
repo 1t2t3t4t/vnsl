@@ -14,7 +14,7 @@ fn main() -> anyhow::Result<()> {
 
     loop {
         let res = runtime.step(&handler).unwrap();
-        println!("{:?}", res);
+        println!("{:#?}", res);
 
         if matches!(res, vnsl_runtime::RuntimeCommand::EndOfScene) {
             break;

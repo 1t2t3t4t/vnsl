@@ -6,3 +6,7 @@ edition = "2021"
 [dependencies]
 mlua.workspace = true
 vnsl_core.workspace = true
+
+[dev-dependencies]
+vnsl_compiler.workspace = true
+pretty_assertions.workspace = true
