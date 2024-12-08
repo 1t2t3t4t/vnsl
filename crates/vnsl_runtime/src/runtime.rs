@@ -47,14 +47,14 @@ impl Runtime {
             .top_mut()
             .map(|s| s.step(&mut self.context, delegate_handler))
         else {
+            println!("Could not get cmd from block runner {:#?}", self.run_stack);
             return Ok(RuntimeCommand::NoOps);
         };
 
         match cmd? {
             BlockCommand::ForkBlock(vnsl_block) => {
                 self.fork_block(vnsl_block);
-                self.step(delegate_handler)?;
-                Ok(RuntimeCommand::NoOps)
+                self.step(delegate_handler)
             }
             BlockCommand::Jump(vnsl_jump) => {
                 let Some(label) = self.current_scene.labels.get(&vnsl_jump.to_label) else {

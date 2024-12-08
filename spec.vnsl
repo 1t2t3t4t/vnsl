@@ -78,7 +78,7 @@ label question_witness:
 
 label case_summary:
     if |clues >= 3 and (car_clue or victim_behavior == "nervous")|:
-        character DETECTIVE
+        character JOE
         "Here's what we know so far..."
         [ACTION summary: "Detective summarizes the findings"]
     else:
