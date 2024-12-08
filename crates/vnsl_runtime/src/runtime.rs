@@ -19,8 +19,7 @@ pub enum RuntimeCommand {
     SetCharacterId(String),
     ShowText(String),
     ExecuteAction(VnslAction),
-    EndOfStack,
-    NoOps,
+    EndOfScene,
 }
 
 impl Runtime {
@@ -40,7 +39,7 @@ impl Runtime {
         delegate_handler: &impl RuntimeDelegateHandler,
     ) -> RuntimeResult<RuntimeCommand> {
         if self.run_stack.len() == 0 {
-            return Ok(RuntimeCommand::EndOfStack);
+            return Ok(RuntimeCommand::EndOfScene);
         }
         let Some(cmd) = self
             .run_stack
@@ -48,7 +47,7 @@ impl Runtime {
             .map(|s| s.step(&mut self.context, delegate_handler))
         else {
             println!("Could not get cmd from block runner {:#?}", self.run_stack);
-            return Ok(RuntimeCommand::NoOps);
+            return self.step(delegate_handler);
         };
 
         match cmd? {
@@ -61,13 +60,13 @@ impl Runtime {
                     todo!("Handle missing label")
                 };
                 self.fork_block(label.block.clone());
-                Ok(RuntimeCommand::NoOps)
+                self.step(delegate_handler)
             }
             BlockCommand::Global(vnsl_global) => {
                 self.context
                     .lua_runtime
                     .set_globals_val_data_type(&vnsl_global.name, vnsl_global.value.clone())?;
-                Ok(RuntimeCommand::NoOps)
+                self.step(delegate_handler)
             }
 
             BlockCommand::DisplayText(vnsl_dialogue) => {
@@ -84,7 +83,7 @@ impl Runtime {
                 self.pop_block_stack();
                 self.step(delegate_handler)
             }
-            BlockCommand::NoOps => Ok(RuntimeCommand::NoOps),
+            BlockCommand::NoOps => self.step(delegate_handler),
         }
     }
 

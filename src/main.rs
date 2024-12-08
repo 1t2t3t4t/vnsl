@@ -14,7 +14,7 @@ fn main() -> anyhow::Result<()> {
         let res = runtime.step(&handler);
         println!("{:?}", res);
 
-        if matches!(res, Ok(vnsl_runtime::RuntimeCommand::EndOfStack)) {
+        if matches!(res, Ok(vnsl_runtime::RuntimeCommand::EndOfScene)) {
             break;
         }
     }

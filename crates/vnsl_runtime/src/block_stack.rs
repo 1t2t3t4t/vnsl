@@ -6,10 +6,6 @@ pub struct RunStack {
 }
 
 impl RunStack {
-    pub fn top(&self) -> Option<&BlockRunner> {
-        self.blocks.last()
-    }
-
     pub fn top_mut(&mut self) -> Option<&mut BlockRunner> {
         self.blocks.last_mut()
     }

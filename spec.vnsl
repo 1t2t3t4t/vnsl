@@ -3,13 +3,6 @@
 ## Basic Structure:
 scene SceneName
 
-character Boss
-
-"Dialogue goes here."
-
-"This is not good...
-We should do better than this."
-
 [ACTION "Action descriptions in square brackets"]
 
 ## Special Commands:
@@ -21,18 +14,25 @@ We should do better than this."
 
 ## Example Script:
 
-[ACTION "The detective surveys the area, notebook in hand"]
+character Boss
+
+"Dialogue goes here."
+
+"This is not good...
+We should do better than this."
+
+[transitionScene "EnterScript"]
 
 character DETECTIVE
 "Let's see what we have here..."
-
-character DETECTIVE
-"I think I'm starting to piece this together."
 
 global clues 4
 global victim_behavior "nervous"
 
 jump case_summary
+
+character DETECTIVE
+"I think I'm starting to piece this together."
 
 label evidence_search:
     choice:
