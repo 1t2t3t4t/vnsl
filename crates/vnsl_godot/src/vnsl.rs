@@ -6,6 +6,7 @@ use godot::{
     obj::Base,
     prelude::{godot_api, GodotClass},
 };
+use vnsl_runtime::Runtime;
 
 #[derive(GodotClass)]
 #[class(base=Node)]

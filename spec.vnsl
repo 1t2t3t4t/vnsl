@@ -29,6 +29,11 @@ character DETECTIVE
 character DETECTIVE
 "I think I'm starting to piece this together."
 
+global clues 4
+global victim_behavior "nervous"
+
+jump case_summary
+
 label evidence_search:
     choice:
         "Check the window":
@@ -75,9 +80,7 @@ label case_summary:
     if |clues >= 3 and (car_clue or victim_behavior == "nervous")|:
         character DETECTIVE
         "Here's what we know so far..."
-        [ACTION "Detective summarizes the findings"]
-        jump Conclusion
+        [ACTION summary: "Detective summarizes the findings"]
     else:
         character DETECTIVE
         "Something's still missing. I should review the evidence."
-        jump evidence_search

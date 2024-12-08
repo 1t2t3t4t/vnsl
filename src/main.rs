@@ -10,7 +10,13 @@ fn main() -> anyhow::Result<()> {
 
     let mut runtime = vnsl_runtime::Runtime::new(scene);
     let handler = Handler;
-    let res = runtime.step(&handler);
-    println!("{:?}", res);
+    loop {
+        let res = runtime.step(&handler);
+        println!("{:?}", res);
+
+        if matches!(res, Ok(vnsl_runtime::RuntimeCommand::EndOfStack)) {
+            break;
+        }
+    }
     Ok(())
 }

@@ -21,7 +21,7 @@ pub enum BlockCommand {
     Choices(VnslChoices),
     ForkBlock(VnslBlock),
     EndOfStack,
-    None,
+    NoOps,
 }
 
 impl BlockRunner {
@@ -75,7 +75,7 @@ fn exec_condition(
         return Ok(BlockCommand::ForkBlock(else_block.clone()));
     }
 
-    Ok(BlockCommand::None)
+    Ok(BlockCommand::NoOps)
 }
 
 fn exec_command(cmd: &VnslCommand) -> BlockCommand {
@@ -211,7 +211,7 @@ mod test {
 
         assert_eq!(
             exec_condition(&condition, &context).unwrap(),
-            BlockCommand::None
+            BlockCommand::NoOps
         );
     }
 }
