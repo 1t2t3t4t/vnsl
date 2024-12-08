@@ -1,0 +1,24 @@
+scene MultipleChoices
+
+[forceChoice 0 2]
+
+"A"
+
+choice:
+    "CA":
+        "B"
+        choice:
+            "CCA":
+                "DEAD"
+            "CCB":
+                "DEAD"
+            "CCC":
+                "C"
+                jump last_label
+    "CB":
+        "DEAD"
+    "CC":
+        "DEAD"
+
+label last_label:
+    "END"

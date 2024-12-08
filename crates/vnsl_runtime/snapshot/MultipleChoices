@@ -1,0 +1,15 @@
+ShowText(
+    "A",
+)
+Select choice CA
+ShowText(
+    "B",
+)
+Select choice CCC
+ShowText(
+    "C",
+)
+ShowText(
+    "END",
+)
+EndOfScene
