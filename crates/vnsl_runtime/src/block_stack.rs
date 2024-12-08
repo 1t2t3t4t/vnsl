@@ -17,8 +17,4 @@ impl RunStack {
     pub fn pop(&mut self) -> Option<BlockRunner> {
         self.blocks.pop()
     }
-
-    pub fn len(&self) -> usize {
-        self.blocks.len()
-    }
 }

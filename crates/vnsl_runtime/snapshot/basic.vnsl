@@ -1,0 +1,13 @@
+scene Basic
+
+character Boss
+
+[forceChoice 0]
+[action 123]
+
+"Hello"
+"World"
+
+choice:
+    "A":
+        "A"

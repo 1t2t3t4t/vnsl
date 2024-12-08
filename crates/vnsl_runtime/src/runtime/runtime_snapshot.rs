@@ -1,10 +1,16 @@
-use std::{fs, path::Path};
+use std::{
+    fs::{self},
+    path::Path,
+};
 
 use vnsl_core::model::VnslScene;
 
 use crate::RuntimeCommand;
 
 use super::Runtime;
+
+const FORCE_RECORD: bool = false;
+const SNAPSHOT_BASE_DIR: &str = "./snapshot";
 
 #[derive(Debug, Default)]
 struct SceneSnapshotRunner {
@@ -47,8 +53,7 @@ impl SceneSnapshotRunner {
             }
         }
 
-        let base_snapshot = Path::new("./snapshot");
-        fs::create_dir_all(base_snapshot).expect("should create base snapshot dir");
+        let base_snapshot = Path::new(SNAPSHOT_BASE_DIR);
 
         let snapshot_path = base_snapshot.join(name);
         let existing_result = fs::read_to_string(&snapshot_path);
@@ -60,26 +65,23 @@ impl SceneSnapshotRunner {
     }
 }
 
-const FORCE_RECORD: bool = false;
-
 #[test]
-fn test_basic_flow() {
-    let src = r#"
-scene Basic
+fn test_snapshots() {
+    fs::create_dir_all(SNAPSHOT_BASE_DIR).expect("should create base snapshot dir");
+    let dir = fs::read_dir(SNAPSHOT_BASE_DIR).expect("should be able to read snapshot base dir");
 
-character Boss
+    for entry in dir {
+        let entry = entry.expect("should be able to read dir entry");
+        let is_file = entry.file_type().map(|i| i.is_file()).unwrap_or(false);
+        let file_name = entry.file_name().to_str().unwrap().to_string();
 
-[forceChoice 0]
-[action 123]
+        if is_file && file_name.ends_with(".vnsl") {
+            let src = fs::read_to_string(entry.path()).unwrap();
+            let scene = vnsl_compiler::compile(&src).unwrap();
+            let mut snapshot_runner = SceneSnapshotRunner::default();
+            snapshot_runner.run_scene(scene, FORCE_RECORD);
+        }
+    }
 
-"Hello"
-"World"
-
-choice:
-    "A":
-        "A"
-"#;
-    let scene = vnsl_compiler::compile(&src).unwrap();
-    let mut snapshot_runner = SceneSnapshotRunner::default();
-    snapshot_runner.run_scene(scene, FORCE_RECORD);
+    assert!(!FORCE_RECORD, "Forcing record is enabled");
 }
