@@ -1,4 +1,4 @@
-use vnsl_core::model::{VnslAction, VnslBlock, VnslScene};
+use vnsl_core::model::{VnslAction, VnslBlock, VnslChoice, VnslChoices, VnslScene};
 
 use crate::{
     block_runner::{BlockCommand, BlockRunner},
@@ -19,6 +19,7 @@ pub enum RuntimeCommand {
     SetCharacterId(String),
     ShowText(String),
     ExecuteAction(VnslAction),
+    PromptChoices(VnslChoices),
     EndOfScene,
 }
 
@@ -65,7 +66,7 @@ impl Runtime {
             BlockCommand::Global(vnsl_global) => {
                 self.context
                     .lua_runtime
-                    .set_globals_val_data_type(&vnsl_global.name, vnsl_global.value.clone())?;
+                    .set_globals_val_data_type(&vnsl_global.name, vnsl_global.value)?;
                 self.step(delegate_handler)
             }
 
@@ -75,16 +76,18 @@ impl Runtime {
             BlockCommand::SetCharacter(vnsl_set_character) => Ok(RuntimeCommand::SetCharacterId(
                 vnsl_set_character.id.clone(),
             )),
-            BlockCommand::Action(vnsl_action) => {
-                Ok(RuntimeCommand::ExecuteAction(vnsl_action.clone()))
-            }
-            BlockCommand::Choices(vnsl_choices) => todo!(),
+            BlockCommand::Action(vnsl_action) => Ok(RuntimeCommand::ExecuteAction(vnsl_action)),
+            BlockCommand::Choices(vnsl_choices) => Ok(RuntimeCommand::PromptChoices(vnsl_choices)),
             BlockCommand::EndOfStack => {
                 self.pop_block_stack();
                 self.step(delegate_handler)
             }
             BlockCommand::NoOps => self.step(delegate_handler),
         }
+    }
+
+    pub fn select_choice(&mut self, choice: &VnslChoice) {
+        self.fork_block(choice.block.clone());
     }
 
     fn pop_block_stack(&mut self) {

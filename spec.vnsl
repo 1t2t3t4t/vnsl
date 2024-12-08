@@ -21,12 +21,15 @@ character Boss
 "This is not good...
 We should do better than this."
 
+global clues 4
+
 [transitionScene "EnterScript"]
 
 character DETECTIVE
 "Let's see what we have here..."
 
-global clues 4
+jump question_witness
+
 global victim_behavior "nervous"
 
 jump case_summary
@@ -48,7 +51,7 @@ label evidence_search:
             character DETECTIVE
             "A half-written letter... could be important."
 
-    if |globals.clues < 3|:
+    if |clues < 3|:
         character DETECTIVE
         "I should take another look around."
         jump evidence_search
@@ -61,9 +64,11 @@ label question_witness:
         "Ask about the strange occurrence":
             char WITNESS
             "There was a car parked outside for hours."
+            global victim_behavior 1
         "Inquire about the victim":
             character WITNESS
             "They seemed nervous lately."
+            global victim_behavior 2
 
     if |car_clue|:
         character DETECTIVE

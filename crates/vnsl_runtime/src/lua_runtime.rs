@@ -20,21 +20,21 @@ impl LuaRuntime {
         self.lua
             .globals()
             .set(key, val.to_lua(&self.lua)?)
-            .map_err(|e| RuntimeError::LuaEvalError(e))
+            .map_err(|e| RuntimeError::LuaError(e))
     }
 
     pub fn set_globals_val<T: IntoLua>(&self, key: &str, val: T) -> RuntimeResult<()> {
         self.lua
             .globals()
             .set(key, val)
-            .map_err(|e| RuntimeError::LuaEvalError(e))
+            .map_err(|e| RuntimeError::LuaError(e))
     }
 
     pub fn eval_expr<T: FromLuaMulti>(&self, expr: &str) -> RuntimeResult<T> {
         self.lua
             .load(expr)
             .eval::<T>()
-            .map_err(|e| RuntimeError::LuaEvalError(e))
+            .map_err(|e| RuntimeError::LuaEvalError(expr.to_string(), e))
     }
 }
 
