@@ -1,5 +1,6 @@
 #[derive(Debug)]
 pub enum RuntimeError {
+    NoSceneLoaded,
     LuaEvalError(String, mlua::Error),
     LuaError(mlua::Error),
 }

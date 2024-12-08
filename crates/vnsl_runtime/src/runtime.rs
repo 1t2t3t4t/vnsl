@@ -3,13 +3,13 @@ use vnsl_core::model::{VnslAction, VnslBlock, VnslChoice, VnslChoices, VnslScene
 use crate::{
     block_runner::{BlockCommand, BlockRunner},
     block_stack::RunStack,
-    runtime_result::RuntimeResult,
+    runtime_result::{RuntimeError, RuntimeResult},
     RunContext, RuntimeDelegateHandler,
 };
 
 #[derive(Debug)]
 pub struct Runtime {
-    current_scene: VnslScene,
+    current_scene: Option<VnslScene>,
     context: RunContext,
     run_stack: RunStack,
 }
@@ -24,31 +24,36 @@ pub enum RuntimeCommand {
 }
 
 impl Runtime {
-    pub fn new(scene: VnslScene) -> Self {
+    pub fn new() -> Self {
         let context = RunContext::default();
-        let mut run_stack = RunStack::default();
-        run_stack.push(BlockRunner::new(scene.main_block.clone()));
+        let run_stack = RunStack::default();
         Self {
-            current_scene: scene,
+            current_scene: None,
             context,
             run_stack,
         }
+    }
+
+    pub fn load_scene(&mut self, scene: VnslScene) {
+        let main_block = scene.main_block.clone();
+        self.current_scene = Some(scene);
+        self.run_stack.push(BlockRunner::new(main_block));
     }
 
     pub fn step(
         &mut self,
         delegate_handler: &impl RuntimeDelegateHandler,
     ) -> RuntimeResult<RuntimeCommand> {
-        if self.run_stack.len() == 0 {
-            return Ok(RuntimeCommand::EndOfScene);
-        }
+        let Some(current_scene) = &self.current_scene else {
+            return Err(RuntimeError::NoSceneLoaded);
+        };
+
         let Some(cmd) = self
             .run_stack
             .top_mut()
             .map(|s| s.step(&mut self.context, delegate_handler))
         else {
-            println!("Could not get cmd from block runner {:#?}", self.run_stack);
-            return self.step(delegate_handler);
+            return Ok(RuntimeCommand::EndOfScene);
         };
 
         match cmd? {
@@ -57,7 +62,7 @@ impl Runtime {
                 self.step(delegate_handler)
             }
             BlockCommand::Jump(vnsl_jump) => {
-                let Some(label) = self.current_scene.labels.get(&vnsl_jump.to_label) else {
+                let Some(label) = current_scene.labels.get(&vnsl_jump.to_label) else {
                     todo!("Handle missing label")
                 };
                 self.fork_block(label.block.clone());
