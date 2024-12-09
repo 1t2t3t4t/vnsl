@@ -3,7 +3,7 @@ mod test;
 
 use vnsl_core::model::{
     VnslAction, VnslBlock, VnslChoices, VnslCommand, VnslCondition, VnslDialogue, VnslGlobal,
-    VnslJump, VnslSetCharacter, VnslStatement,
+    VnslGoTo, VnslJump, VnslSetCharacter, VnslStatement,
 };
 
 use crate::{runtime_result::RuntimeResult, RunContext};
@@ -23,6 +23,7 @@ pub enum BlockCommand {
     Global(VnslGlobal),
     Choices(VnslChoices),
     ForkBlock(VnslBlock),
+    ChangeScene(VnslGoTo),
     EndOfStack,
     NoOps,
 }
@@ -86,7 +87,7 @@ fn exec_command(cmd: &VnslCommand) -> BlockCommand {
         VnslCommand::Action(vnsl_action) => BlockCommand::Action(vnsl_action.clone()),
         VnslCommand::Jump(vnsl_jump) => BlockCommand::Jump(vnsl_jump.clone()),
         VnslCommand::Global(vnsl_global) => BlockCommand::Global(vnsl_global.clone()),
-        VnslCommand::GoTo(vnsl_go_to) => todo!("{:?}", vnsl_go_to),
+        VnslCommand::GoTo(vnsl_go_to) => BlockCommand::ChangeScene(vnsl_go_to.clone()),
         VnslCommand::Return => BlockCommand::EndOfStack,
     }
 }

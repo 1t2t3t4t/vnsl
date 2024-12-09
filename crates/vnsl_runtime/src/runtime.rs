@@ -23,6 +23,7 @@ pub enum RuntimeCommand {
     ShowText(String),
     ExecuteAction(VnslAction),
     PromptChoices(VnslChoices),
+    ChangeScene(String),
     EndOfScene,
 }
 
@@ -79,11 +80,15 @@ impl Runtime {
             )),
             BlockCommand::Action(vnsl_action) => Ok(RuntimeCommand::ExecuteAction(vnsl_action)),
             BlockCommand::Choices(vnsl_choices) => Ok(RuntimeCommand::PromptChoices(vnsl_choices)),
+            BlockCommand::ChangeScene(vnsl_go_to) => {
+                self.clear_block_stack();
+                Ok(RuntimeCommand::ChangeScene(vnsl_go_to.scene_id))
+            }
+            BlockCommand::NoOps => self.step(),
             BlockCommand::EndOfStack => {
                 self.pop_block_stack();
                 self.step()
             }
-            BlockCommand::NoOps => self.step(),
         }
     }
 
@@ -93,6 +98,12 @@ impl Runtime {
 
     fn pop_block_stack(&mut self) {
         self.run_stack.pop();
+    }
+
+    fn clear_block_stack(&mut self) {
+        while self.run_stack.len() > 0 {
+            self.run_stack.pop();
+        }
     }
 
     fn fork_block(&mut self, block: VnslBlock) {

@@ -1,0 +1,14 @@
+scene ChangeSceneLabel
+
+"A"
+
+jump Test
+
+"XX"
+
+label Test:
+    "B"
+
+    goto NextScene
+
+    "X"

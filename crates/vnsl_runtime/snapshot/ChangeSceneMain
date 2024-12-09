@@ -1,0 +1,7 @@
+ShowText(
+    "A",
+)
+ChangeScene(
+    "NextScene",
+)
+EndOfScene

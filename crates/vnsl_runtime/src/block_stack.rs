@@ -6,6 +6,10 @@ pub struct RunStack {
 }
 
 impl RunStack {
+    pub fn len(&self) -> usize {
+        self.blocks.len()
+    }
+
     pub fn top_mut(&mut self) -> Option<&mut BlockRunner> {
         self.blocks.last_mut()
     }
