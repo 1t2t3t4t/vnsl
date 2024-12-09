@@ -33,7 +33,9 @@ action_arg    = { (identifier ~ ":" ~ spacer)? ~ data_type }
 jump          = { "jump" ~ spacer ~ identifier }
 global        = { "global" ~ spacer ~ identifier ~ spacer ~ data_type }
 set_character = { ("character" | "char") ~ spacer ~ identifier }
-command       = { dialogue | set_character | action | global | jump }
+goto          = { "goto" ~ spacer ~ identifier }
+return        = { "return" }
+command       = { dialogue | set_character | action | global | jump | goto | return }
 
 choice        =  {
     string ~ block

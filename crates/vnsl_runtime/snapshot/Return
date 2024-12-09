@@ -1,0 +1,22 @@
+ShowText(
+    "A",
+)
+ShowText(
+    "B",
+)
+ShowText(
+    "C",
+)
+ShowText(
+    "D",
+)
+ShowText(
+    "E",
+)
+ShowText(
+    "F",
+)
+ShowText(
+    "G",
+)
+EndOfScene

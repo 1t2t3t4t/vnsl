@@ -1,0 +1,25 @@
+scene Return
+
+"A"
+jump Test
+"G"
+
+label Test:
+    "B"
+    jump Test2
+    "F"
+    return
+    "X"
+
+
+label Test2:
+    "C"
+    jump Test3
+    "E"
+    return
+    "XX"
+
+label Test3:
+    "D"
+    return
+    "XXX"

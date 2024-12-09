@@ -10,6 +10,8 @@ pub enum VnslCommand {
     Action(VnslAction),
     Jump(VnslJump),
     Global(VnslGlobal),
+    GoTo(VnslGoTo),
+    Return,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -43,4 +45,9 @@ pub struct VnslActionArg {
 pub struct VnslGlobal {
     pub name: String,
     pub value: VnslDataType,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct VnslGoTo {
+    pub scene_id: String,
 }

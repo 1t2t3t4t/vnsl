@@ -86,5 +86,7 @@ fn exec_command(cmd: &VnslCommand) -> BlockCommand {
         VnslCommand::Action(vnsl_action) => BlockCommand::Action(vnsl_action.clone()),
         VnslCommand::Jump(vnsl_jump) => BlockCommand::Jump(vnsl_jump.clone()),
         VnslCommand::Global(vnsl_global) => BlockCommand::Global(vnsl_global.clone()),
+        VnslCommand::GoTo(vnsl_go_to) => todo!("{:?}", vnsl_go_to),
+        VnslCommand::Return => BlockCommand::EndOfStack,
     }
 }

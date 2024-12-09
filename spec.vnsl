@@ -37,6 +37,8 @@ jump case_summary
 character DETECTIVE
 "I think I'm starting to piece this together."
 
+goto NextScene
+
 label evidence_search:
     choice:
         "Check the window":

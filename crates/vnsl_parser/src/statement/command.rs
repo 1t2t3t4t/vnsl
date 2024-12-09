@@ -7,6 +7,7 @@ mod action;
 mod character;
 mod dialogue;
 mod global;
+mod goto;
 mod jump;
 
 pub fn parse_command(rule: Pair<Rule>) -> anyhow::Result<VnslCommand> {
@@ -17,6 +18,8 @@ pub fn parse_command(rule: Pair<Rule>) -> anyhow::Result<VnslCommand> {
         Rule::action => VnslCommand::Action(action::parse_action(inner)?),
         Rule::jump => VnslCommand::Jump(jump::parse_jump(inner)?),
         Rule::global => VnslCommand::Global(global::parse_global(inner)?),
+        Rule::goto => VnslCommand::GoTo(goto::parse_goto(inner)?),
+        Rule::r#return => VnslCommand::Return,
         _ => unreachable!(),
     };
     Ok(cmd)
