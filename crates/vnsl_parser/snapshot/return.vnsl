@@ -1,0 +1,13 @@
+scene Return
+
+return
+
+if |x|:
+    return
+
+choice:
+    "A":
+        return
+
+label Test:
+    return

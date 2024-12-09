@@ -1,0 +1,58 @@
+VnslScene {
+    name: "Return",
+    main_block: VnslBlock {
+        statements: [
+            Command(
+                Return,
+            ),
+            Condition(
+                VnslCondition {
+                    if_block: VnslConditionBlock {
+                        condition: VnslLuaEvalExpr {
+                            code: "x",
+                            return_type: Bool,
+                        },
+                        block: VnslBlock {
+                            statements: [
+                                Command(
+                                    Return,
+                                ),
+                            ],
+                        },
+                    },
+                    elif_block: [],
+                    else_block: None,
+                },
+            ),
+            Choices(
+                VnslChoices {
+                    choices: [
+                        VnslChoice {
+                            id: "TestUuid",
+                            text: "A",
+                            block: VnslBlock {
+                                statements: [
+                                    Command(
+                                        Return,
+                                    ),
+                                ],
+                            },
+                        },
+                    ],
+                },
+            ),
+        ],
+    },
+    labels: {
+        "Test": VnslLabel {
+            name: "Test",
+            block: VnslBlock {
+                statements: [
+                    Command(
+                        Return,
+                    ),
+                ],
+            },
+        },
+    },
+}

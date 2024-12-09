@@ -1,0 +1,22 @@
+VnslScene {
+    name: "ChangeScene",
+    main_block: VnslBlock {
+        statements: [
+            Command(
+                Dialogue(
+                    VnslDialogue {
+                        text: "A",
+                    },
+                ),
+            ),
+            Command(
+                GoTo(
+                    VnslGoTo {
+                        scene_id: "NextScene",
+                    },
+                ),
+            ),
+        ],
+    },
+    labels: {},
+}
