@@ -7,7 +7,8 @@ edition = "2021"
 crate-type = ["cdylib"]
 
 [dependencies]
-godot = { version = "0.2.0", features = ["api-4-3"] }
+anyhow.workspace = true
+godot = { version = "0.2.1", features = ["api-4-3"] }
 serde_json.workspace = true
 vnsl_compiler.workspace = true
 vnsl_runtime.workspace = true
