@@ -39,6 +39,19 @@ impl GdResult {
     pub fn is_err(&self) -> bool {
         self.err.is_some()
     }
+
+    #[func]
+    pub fn result(&self) -> Variant {
+        self.result.clone().expect("should have result")
+    }
+
+    #[func]
+    pub fn err_message(&self) -> String {
+        match &self.err {
+            Some(err) => format!("{}", err),
+            None => "Ok".to_string(),
+        }
+    }
 }
 
 pub fn wrap_gd_result<T>(f: impl FnOnce() -> anyhow::Result<T>) -> Gd<GdResult>
