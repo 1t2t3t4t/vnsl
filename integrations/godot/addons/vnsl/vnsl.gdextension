@@ -1,8 +1,0 @@
-[configuration]
-entry_symbol = "gdext_rust_init"
-compatibility_minimum = 4.3
-reloadable = true
-
-[libraries]
-windows.debug.x86_64 =   "res://addons/vnsl/bin/debug/vnsl_godot.dll"
-windows.release.x86_64 = "res://addons/vnsl/bin/release/vnsl_godot.dll"

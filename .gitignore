@@ -1,2 +1,4 @@
 /target
 .DS_Store
+
+integrations/godot/addons/godot_vnsl/bin/
