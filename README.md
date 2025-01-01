@@ -1,3 +1,2 @@
-# Unsupported/ Unknown issues
-- Nested if/else doesn't work
-- Expression unsupported
+# Vnsl
+A general, engine-diagnostic dialogue scripting language  
