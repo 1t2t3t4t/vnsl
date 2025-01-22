@@ -39,7 +39,15 @@ pub fn scan_scripts(path: &str, use_absolute: bool) -> anyhow::Result<Vec<String
 
 #[cfg(test)]
 mod tests {
+    use std::path::Path;
+
     use crate::fs::scan_scripts;
+
+    macro_rules! path_str {
+        ($f:expr, $($str:expr),*) => {
+            Path::new($f)$(.join($str))*.to_str().unwrap().to_string()
+        };
+    }
 
     #[test]
     fn test_compile_dir() {
@@ -47,10 +55,10 @@ mod tests {
         assert_eq!(
             res,
             vec![
-                "./test_scripts\\A.vnsl",
-                "./test_scripts\\B.vnsl",
-                "./test_scripts\\sub_folder\\D.vnsl",
-                "./test_scripts\\sub_folder\\sub_sub\\C.vnsl"
+                path_str!("./test_scripts", "A.vnsl"),
+                path_str!("./test_scripts", "B.vnsl"),
+                path_str!("./test_scripts", "sub_folder", "sub_sub", "C.vnsl"),
+                path_str!("./test_scripts", "sub_folder", "D.vnsl"),
             ]
         )
     }

@@ -5,4 +5,4 @@ reloadable = true
 
 [libraries]
 windows.debug.x86_64 =   "res://addons/godot_vnsl/bin/debug/vnsl_godot.dll"
-windows.release.x86_64 = "res://addons/vnsl/godot_vnsl/release/vnsl_godot.dll"
+windows.release.x86_64 = "res://addons/godot_vnsl/bin/release/vnsl_godot.dll"
