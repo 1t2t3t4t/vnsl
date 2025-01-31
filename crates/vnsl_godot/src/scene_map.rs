@@ -5,3 +5,5 @@ use godot::{builtin::Dictionary, prelude::GodotClass};
 pub struct VnslSceneMap {
     map: Dictionary,
 }
+
+impl VnslSceneMap {}
