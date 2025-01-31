@@ -9,8 +9,10 @@ func _recognize(resource: Resource) -> bool:
 	return resource is VnslScript
 
 func _save(resource: Resource, path: String, flags: int) -> Error:
-	print(path)
-	print(resource)
-	var acc := FileAccess.open("./test", FileAccess.WRITE)
-	acc.store_string("Yppp")
-	return OK
+	var vnsl_script := resource as VnslScript
+	var file := FileAccess.open(path, FileAccess.WRITE)
+	var open_err := FileAccess.get_open_error()
+	if open_err != OK:
+		return open_err
+	file.store_string(vnsl_script.vnsl_script)
+	return file.get_error()

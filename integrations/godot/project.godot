@@ -20,4 +20,4 @@ project/assembly_name="godot_vnsl"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/godot_vnsl/plugin.cfg")
+enabled=PackedStringArray("res://addons/godot_vnsl/plugin.cfg", "res://addons/script-ide/plugin.cfg")
