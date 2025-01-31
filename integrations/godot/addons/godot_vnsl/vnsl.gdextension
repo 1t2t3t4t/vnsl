@@ -6,3 +6,5 @@ reloadable = true
 [libraries]
 windows.debug.x86_64 =   "res://addons/godot_vnsl/bin/debug/vnsl_godot.dll"
 windows.release.x86_64 = "res://addons/godot_vnsl/bin/release/vnsl_godot.dll"
+macos.debug = "res://addons/godot_vnsl/bin/debug/libvnsl_godot.dylib"
+macos.release = "res://addons/godot_vnsl/bin/release/libvnsl_godot.dylib"

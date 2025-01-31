@@ -1,3 +1,6 @@
-[gd_scene format=3 uid="uid://b42y0txtcudkm"]
+[gd_scene load_steps=2 format=3 uid="uid://b42y0txtcudkm"]
+
+[ext_resource type="Script" path="res://vnsl_runtime_ext.gd" id="1_i2btw"]
 
 [node name="VnslRuntime" type="VnslRuntime"]
+script = ExtResource("1_i2btw")
