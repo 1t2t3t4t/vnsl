@@ -27,6 +27,6 @@ impl VnslSceneMap {
 #[derive(GodotClass)]
 #[class(tool, base=Resource, init)]
 pub struct VnslScript {
-    #[var]
+    #[export]
     pub content: GString,
 }

@@ -919,6 +919,7 @@ dependencies = [
  "anyhow",
  "godot",
  "serde_json",
+ "thiserror",
  "vnsl_compiler",
  "vnsl_runtime",
 ]
