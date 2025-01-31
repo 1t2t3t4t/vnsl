@@ -3,10 +3,15 @@
 cargo build -p vnsl_godot
 cargo build --release -p vnsl_godot
 
-mkdir -p ./integrations/godot/addons/godot_vnsl/bin/debug/
-mkdir -p ./integrations/godot/addons/godot_vnsl/bin/release/
+ENVS=(release debug)
 
-cp ./target/debug/libvnsl_godot.dylib ./integrations/godot/addons/godot_vnsl/bin/debug/libvnsl_godot.dylib
-cp ./target/release/libvnsl_godot.dylib ./integrations/godot/addons/godot_vnsl/bin/release/libvnsl_godot.dylib
+for env in "${ENVS[@]}"; do
+    mkdir -p ./integrations/godot/addons/godot_vnsl/bin/$env/
+
+    DEST=./integrations/godot/addons/godot_vnsl/bin/$env/libvnsl_godot.dylib
+    SRC=./target/$env/libvnsl_godot.dylib
+    rm $DEST
+    cp $SRC $DEST
+done
 
 echo Done
