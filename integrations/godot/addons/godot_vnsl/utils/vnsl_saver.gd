@@ -14,5 +14,5 @@ func _save(resource: Resource, path: String, flags: int) -> Error:
 	var open_err := FileAccess.get_open_error()
 	if open_err != OK:
 		return open_err
-	file.store_string(vnsl_script.vnsl_script)
+	file.store_string(vnsl_script.content)
 	return file.get_error()

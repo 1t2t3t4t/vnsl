@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://b42y0txtcudkm"]
+
+[ext_resource type="Script" path="res://test_scene.gd" id="1_7t6iv"]
+[ext_resource type="Script" path="res://addons/godot_vnsl/vnsl_runtime.gd" id="2_vhsov"]
+
+[node name="TestScene" type="Node"]
+script = ExtResource("1_7t6iv")
+
+[node name="VnslRuntime" type="BaseVnslRuntime" parent="."]
+script = ExtResource("2_vhsov")

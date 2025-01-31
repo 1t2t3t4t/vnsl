@@ -1,8 +1,8 @@
 use godot::prelude::*;
 
+mod resources;
 mod result;
 mod runtime;
-mod scene_map;
 
 struct Extension;
 

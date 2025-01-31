@@ -15,5 +15,6 @@ func _load(path: String, original_path: String, use_sub_threads: bool, cache_mod
 		return open_err
 	var txt := file.get_as_text()
 	var script := VnslScript.new()
-	script.vnsl_script = txt
+	print(txt)
+	script.content = txt
 	return script

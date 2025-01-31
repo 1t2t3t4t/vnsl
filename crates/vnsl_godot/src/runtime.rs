@@ -1,40 +1,59 @@
+use std::ops::Deref;
+
 use godot::{
-    classes::{INode, Node},
+    builtin::{Array, GString},
+    classes::{file_access::ModeFlags, FileAccess, INode, Node, Resource},
+    global::print,
     meta::ToGodot,
-    obj::{Base, Gd},
+    obj::{Base, Gd, NewGd},
     prelude::{godot_api, GodotClass},
 };
 use vnsl_runtime::Runtime;
 
-use crate::result::{wrap_gd_result, GdResult};
+use crate::{
+    resources::{VnslSceneMap, VnslScript},
+    result::{wrap_gd_result, GdResult},
+};
 
 #[derive(GodotClass)]
 #[class(base=Node)]
-struct VnslRuntime {
+struct BaseVnslRuntime {
     runtime: Runtime,
+    #[var]
+    scene_map: Gd<VnslSceneMap>,
 
     #[base]
     base: Base<Node>,
 }
 
 #[godot_api]
-impl INode for VnslRuntime {
+impl INode for BaseVnslRuntime {
     fn init(base: Base<Node>) -> Self {
         Self {
             runtime: Runtime::new(),
+            scene_map: VnslSceneMap::new_gd(),
             base,
         }
     }
-
-    fn ready(&mut self) {
-        godot::global::print(&["I'm born from Rust".to_variant()]);
-    }
-
-    fn process(&mut self, _delta: f64) {}
 }
 
 #[godot_api]
-impl VnslRuntime {
+impl BaseVnslRuntime {
+    #[func]
+    fn construct_scene_map(&mut self, scripts_path: Array<GString>) {
+        for path in scripts_path.iter_shared() {
+            let res = FileAccess::open(&path, ModeFlags::READ);
+            let content = res.unwrap().get_as_text();
+            let scene = vnsl_compiler::compile(&content.to_string()).unwrap();
+            let mut script = VnslScript::new_gd();
+            script.bind_mut().set_content(content);
+
+            self.scene_map
+                .bind_mut()
+                .set_scene(scene.name.into(), script);
+        }
+    }
+
     #[func]
     fn load_scene(&mut self, src: String) -> Gd<GdResult> {
         wrap_gd_result(move || {
