@@ -13,3 +13,4 @@ serde_json.workspace = true
 vnsl_compiler.workspace = true
 vnsl_runtime.workspace = true
 thiserror.workspace = true
+vnsl_core.workspace = true

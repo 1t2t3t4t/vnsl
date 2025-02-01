@@ -5,6 +5,7 @@ edition = "2021"
 
 [dependencies]
 mlua.workspace = true
+thiserror.workspace = true
 vnsl_core.workspace = true
 
 [dev-dependencies]

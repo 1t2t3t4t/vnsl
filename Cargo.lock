@@ -442,6 +442,7 @@ version = "0.10.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0ae9546e4a268c309804e8bbb7526e31cbfdedca7cd60ac1b987d0b212e0d876"
 dependencies = [
+ "anyhow",
  "bstr",
  "either",
  "mlua-sys",
@@ -921,6 +922,7 @@ dependencies = [
  "serde_json",
  "thiserror",
  "vnsl_compiler",
+ "vnsl_core",
  "vnsl_runtime",
 ]
 
@@ -943,6 +945,7 @@ version = "0.1.0"
 dependencies = [
  "mlua",
  "pretty_assertions",
+ "thiserror",
  "vnsl_compiler",
  "vnsl_core",
 ]

@@ -8,7 +8,8 @@ func _ready() -> void:
 	var result := _scan_scripts(scripts_path)
 	construct_scene_map(result)
 	var res := load_scene("MainScene")
-	print(res.err_message())
+	if res.is_err():
+		print(res.err_message())
 
 
 func _scan_scripts(current_path: String) -> Array[String]:

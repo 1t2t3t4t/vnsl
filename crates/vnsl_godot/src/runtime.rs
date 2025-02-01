@@ -1,12 +1,27 @@
+mod model {
+    use godot::{builtin::GString, prelude::GodotClass};
+
+    #[derive(Debug, Clone, PartialEq, Eq, GodotClass)]
+    #[class(base = RefCounted, init)]
+    pub struct VnslRuntimeChoice {
+        #[var]
+        pub id: GString,
+        #[var]
+        pub text: GString,
+    }
+}
+
 use godot::{
     builtin::{Array, GString, StringName},
     classes::{file_access::ModeFlags, FileAccess, INode, Node},
     global::print,
     meta::ToGodot,
-    obj::{Base, Gd, NewGd},
+    obj::{Base, Gd, NewGd, WithBaseField},
     prelude::{godot_api, GodotClass},
 };
+use model::VnslRuntimeChoice;
 use thiserror::Error;
+use vnsl_core::model::VnslChoice;
 use vnsl_runtime::Runtime;
 
 use crate::{
@@ -44,6 +59,21 @@ impl INode for BaseVnslRuntime {
 
 #[godot_api]
 impl BaseVnslRuntime {
+    #[signal]
+    fn set_character_id(id: String) {}
+
+    #[signal]
+    fn show_text(text: String) {}
+
+    #[signal]
+    fn change_scene(scene_name: String) {}
+
+    #[signal]
+    fn prompt_choices(choices: Array<Gd<VnslRuntimeChoice>>) {}
+
+    #[signal]
+    fn scene_end() {}
+
     #[func]
     fn construct_scene_map(&mut self, scripts_path: Array<GString>) {
         for path in scripts_path.iter_shared() {
@@ -79,4 +109,45 @@ impl BaseVnslRuntime {
             Ok(())
         })
     }
+
+    #[func]
+    fn step(&mut self) -> Gd<GdResult> {
+        wrap_gd_result(|| {
+            match self.runtime.step()? {
+                vnsl_runtime::RuntimeCommand::SetCharacterId(char_id) => {
+                    self.base_mut()
+                        .emit_signal("set_character_id", &[char_id.to_variant()]);
+                }
+                vnsl_runtime::RuntimeCommand::ShowText(text) => {
+                    self.base_mut()
+                        .emit_signal("show_text", &[text.to_variant()]);
+                }
+                vnsl_runtime::RuntimeCommand::ExecuteAction(_) => todo!(),
+                vnsl_runtime::RuntimeCommand::PromptChoices(vnsl_choices) => {
+                    let choices = vnsl_choices
+                        .choices
+                        .into_iter()
+                        .map(map_choice)
+                        .collect::<Vec<_>>();
+                    self.base_mut()
+                        .emit_signal("prompt_choices", &[choices.to_variant()]);
+                }
+                vnsl_runtime::RuntimeCommand::ChangeScene(name) => {
+                    self.base_mut()
+                        .emit_signal("change_scene", &[name.to_variant()]);
+                }
+                vnsl_runtime::RuntimeCommand::EndOfScene => {
+                    self.base_mut().emit_signal("scene_end", &[]);
+                }
+            }
+            Ok(())
+        })
+    }
+}
+
+fn map_choice(c: VnslChoice) -> Gd<VnslRuntimeChoice> {
+    let mut choice = VnslRuntimeChoice::new_gd();
+    choice.bind_mut().id = c.id.to_godot();
+    choice.bind_mut().text = c.text.to_godot();
+    choice
 }
