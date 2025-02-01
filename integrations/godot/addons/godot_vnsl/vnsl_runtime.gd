@@ -5,8 +5,8 @@ class_name VnslRuntime
 @export var scripts_path: String = "res://scripts/"
 
 func _ready() -> void:
-	var result := _scan_scripts(scripts_path)
-	construct_scene_map(result)
+	var scripts := _scan_scripts(scripts_path)
+	construct_scene_map(scripts)
 	var res := load_scene("MainScene")
 	if res.is_err():
 		print(res.err_message())
