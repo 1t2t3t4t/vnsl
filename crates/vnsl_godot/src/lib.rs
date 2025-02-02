@@ -1,5 +1,7 @@
 use godot::prelude::*;
 
+mod action;
+mod model;
 mod resources;
 mod result;
 mod runtime;

@@ -1,5 +1,7 @@
 scene MainScene
 
+[MyAction "boss" 123 true]
+
 character Boss
 
 "This is it..."

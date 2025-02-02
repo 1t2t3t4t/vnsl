@@ -1,16 +1,9 @@
-mod model {
-    use godot::{builtin::GString, prelude::GodotClass};
+use std::collections::HashMap;
 
-    #[derive(Debug, Clone, PartialEq, Eq, GodotClass)]
-    #[class(base = RefCounted, init)]
-    pub struct VnslRuntimeChoice {
-        #[var]
-        pub id: GString,
-        #[var]
-        pub text: GString,
-    }
-}
-
+use crate::{
+    action::VnslActionHandler,
+    model::{VnslRuntimeAction, VnslRuntimeChoice},
+};
 use godot::{
     builtin::{Array, GString, StringName},
     classes::{file_access::ModeFlags, FileAccess, INode, Node},
@@ -19,9 +12,8 @@ use godot::{
     obj::{Base, Gd, NewGd, WithBaseField},
     prelude::{godot_api, GodotClass},
 };
-use model::VnslRuntimeChoice;
 use thiserror::Error;
-use vnsl_core::model::VnslChoice;
+use vnsl_core::model::{VnslAction, VnslChoice};
 use vnsl_runtime::Runtime;
 
 use crate::{
@@ -42,6 +34,8 @@ struct BaseVnslRuntime {
     #[var]
     scene_map: Gd<VnslSceneMap>,
 
+    action_handler: HashMap<String, Vec<Gd<VnslActionHandler>>>,
+
     #[base]
     base: Base<Node>,
 }
@@ -52,6 +46,7 @@ impl INode for BaseVnslRuntime {
         Self {
             runtime: Runtime::new(),
             scene_map: VnslSceneMap::new_gd(),
+            action_handler: Default::default(),
             base,
         }
     }
@@ -73,6 +68,15 @@ impl BaseVnslRuntime {
 
     #[signal]
     fn scene_end() {}
+
+    #[func]
+    fn register_action_handler(&mut self, handler: Gd<VnslActionHandler>) {
+        let name = handler.bind().handle_action_name().to_string();
+        if !self.action_handler.contains_key(&name) {
+            self.action_handler.insert(name.clone(), vec![]);
+        }
+        self.action_handler.get_mut(&name).unwrap().push(handler);
+    }
 
     #[func]
     fn construct_scene_map(&mut self, scripts_path: Array<GString>) {
@@ -122,7 +126,9 @@ impl BaseVnslRuntime {
                     self.base_mut()
                         .emit_signal("show_text", &[text.to_variant()]);
                 }
-                vnsl_runtime::RuntimeCommand::ExecuteAction(_) => todo!(),
+                vnsl_runtime::RuntimeCommand::ExecuteAction(action) => {
+                    self.handle_action(action);
+                }
                 vnsl_runtime::RuntimeCommand::PromptChoices(vnsl_choices) => {
                     let choices = vnsl_choices
                         .choices
@@ -145,9 +151,27 @@ impl BaseVnslRuntime {
     }
 }
 
+impl BaseVnslRuntime {
+    fn handle_action(&mut self, action: VnslAction) {
+        let Some(handlers) = self.action_handler.get_mut(&action.name) else {
+            return;
+        };
+        for handler in handlers {
+            handler.bind_mut().handle(map_action(&action));
+        }
+    }
+}
+
 fn map_choice(c: VnslChoice) -> Gd<VnslRuntimeChoice> {
     let mut choice = VnslRuntimeChoice::new_gd();
     choice.bind_mut().id = c.id.to_godot();
     choice.bind_mut().text = c.text.to_godot();
     choice
+}
+
+fn map_action(a: &VnslAction) -> Gd<VnslRuntimeAction> {
+    let mut action = VnslRuntimeAction::new_gd();
+    action.bind_mut().name = a.name.to_string().into();
+
+    action
 }
