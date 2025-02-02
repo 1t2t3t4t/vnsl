@@ -24,7 +24,8 @@ impl SceneSnapshotRunner {
         let mut result = String::new();
         runtime.load_scene(scene);
 
-        while let Ok(cmd) = runtime.step() {
+        while !runtime.scene_ended() {
+            let cmd = runtime.step().unwrap();
             match cmd {
                 RuntimeCommand::ExecuteAction(action)
                     if action.name == "forceChoice".to_string() =>

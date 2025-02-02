@@ -94,7 +94,7 @@ impl Runtime {
             BlockCommand::NoOps => self.step(),
         };
 
-        if self.run_stack.top().map(|b| b.block_ended()) == Some(true) {
+        while self.run_stack.top().map(|b| b.block_ended()) == Some(true) {
             self.pop_block_stack();
         }
 

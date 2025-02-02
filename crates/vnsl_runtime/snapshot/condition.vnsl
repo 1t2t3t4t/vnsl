@@ -1,0 +1,25 @@
+scene ConditionTest
+
+global a 20
+global b 10
+
+"Start"
+
+if |a == 20|:
+    "A"
+    "B"
+    global b 30
+    if |b == 10|:
+        "Wrong"
+    elif |b == 30|:
+        "C"
+        if |a == 100|:
+            "Wrong"
+        elif |a == 300|:
+            "Wrong"
+        else:
+            "D"
+else:
+    "Else Wrong"
+
+"End"
