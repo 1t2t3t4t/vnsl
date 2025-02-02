@@ -7,7 +7,7 @@ use crate::{
 use godot::{
     builtin::{Array, GString, StringName},
     classes::{file_access::ModeFlags, FileAccess, INode, Node},
-    global::print,
+    global::{godot_print, print},
     meta::ToGodot,
     obj::{Base, Gd, NewGd, WithBaseField},
     prelude::{godot_api, GodotClass},
@@ -17,8 +17,8 @@ use vnsl_core::model::{VnslAction, VnslChoice};
 use vnsl_runtime::Runtime;
 
 use crate::{
+    gd_result::{wrap_gd_result, GdResult},
     resources::{VnslSceneMap, VnslScript},
-    result::{wrap_gd_result, GdResult},
 };
 
 #[derive(Debug, Error)]
@@ -156,8 +156,13 @@ impl BaseVnslRuntime {
 impl BaseVnslRuntime {
     fn handle_action(&mut self, action: VnslAction) {
         let Some(handlers) = self.action_handler.get_mut(&action.name) else {
+            godot_print!("Action {} has no handle", action.name);
             return;
         };
+        if handlers.len() == 0 {
+            godot_print!("Action {} has no handle", action.name);
+        }
+
         for handler in handlers {
             handler.bind_mut().handle(map_action(&action));
         }

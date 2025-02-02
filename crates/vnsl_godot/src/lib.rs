@@ -1,10 +1,10 @@
 use godot::prelude::*;
 
 mod action;
+mod gd_result;
+mod gd_runtime;
 mod model;
 mod resources;
-mod result;
-mod runtime;
 
 struct Extension;
 
