@@ -8,8 +8,8 @@ func _ready() -> void:
 	vnsl_runtime.register_action_handler(handler)
 
 
-func _process(delta: float) -> void:
-	if not vnsl_runtime.is_scene_end():
+func _process(_delta: float) -> void:
+	if not vnsl_runtime.scene_ended():
 		print("step")
 		vnsl_runtime.step()
 
