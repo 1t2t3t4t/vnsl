@@ -14,6 +14,7 @@ pub fn compile_dir(path: &str) -> anyhow::Result<Vec<VnslScene>> {
 }
 
 pub fn compile(script: &str) -> anyhow::Result<VnslScene> {
+    // TODO: - Impl some validation of the script
     vnsl_parser::parse(script)
 }
 

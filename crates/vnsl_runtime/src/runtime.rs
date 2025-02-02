@@ -63,7 +63,7 @@ impl Runtime {
             }
             BlockCommand::Jump(vnsl_jump) => {
                 let Some(label) = current_scene.labels.get(&vnsl_jump.to_label) else {
-                    todo!("Handle missing label")
+                    return Err(RuntimeError::InvalidLabelJump(vnsl_jump.to_label));
                 };
                 self.fork_block(label.block.clone());
                 self.step()

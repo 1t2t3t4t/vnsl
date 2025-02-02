@@ -6,6 +6,8 @@ pub enum RuntimeError {
     NoSceneLoaded,
     #[error("End of stack.")]
     EndOfStack,
+    #[error("Label with name {0} cannot be found.")]
+    InvalidLabelJump(String),
     #[error("Lua eval error for line {0}.\nError:{1:#?}")]
     LuaEvalError(String, mlua::Error),
     #[error("Lua error:{0:#?}")]
@@ -25,6 +27,9 @@ impl PartialEq for RuntimeError {
         match (self, other) {
             (RuntimeError::NoSceneLoaded, RuntimeError::NoSceneLoaded)
             | (RuntimeError::EndOfStack, RuntimeError::EndOfStack) => true,
+            (RuntimeError::InvalidLabelJump(label_a), RuntimeError::InvalidLabelJump(label_b)) => {
+                label_a == label_b
+            }
             (
                 RuntimeError::LuaEvalError(line_a, err_a),
                 RuntimeError::LuaEvalError(line_b, err_b),
