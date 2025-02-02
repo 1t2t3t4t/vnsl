@@ -51,14 +51,15 @@ mod tests {
 
     #[test]
     fn test_compile_dir() {
-        let res = scan_scripts("./test_scripts", false).unwrap();
+        let mut res = scan_scripts("./test_scripts", false).unwrap();
+        res.sort();
         assert_eq!(
             res,
             vec![
                 path_str!("./test_scripts", "A.vnsl"),
                 path_str!("./test_scripts", "B.vnsl"),
-                path_str!("./test_scripts", "sub_folder", "sub_sub", "C.vnsl"),
                 path_str!("./test_scripts", "sub_folder", "D.vnsl"),
+                path_str!("./test_scripts", "sub_folder", "sub_sub", "C.vnsl"),
             ]
         )
     }

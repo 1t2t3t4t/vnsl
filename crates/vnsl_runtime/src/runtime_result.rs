@@ -19,3 +19,20 @@ impl From<mlua::Error> for RuntimeError {
         Self::LuaError(value)
     }
 }
+
+impl PartialEq for RuntimeError {
+    fn eq(&self, other: &Self) -> bool {
+        match (self, other) {
+            (RuntimeError::NoSceneLoaded, RuntimeError::NoSceneLoaded)
+            | (RuntimeError::EndOfStack, RuntimeError::EndOfStack) => true,
+            (
+                RuntimeError::LuaEvalError(line_a, err_a),
+                RuntimeError::LuaEvalError(line_b, err_b),
+            ) => format!("{} {:?}", line_a, err_a) == format!("{} {:?}", line_b, err_b),
+            (RuntimeError::LuaError(err_a), RuntimeError::LuaError(err_b)) => {
+                format!("{:?}", err_a) == format!("{:?}", err_b)
+            }
+            _ => false,
+        }
+    }
+}

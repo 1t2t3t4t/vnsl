@@ -3,9 +3,9 @@ use vnsl_core::model::{
     VnslStatement,
 };
 
-use crate::{block_runner::BlockCommand, RunContext};
+use crate::{block_runner::BlockCommand, runtime_result::RuntimeError, RunContext};
 
-use super::exec_condition;
+use super::{exec_condition, BlockRunner};
 
 fn create_block(label: &str) -> VnslBlock {
     VnslBlock {
@@ -22,6 +22,23 @@ fn create_expr(code: &str) -> VnslLuaEvalExpr {
         code: code.to_string(),
         return_type: VnslLuaEvalType::Bool,
     }
+}
+
+#[test]
+fn test_block_end() {
+    let mut context = RunContext::default();
+    let block = create_block("Test");
+    let mut runner = BlockRunner::new(block);
+
+    assert_eq!(runner.block_ended(), false);
+    assert_eq!(
+        runner.step(&mut context),
+        Ok(BlockCommand::DisplayText(VnslDialogue {
+            text: "Test".to_string()
+        }))
+    );
+    assert_eq!(runner.block_ended(), true);
+    assert_eq!(runner.step(&mut context), Err(RuntimeError::EndOfStack));
 }
 
 #[test]
