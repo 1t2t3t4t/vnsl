@@ -49,9 +49,9 @@ pub fn parse_condition(rule: Pair<Rule>) -> anyhow::Result<VnslCondition> {
 }
 
 fn parse_condition_iden(rule: Pair<Rule>) -> anyhow::Result<VnslConditionBlock> {
-    let inners = utils::extract_inners(rule, [Rule::eval_expr, Rule::block]);
+    let inners = utils::extract_inners(rule, [Rule::lua_lang, Rule::block]);
     let code = inners
-        .get(&Rule::eval_expr)
+        .get(&Rule::lua_lang)
         .unwrap()
         .as_str()
         .trim()

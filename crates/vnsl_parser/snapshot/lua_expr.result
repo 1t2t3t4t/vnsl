@@ -1,0 +1,59 @@
+VnslScene {
+    name: "LuaExprTest",
+    main_block: VnslBlock {
+        statements: [
+            LuaExpr(
+                VnslLuaExpr {
+                    lua: "a += 1",
+                },
+            ),
+            LuaExpr(
+                VnslLuaExpr {
+                    lua: "a += 1",
+                },
+            ),
+            LuaExpr(
+                VnslLuaExpr {
+                    lua: "a += 1",
+                },
+            ),
+            LuaExpr(
+                VnslLuaExpr {
+                    lua: "a += 20\r\nb += 15",
+                },
+            ),
+            LuaExpr(
+                VnslLuaExpr {
+                    lua: "a += 20\r\nb += 15",
+                },
+            ),
+            LuaExpr(
+                VnslLuaExpr {
+                    lua: "a += 20\r\nb += 15",
+                },
+            ),
+            Condition(
+                VnslCondition {
+                    if_block: VnslConditionBlock {
+                        condition: VnslLuaEvalExpr {
+                            code: "test",
+                            return_type: Bool,
+                        },
+                        block: VnslBlock {
+                            statements: [
+                                LuaExpr(
+                                    VnslLuaExpr {
+                                        lua: "a += 20\r\n    b += 15",
+                                    },
+                                ),
+                            ],
+                        },
+                    },
+                    elif_block: [],
+                    else_block: None,
+                },
+            ),
+        ],
+    },
+    labels: {},
+}

@@ -8,6 +8,12 @@ pub enum VnslStatement {
     Command(VnslCommand),
     Choices(VnslChoices),
     Condition(VnslCondition),
+    LuaExpr(VnslLuaExpr),
+}
+
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct VnslLuaExpr {
+    pub lua: String,
 }
 
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]

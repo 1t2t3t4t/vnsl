@@ -22,8 +22,10 @@ bool      =  { "true" | "false" }
 data_type =  { string | number | bool }
 
 // Expressions
-eval_expr     = @{ (ASCII_ALPHANUMERIC | "\"" | "_" | " " | "+" | "-" | "*" | "/" | ">" | "<" | "=" | "(" | ")" | ".")+ }
-lua_eval_expr = _{ "|" ~ spacer ~ eval_expr ~ spacer ~ "|" }
+lua_lang      = @{ (ASCII_ALPHANUMERIC | "\"" | "_" | " " | "+" | "-" | "*" | "/" | ">" | "<" | "=" | "(" | ")" | ".")+ }
+lua_eval_expr = _{ "|" ~ spacer ~ lua_lang ~ spacer ~ "|" }
+lua_script    = @{ lua_lang ~ (NEWLINE ~ PEEK_ALL ~ lua_lang)* }
+lua_expr      =  { "||" ~ spacer ~ lua_script ~ spacer ~ "||" }
 
 // Commands
 dialogue      = { string }
@@ -64,7 +66,7 @@ condition_block = _{
 }
 
 // Flow
-stmt        =  { command | choices | condition }
+stmt        =  { command | choices | condition | lua_expr }
 block_stmt  = _{ stmt }
 block       =  {
     ":" ~ PEEK_ALL ~ PUSH(indentation) ~ block_stmt ~ (PEEK_ALL ~ block_stmt)* ~ DROP
