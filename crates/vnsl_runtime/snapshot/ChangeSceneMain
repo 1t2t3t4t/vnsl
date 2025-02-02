@@ -4,4 +4,3 @@ ShowText(
 ChangeScene(
     "NextScene",
 )
-EndOfScene

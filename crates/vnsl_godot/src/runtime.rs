@@ -115,6 +115,11 @@ impl BaseVnslRuntime {
     }
 
     #[func]
+    fn scene_ended(&self) -> bool {
+        self.runtime.scene_ended()
+    }
+
+    #[func]
     fn step(&mut self) -> Gd<GdResult> {
         wrap_gd_result(|| {
             match self.runtime.step()? {
@@ -141,9 +146,6 @@ impl BaseVnslRuntime {
                 vnsl_runtime::RuntimeCommand::ChangeScene(name) => {
                     self.base_mut()
                         .emit_signal("change_scene", &[name.to_variant()]);
-                }
-                vnsl_runtime::RuntimeCommand::EndOfScene => {
-                    self.base_mut().emit_signal("scene_end", &[]);
                 }
             }
             Ok(())

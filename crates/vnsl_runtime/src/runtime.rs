@@ -24,7 +24,6 @@ pub enum RuntimeCommand {
     ExecuteAction(VnslAction),
     PromptChoices(VnslChoices),
     ChangeScene(String),
-    EndOfScene,
 }
 
 impl Runtime {
@@ -44,16 +43,20 @@ impl Runtime {
         self.run_stack.push(BlockRunner::new(main_block));
     }
 
+    pub fn scene_ended(&self) -> bool {
+        self.run_stack.len() == 0
+    }
+
     pub fn step(&mut self) -> RuntimeResult<RuntimeCommand> {
         let Some(current_scene) = &self.current_scene else {
             return Err(RuntimeError::NoSceneLoaded);
         };
 
         let Some(cmd) = self.run_stack.top_mut().map(|s| s.step(&mut self.context)) else {
-            return Ok(RuntimeCommand::EndOfScene);
+            return Err(RuntimeError::EndOfStack);
         };
 
-        match cmd? {
+        let cmd = match cmd? {
             BlockCommand::ForkBlock(vnsl_block) => {
                 self.fork_block(vnsl_block);
                 self.step()
@@ -84,12 +87,18 @@ impl Runtime {
                 self.clear_block_stack();
                 Ok(RuntimeCommand::ChangeScene(vnsl_go_to.scene_id))
             }
-            BlockCommand::NoOps => self.step(),
-            BlockCommand::EndOfStack => {
+            BlockCommand::Return => {
                 self.pop_block_stack();
                 self.step()
             }
+            BlockCommand::NoOps => self.step(),
+        };
+
+        if self.run_stack.top().map(|b| b.block_ended()) == Some(true) {
+            self.pop_block_stack();
         }
+
+        cmd
     }
 
     pub fn select_choice(&mut self, choice: &VnslChoice) {

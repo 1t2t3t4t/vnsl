@@ -1,7 +1,6 @@
 extends Node
 
 @onready var vnsl_runtime: VnslRuntime = $VnslRuntime
-var scene_ended := false
 
 func _ready() -> void:
 	var handler := TestActionHandler.new()
@@ -10,12 +9,9 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
-	if not scene_ended:
+	if not vnsl_runtime.is_scene_end():
+		print("step")
 		vnsl_runtime.step()
-
-
-func _on_vnsl_runtime_scene_end() -> void:
-	scene_ended = true
 
 
 func _on_vnsl_runtime_set_character_id(id: String) -> void:

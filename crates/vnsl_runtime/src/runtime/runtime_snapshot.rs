@@ -45,20 +45,17 @@ impl SceneSnapshotRunner {
                     result.push_str(&format!("Select choice {}\n", choice.text));
                     runtime.select_choice(choice);
                 }
-                RuntimeCommand::EndOfScene => {
-                    result.push_str(&format!("{:#?}\n", cmd));
-                    break;
-                }
                 _ => result.push_str(&format!("{:#?}\n", cmd)),
             }
         }
 
         let base_snapshot = Path::new(SNAPSHOT_BASE_DIR);
 
-        let snapshot_path = base_snapshot.join(name);
+        let snapshot_path = base_snapshot.join(name.clone());
         let existing_result = fs::read_to_string(&snapshot_path);
         if existing_result.is_ok() && !record {
             pretty_assertions::assert_str_eq!(existing_result.unwrap(), result);
+            println!("Tested {name}");
         } else {
             fs::write(&snapshot_path, &result).expect("should write result to snapshot file");
         }

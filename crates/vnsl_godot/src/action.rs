@@ -22,6 +22,7 @@ impl VnslActionHandler {
     }
 
     #[func(virtual)]
+    #[allow(unused_variables)]
     pub fn handle(&mut self, action: Gd<VnslRuntimeAction>) {
         let global_name = self.base().get_script().call("get_global_name", &[]);
         unimplemented!("Action handler {} is not handled", global_name)

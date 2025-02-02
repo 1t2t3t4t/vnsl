@@ -4,6 +4,8 @@ use thiserror::Error;
 pub enum RuntimeError {
     #[error("No scene loaded.")]
     NoSceneLoaded,
+    #[error("End of stack.")]
+    EndOfStack,
     #[error("Lua eval error for line {0}.\nError:{1:#?}")]
     LuaEvalError(String, mlua::Error),
     #[error("Lua error:{0:#?}")]

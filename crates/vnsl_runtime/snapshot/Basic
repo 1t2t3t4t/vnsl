@@ -24,4 +24,3 @@ Select choice A
 ShowText(
     "A",
 )
-EndOfScene

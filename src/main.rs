@@ -18,7 +18,7 @@ fn main() -> anyhow::Result<()> {
         let res = runtime.step().unwrap();
         println!("{:?}", res);
 
-        if matches!(res, vnsl_runtime::RuntimeCommand::EndOfScene) {
+        if runtime.scene_ended() {
             break;
         }
     }

@@ -6,7 +6,10 @@ use vnsl_core::model::{
     VnslGoTo, VnslJump, VnslSetCharacter, VnslStatement,
 };
 
-use crate::{runtime_result::RuntimeResult, RunContext};
+use crate::{
+    runtime_result::{RuntimeError, RuntimeResult},
+    RunContext,
+};
 
 #[derive(Debug)]
 pub struct BlockRunner {
@@ -24,7 +27,7 @@ pub enum BlockCommand {
     Choices(VnslChoices),
     ForkBlock(VnslBlock),
     ChangeScene(VnslGoTo),
-    EndOfStack,
+    Return,
     NoOps,
 }
 
@@ -36,9 +39,13 @@ impl BlockRunner {
         }
     }
 
+    pub fn block_ended(&self) -> bool {
+        self.block.statements.get(self.current_stmt).is_none()
+    }
+
     pub fn step(&mut self, context: &mut RunContext) -> RuntimeResult<BlockCommand> {
         let Some(stmt) = self.block.statements.get(self.current_stmt) else {
-            return Ok(BlockCommand::EndOfStack);
+            return Err(RuntimeError::EndOfStack);
         };
         let result = match stmt {
             VnslStatement::Command(vnsl_command) => Ok(exec_command(vnsl_command)),
@@ -88,6 +95,6 @@ fn exec_command(cmd: &VnslCommand) -> BlockCommand {
         VnslCommand::Jump(vnsl_jump) => BlockCommand::Jump(vnsl_jump.clone()),
         VnslCommand::Global(vnsl_global) => BlockCommand::Global(vnsl_global.clone()),
         VnslCommand::GoTo(vnsl_go_to) => BlockCommand::ChangeScene(vnsl_go_to.clone()),
-        VnslCommand::Return => BlockCommand::EndOfStack,
+        VnslCommand::Return => BlockCommand::Return,
     }
 }
