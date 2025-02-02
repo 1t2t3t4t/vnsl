@@ -23,6 +23,7 @@ impl LuaRuntime {
             .map_err(|e| RuntimeError::LuaError(e))
     }
 
+    #[allow(dead_code)]
     pub fn set_globals_val<T: IntoLua>(&self, key: &str, val: T) -> RuntimeResult<()> {
         self.lua
             .globals()
