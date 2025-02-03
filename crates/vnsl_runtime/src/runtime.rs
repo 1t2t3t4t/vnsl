@@ -24,6 +24,7 @@ pub enum RuntimeCommand {
     ExecuteAction(VnslAction),
     PromptChoices(VnslChoices),
     ChangeScene(String),
+    EndOfScene,
 }
 
 impl Runtime {
@@ -51,6 +52,10 @@ impl Runtime {
         let Some(current_scene) = &self.current_scene else {
             return Err(RuntimeError::NoSceneLoaded);
         };
+
+        if self.scene_ended() {
+            return Ok(RuntimeCommand::EndOfScene);
+        }
 
         let Some(cmd) = self.run_stack.top_mut().map(|s| s.step(&mut self.context)) else {
             return Err(RuntimeError::EndOfStack);

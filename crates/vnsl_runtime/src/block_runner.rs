@@ -6,10 +6,7 @@ use vnsl_core::model::{
     VnslGoTo, VnslJump, VnslSetCharacter, VnslStatement,
 };
 
-use crate::{
-    runtime_result::{RuntimeError, RuntimeResult},
-    RunContext,
-};
+use crate::{runtime_result::RuntimeResult, RunContext};
 
 #[derive(Debug)]
 pub struct BlockRunner {
@@ -45,7 +42,7 @@ impl BlockRunner {
 
     pub fn step(&mut self, context: &mut RunContext) -> RuntimeResult<BlockCommand> {
         let Some(stmt) = self.block.statements.get(self.current_stmt) else {
-            return Err(RuntimeError::EndOfStack);
+            return Ok(BlockCommand::NoOps);
         };
         let result = match stmt {
             VnslStatement::Command(vnsl_command) => Ok(exec_command(vnsl_command)),

@@ -14,7 +14,7 @@ use godot::{
 };
 use thiserror::Error;
 use vnsl_core::model::{VnslAction, VnslChoice};
-use vnsl_runtime::Runtime;
+use vnsl_runtime::{Runtime, RuntimeCommand};
 
 use crate::{
     gd_result::{wrap_gd_result, GdResult},
@@ -127,18 +127,18 @@ impl BaseVnslRuntime {
     fn step(&mut self) -> Gd<GdResult> {
         wrap_gd_result(|| {
             match self.runtime.step()? {
-                vnsl_runtime::RuntimeCommand::SetCharacterId(char_id) => {
+                RuntimeCommand::SetCharacterId(char_id) => {
                     self.base_mut()
                         .emit_signal("set_character_id", &[char_id.to_variant()]);
                 }
-                vnsl_runtime::RuntimeCommand::ShowText(text) => {
+                RuntimeCommand::ShowText(text) => {
                     self.base_mut()
                         .emit_signal("show_text", &[text.to_variant()]);
                 }
-                vnsl_runtime::RuntimeCommand::ExecuteAction(action) => {
+                RuntimeCommand::ExecuteAction(action) => {
                     self.handle_action(action);
                 }
-                vnsl_runtime::RuntimeCommand::PromptChoices(vnsl_choices) => {
+                RuntimeCommand::PromptChoices(vnsl_choices) => {
                     let choices = vnsl_choices
                         .choices
                         .into_iter()
@@ -147,10 +147,11 @@ impl BaseVnslRuntime {
                     self.base_mut()
                         .emit_signal("prompt_choices", &[choices.to_variant()]);
                 }
-                vnsl_runtime::RuntimeCommand::ChangeScene(name) => {
+                RuntimeCommand::ChangeScene(name) => {
                     self.base_mut()
                         .emit_signal("change_scene", &[name.to_variant()]);
                 }
+                RuntimeCommand::EndOfScene => todo!(),
             }
             Ok(())
         })

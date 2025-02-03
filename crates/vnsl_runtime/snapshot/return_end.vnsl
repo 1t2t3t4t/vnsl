@@ -1,0 +1,14 @@
+scene ReturnEndTest
+
+jump A
+
+label A:
+    "A"
+    jump B
+
+label B:
+    "B"
+    jump C
+
+label C:
+    return

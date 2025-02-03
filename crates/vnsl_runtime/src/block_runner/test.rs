@@ -3,7 +3,7 @@ use vnsl_core::model::{
     VnslStatement,
 };
 
-use crate::{block_runner::BlockCommand, runtime_result::RuntimeError, RunContext};
+use crate::{block_runner::BlockCommand, RunContext};
 
 use super::{exec_condition, BlockRunner};
 
@@ -38,7 +38,7 @@ fn test_block_end() {
         }))
     );
     assert_eq!(runner.block_ended(), true);
-    assert_eq!(runner.step(&mut context), Err(RuntimeError::EndOfStack));
+    assert_eq!(runner.step(&mut context), Ok(BlockCommand::NoOps));
 }
 
 #[test]
