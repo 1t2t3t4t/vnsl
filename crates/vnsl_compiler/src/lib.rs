@@ -10,7 +10,11 @@ pub fn compile_dir(path: &str) -> anyhow::Result<Vec<VnslScene>> {
         .iter()
         .map(|p| std::fs::read_to_string(p))
         .collect();
-    scripts?.par_iter().map(|src| compile(src)).collect()
+    compile_scripts(&scripts?)
+}
+
+pub fn compile_scripts(scripts: &[String]) -> anyhow::Result<Vec<VnslScene>> {
+    scripts.par_iter().map(|src| compile(src)).collect()
 }
 
 pub fn compile(script: &str) -> anyhow::Result<VnslScene> {

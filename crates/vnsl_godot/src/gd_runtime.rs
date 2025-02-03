@@ -82,15 +82,18 @@ impl BaseVnslRuntime {
     fn construct_scene_map(&mut self, scripts_path: Array<GString>) {
         for path in scripts_path.iter_shared() {
             let res = FileAccess::open(&path, ModeFlags::READ);
-            let content = res.unwrap().get_as_text();
-            match vnsl_compiler::compile(&content.to_string()) {
+            let content = res.unwrap().get_as_text().to_string();
+            match vnsl_compiler::compile(&content) {
                 Ok(scene) => {
-                    let mut script = VnslScript::new_gd();
-                    script.bind_mut().set_content(content);
-
                     self.scene_map
                         .bind_mut()
-                        .set_scene(scene.name.into(), script);
+                        .set_scene_lazy(scene.name.into(), move || {
+                            let res = FileAccess::open(&path, ModeFlags::READ);
+                            let content = res.unwrap().get_as_text().to_string();
+                            let mut script = VnslScript::new_gd();
+                            script.bind_mut().set_content(content.to_godot());
+                            script
+                        });
                 }
                 Err(err) => {
                     print(&[format!("Compile error: {}", err).to_variant()]);
