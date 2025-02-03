@@ -37,6 +37,13 @@ impl LuaRuntime {
             .eval::<T>()
             .map_err(|e| RuntimeError::LuaEvalError(expr.to_string(), e))
     }
+
+    pub fn exec_expr(&self, expr: &str) -> RuntimeResult<()> {
+        self.lua
+            .load(expr)
+            .exec()
+            .map_err(|e| RuntimeError::LuaEvalError(expr.to_string(), e))
+    }
 }
 
 pub trait ToLua {

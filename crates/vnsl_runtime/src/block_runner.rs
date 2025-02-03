@@ -51,7 +51,10 @@ impl BlockRunner {
             VnslStatement::Command(vnsl_command) => Ok(exec_command(vnsl_command)),
             VnslStatement::Choices(vnsl_choices) => Ok(BlockCommand::Choices(vnsl_choices.clone())),
             VnslStatement::Condition(vnsl_condition) => exec_condition(vnsl_condition, context),
-            VnslStatement::LuaExpr(_) => todo!(),
+            VnslStatement::LuaExpr(expr) => {
+                context.lua_runtime.exec_expr(&expr.lua)?;
+                Ok(BlockCommand::NoOps)
+            }
         };
 
         self.current_stmt += 1;
