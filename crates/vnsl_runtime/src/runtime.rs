@@ -91,18 +91,25 @@ impl Runtime {
                 self.pop_block_stack();
                 self.step()
             }
-            BlockCommand::NoOps => self.step(),
+            BlockCommand::NoOps => {
+                self.clear_end_block_stack();
+                self.step()
+            }
         };
 
-        while self.run_stack.top().map(|b| b.block_ended()) == Some(true) {
-            self.pop_block_stack();
-        }
+        self.clear_end_block_stack();
 
         cmd
     }
 
     pub fn select_choice(&mut self, choice: &VnslChoice) {
         self.fork_block(choice.block.clone());
+    }
+
+    fn clear_end_block_stack(&mut self) {
+        while self.run_stack.top().map(|b| b.block_ended()) == Some(true) {
+            self.pop_block_stack();
+        }
     }
 
     fn pop_block_stack(&mut self) {

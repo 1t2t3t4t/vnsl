@@ -23,6 +23,7 @@ impl SceneSnapshotRunner {
         let name = scene.name.clone();
         let mut result = String::new();
         runtime.load_scene(scene);
+        println!("Testing {name}");
 
         while !runtime.scene_ended() {
             let cmd = runtime.step().unwrap();
@@ -56,7 +57,6 @@ impl SceneSnapshotRunner {
         let existing_result = fs::read_to_string(&snapshot_path);
         if existing_result.is_ok() && !record {
             pretty_assertions::assert_str_eq!(existing_result.unwrap(), result);
-            println!("Tested {name}");
         } else {
             fs::write(&snapshot_path, &result).expect("should write result to snapshot file");
         }

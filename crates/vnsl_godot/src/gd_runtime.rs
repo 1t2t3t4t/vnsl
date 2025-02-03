@@ -85,6 +85,7 @@ impl BaseVnslRuntime {
             let content = res.unwrap().get_as_text().to_string();
             match vnsl_compiler::compile(&content) {
                 Ok(scene) => {
+                    let path = path.to_string();
                     self.scene_map
                         .bind_mut()
                         .set_scene_lazy(scene.name.into(), move || {
