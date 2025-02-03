@@ -4,6 +4,7 @@ use crate::{
     action::VnslActionHandler,
     model::{VnslRuntimeAction, VnslRuntimeChoice},
 };
+use anyhow::Ok;
 use godot::{
     builtin::{Array, GString, StringName},
     classes::{file_access::ModeFlags, FileAccess, INode, Node},
@@ -151,9 +152,9 @@ impl BaseVnslRuntime {
                     self.base_mut()
                         .emit_signal("change_scene", &[name.to_variant()]);
                 }
-                RuntimeCommand::EndOfScene => todo!(),
+                RuntimeCommand::EndOfScene => return Ok(false),
             }
-            Ok(())
+            Ok(true)
         })
     }
 }

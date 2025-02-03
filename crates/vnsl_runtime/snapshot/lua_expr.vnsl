@@ -16,5 +16,4 @@ if |a == 4|:
 else:
     "Wrong"
 
-if |a == 5|:
-    "Wrong"
+||a = 2||
