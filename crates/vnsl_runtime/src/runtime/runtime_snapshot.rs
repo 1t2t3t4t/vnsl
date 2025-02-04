@@ -53,7 +53,7 @@ impl SceneSnapshotRunner {
 
         let base_snapshot = Path::new(SNAPSHOT_BASE_DIR);
 
-        let snapshot_path = base_snapshot.join(name.clone());
+        let snapshot_path = base_snapshot.join("records").join(name.clone());
         let existing_result = fs::read_to_string(&snapshot_path);
         if existing_result.is_ok() && !record {
             pretty_assertions::assert_str_eq!(existing_result.unwrap(), result);

@@ -4,7 +4,6 @@ use crate::{
     action::VnslActionHandler,
     model::{VnslRuntimeAction, VnslRuntimeChoice},
 };
-use anyhow::Ok;
 use godot::{
     builtin::{Array, GString, StringName},
     classes::{file_access::ModeFlags, FileAccess, INode, Node},
