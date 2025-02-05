@@ -1,0 +1,14 @@
+scene LuaGlobalFunction
+
+||
+function add(a, b)
+    return a + b
+end
+||
+
+|| x = add(1, 2) ||
+
+if |x == 3|:
+    "Correct"
+else:
+    "Wrong"

@@ -22,7 +22,7 @@ bool      =  { "true" | "false" }
 data_type =  { string | number | bool }
 
 // Expressions
-lua_lang      = @{ (ASCII_ALPHANUMERIC | "\"" | "_" | " " | "+" | "-" | "*" | "/" | ">" | "<" | "=" | "(" | ")" | ".")+ }
+lua_lang      = @{ (ASCII_ALPHANUMERIC | "\"" | "_" | " " | "+" | "-" | "*" | "/" | ">" | "<" | "=" | "(" | ")" | "." | ",")+ }
 lua_eval_expr = _{ "|" ~ spacer ~ lua_lang ~ spacer ~ "|" }
 lua_script    = @{ lua_lang ~ (NEWLINE ~ PEEK_ALL ~ lua_lang)* }
 lua_expr      =  { "||" ~ spacer ~ lua_script ~ spacer ~ "||" }
