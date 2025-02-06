@@ -91,7 +91,13 @@ mod test {
     use super::LuaRuntime;
 
     #[test]
-    fn test_get_val() {
+    fn test_get_val_vnsl_data_type_empty() {
+        let runtime = LuaRuntime::default();
+        assert_eq!(runtime.try_get_globals_val_data_type::<f64>("test"), None);
+    }
+
+    #[test]
+    fn test_get_val_vnsl_data_type() {
         let runtime = LuaRuntime::default();
         runtime.set_globals_val("test", 20).unwrap();
 
