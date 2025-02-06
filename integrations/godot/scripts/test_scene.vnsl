@@ -2,7 +2,7 @@ scene MainScene
 
 ||
 function doSomething()
-    local x = 1 + 1
+    local x = 1 + math.floor(math.random(0, 2))
     return x
 end
 ||
@@ -16,6 +16,10 @@ character Boss
 "Since when that I left this town?.."
 
 jump tryRemember
+
+if |myPoint == 2|:
+    "Alright.. no point in remembering all these things.
+    It's time to move on."
 
 label tryRemember:
     || myPoint = doSomething() ||
