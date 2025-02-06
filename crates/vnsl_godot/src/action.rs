@@ -18,7 +18,7 @@ pub struct VnslActionHandler {
 impl VnslActionHandler {
     #[func(virtual)]
     pub fn handle_action_name(&self) -> GString {
-        "Default".into()
+        unimplemented!("Action handler didn't implement handle_action_name",)
     }
 
     #[func(virtual)]

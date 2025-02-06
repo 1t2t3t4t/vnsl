@@ -51,6 +51,7 @@ impl SceneSnapshotRunner {
             }
         }
 
+        result = result.replace("\r\n", "\n");
         let base_snapshot = Path::new(SNAPSHOT_BASE_DIR);
 
         let snapshot_path = base_snapshot.join("records").join(name.clone());
