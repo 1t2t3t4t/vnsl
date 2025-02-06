@@ -5,6 +5,7 @@ edition = "2021"
 
 [dependencies]
 mlua.workspace = true
+regex = "1.11.1"
 thiserror.workspace = true
 vnsl_core.workspace = true
 

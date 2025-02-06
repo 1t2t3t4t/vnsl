@@ -101,16 +101,31 @@ mod test {
         let runtime = LuaRuntime::default();
         runtime.set_globals_val("test", 20).unwrap();
 
-        let val = runtime.try_get_globals_val_data_type::<f64>("test");
-        assert_eq!(val, Some(vnsl_core::model::VnslDataType::Number(20f64)));
+        assert_eq!(
+            runtime.try_get_globals_val_data_type::<f64>("test"),
+            Some(VnslDataType::Number(20f64))
+        );
+        assert_eq!(
+            runtime.try_get_globals_val_data_type::<String>("test"),
+            Some(VnslDataType::String("20".to_string()))
+        );
 
         runtime
             .set_globals_val_data_type("test2", VnslDataType::String("yoo".to_string()))
             .unwrap();
-        let val = runtime.try_get_globals_val_data_type::<String>("test2");
         assert_eq!(
-            val,
-            Some(vnsl_core::model::VnslDataType::String("yoo".to_string()))
+            runtime.try_get_globals_val_data_type::<String>("test2"),
+            Some(VnslDataType::String("yoo".to_string()))
+        );
+
+        runtime.set_globals_val("test3", false).unwrap();
+        assert_eq!(
+            runtime.try_get_globals_val_data_type::<bool>("test3"),
+            Some(VnslDataType::Bool(false))
+        );
+        assert_eq!(
+            runtime.try_get_globals_val_data_type::<String>("test3"),
+            None
         );
     }
 }
