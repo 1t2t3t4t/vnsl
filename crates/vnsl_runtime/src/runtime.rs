@@ -1,5 +1,6 @@
 #[cfg(test)]
 mod runtime_snapshot;
+mod text;
 
 use vnsl_core::model::{VnslAction, VnslBlock, VnslChoice, VnslChoices, VnslScene};
 
@@ -80,12 +81,12 @@ impl Runtime {
                 self.step()
             }
 
-            BlockCommand::DisplayText(vnsl_dialogue) => {
-                Ok(RuntimeCommand::ShowText(vnsl_dialogue.text.clone()))
-            }
-            BlockCommand::SetCharacter(vnsl_set_character) => Ok(RuntimeCommand::SetCharacterId(
-                vnsl_set_character.id.clone(),
+            BlockCommand::DisplayText(vnsl_dialogue) => Ok(RuntimeCommand::ShowText(
+                text::process_display_text(vnsl_dialogue.text, &self.context),
             )),
+            BlockCommand::SetCharacter(vnsl_set_character) => {
+                Ok(RuntimeCommand::SetCharacterId(vnsl_set_character.id))
+            }
             BlockCommand::Action(vnsl_action) => Ok(RuntimeCommand::ExecuteAction(vnsl_action)),
             BlockCommand::Choices(vnsl_choices) => Ok(RuntimeCommand::PromptChoices(vnsl_choices)),
             BlockCommand::ChangeScene(vnsl_go_to) => {

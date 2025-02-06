@@ -1,4 +1,5 @@
 mod command;
+mod data_type;
 mod statement;
 
 #[cfg(debug_assertions)]
@@ -10,6 +11,7 @@ use std::collections::HashMap;
 use crate::impl_deref;
 
 pub use command::*;
+pub use data_type::*;
 use serde::{Deserialize, Serialize};
 pub use statement::*;
 
@@ -35,23 +37,6 @@ pub struct VnslBlock {
     pub statements: Vec<VnslStatement>,
 }
 impl_deref!(VnslBlock, [VnslStatement], statements);
-
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-#[serde(tag = "type", content = "content")]
-pub enum VnslDataType {
-    String(String),
-    Number(f64),
-    Bool(bool),
-}
-
-impl VnslDataType {
-    pub fn get_number(self) -> f64 {
-        match self {
-            VnslDataType::Number(n) => n,
-            _ => panic!("Data type {:?} is not a number", self),
-        }
-    }
-}
 
 impl VnslScene {
     pub fn new(name: &str) -> Self {

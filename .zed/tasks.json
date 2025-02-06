@@ -1,0 +1,13 @@
+// Static tasks configuration.
+//
+// Example:
+[
+  {
+    "label": "Test All",
+    "command": "cargo test --all"
+  },
+  {
+    "label": "Build All",
+    "command": "cargo build --all"
+  }
+]

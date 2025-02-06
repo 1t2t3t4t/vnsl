@@ -1,4 +1,4 @@
-use mlua::{FromLuaMulti, IntoLua, Lua, Value};
+use mlua::{FromLua, FromLuaMulti, IntoLua, Lua, Value};
 use vnsl_core::model::VnslDataType;
 
 use crate::runtime_result::{RuntimeError, RuntimeResult};
@@ -16,6 +16,26 @@ impl Default for LuaRuntime {
 }
 
 impl LuaRuntime {
+    pub fn try_get_globals_val_data_type<V>(&self, key: &str) -> Option<VnslDataType>
+    where
+        V: FromLua + Into<VnslDataType>,
+    {
+        let Ok(val) = self.lua.globals().get::<V>(key) else {
+            return None;
+        };
+        Some(val.into())
+    }
+
+    pub fn try_get_globals_val<V>(&self, key: &str) -> Option<V>
+    where
+        V: FromLua,
+    {
+        let Ok(val) = self.lua.globals().get::<V>(key) else {
+            return None;
+        };
+        Some(val.into())
+    }
+
     pub fn set_globals_val_data_type(&self, key: &str, val: VnslDataType) -> RuntimeResult<()> {
         self.lua
             .globals()
@@ -24,7 +44,11 @@ impl LuaRuntime {
     }
 
     #[allow(dead_code)]
-    pub fn set_globals_val<T: IntoLua>(&self, key: &str, val: T) -> RuntimeResult<()> {
+    pub fn set_globals_val<T: IntoLua + Into<VnslDataType>>(
+        &self,
+        key: &str,
+        val: T,
+    ) -> RuntimeResult<()> {
         self.lua
             .globals()
             .set(key, val)
@@ -57,5 +81,30 @@ impl ToLua for VnslDataType {
             VnslDataType::Number(n) => n.into_lua(lua),
             VnslDataType::Bool(b) => b.into_lua(lua),
         }
+    }
+}
+
+#[cfg(test)]
+mod test {
+    use vnsl_core::model::VnslDataType;
+
+    use super::LuaRuntime;
+
+    #[test]
+    fn test_get_val() {
+        let runtime = LuaRuntime::default();
+        runtime.set_globals_val("test", 20).unwrap();
+
+        let val = runtime.try_get_globals_val_data_type::<f64>("test");
+        assert_eq!(val, Some(vnsl_core::model::VnslDataType::Number(20f64)));
+
+        runtime
+            .set_globals_val_data_type("test2", VnslDataType::String("yoo".to_string()))
+            .unwrap();
+        let val = runtime.try_get_globals_val_data_type::<String>("test2");
+        assert_eq!(
+            val,
+            Some(vnsl_core::model::VnslDataType::String("yoo".to_string()))
+        );
     }
 }
