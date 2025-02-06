@@ -1,5 +1,12 @@
 scene MainScene
 
+||
+function doSomething()
+    local x = 1 + 1
+    return x
+end
+||
+
 [MyAction "boss" 123 true]
 
 character Boss
@@ -7,3 +14,13 @@ character Boss
 "This is it..."
 
 "Since when that I left this town?.."
+
+jump tryRemember
+
+label tryRemember:
+    || myPoint = doSomething() ||
+
+    if |myPoint == 2|:
+        "2 years I assume?"
+    else:
+        "Can't remember..."
