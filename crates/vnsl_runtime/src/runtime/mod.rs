@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod runtime_snapshot;
+mod snapshot_test;
 mod text;
 
 use vnsl_core::model::{VnslAction, VnslBlock, VnslChoice, VnslChoices, VnslScene};

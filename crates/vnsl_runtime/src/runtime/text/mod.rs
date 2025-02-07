@@ -7,13 +7,9 @@ use crate::RunContext;
 
 pub fn process_display_text(txt: String, ctx: &RunContext) -> String {
     StringProcess::new(txt, ctx)
-        .chain(no_ops)
         .chain(replace_runtime_val)
+        .chain(string_cleanup)
         .string()
-}
-
-fn no_ops(txt: String, _ctx: &RunContext) -> String {
-    txt
 }
 
 fn replace_runtime_val(txt: String, ctx: &RunContext) -> String {
@@ -31,6 +27,10 @@ fn replace_runtime_val(txt: String, ctx: &RunContext) -> String {
         }
     }
     result
+}
+
+fn string_cleanup(txt: String, _ctx: &RunContext) -> String {
+    txt.replace(r#"\""#, r#"""#)
 }
 
 #[cfg(test)]

@@ -20,6 +20,9 @@ ShowText(
 ShowText(
     "World",
 )
+ShowText(
+    "And he told me \"This is not good!!\" Boss",
+)
 Select choice A
 ShowText(
     "A",

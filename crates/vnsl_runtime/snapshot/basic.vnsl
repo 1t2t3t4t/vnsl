@@ -1,5 +1,7 @@
 scene Basic
 
+global MC "Boss"
+
 character Boss
 
 [forceChoice 0]
@@ -7,6 +9,9 @@ character Boss
 
 "Hello"
 "World"
+
+"And he told me \"This is not good!!\" {{MC}}
+"
 
 choice:
     "A":
