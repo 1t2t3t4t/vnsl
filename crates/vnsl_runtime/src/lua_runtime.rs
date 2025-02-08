@@ -16,16 +16,6 @@ impl Default for LuaRuntime {
 }
 
 impl LuaRuntime {
-    pub fn try_get_globals_val_data_type<V>(&self, key: &str) -> Option<VnslDataType>
-    where
-        V: FromLua + Into<VnslDataType>,
-    {
-        let Ok(val) = self.lua.globals().get::<V>(key) else {
-            return None;
-        };
-        Some(val.into())
-    }
-
     pub fn try_get_globals_val<V>(&self, key: &str) -> Option<V>
     where
         V: FromLua,
@@ -93,39 +83,69 @@ mod test {
     #[test]
     fn test_get_val_vnsl_data_type_empty() {
         let runtime = LuaRuntime::default();
-        assert_eq!(runtime.try_get_globals_val_data_type::<f64>("test"), None);
+        assert_eq!(runtime.try_get_globals_val::<f64>("test"), None);
     }
 
     #[test]
-    fn test_get_val_vnsl_data_type() {
+    fn test_global_value_as_f64() {
         let runtime = LuaRuntime::default();
         runtime.set_globals_val("test", 20).unwrap();
+        assert_eq!(runtime.try_get_globals_val::<f64>("test"), Some(20f64));
+    }
 
+    #[test]
+    fn test_global_value_as_string() {
+        let runtime = LuaRuntime::default();
+        runtime.set_globals_val("test", 20).unwrap();
         assert_eq!(
-            runtime.try_get_globals_val_data_type::<f64>("test"),
-            Some(VnslDataType::Number(20f64))
+            runtime.try_get_globals_val::<String>("test"),
+            Some("20".to_string())
         );
-        assert_eq!(
-            runtime.try_get_globals_val_data_type::<String>("test"),
-            Some(VnslDataType::String("20".to_string()))
-        );
+    }
 
+    #[test]
+    fn test_global_value_with_custom_data_type() {
+        let runtime = LuaRuntime::default();
         runtime
             .set_globals_val_data_type("test2", VnslDataType::String("yoo".to_string()))
             .unwrap();
         assert_eq!(
-            runtime.try_get_globals_val_data_type::<String>("test2"),
-            Some(VnslDataType::String("yoo".to_string()))
+            runtime.try_get_globals_val::<String>("test2"),
+            Some("yoo".to_string())
         );
+    }
 
+    #[test]
+    fn test_global_value_as_bool() {
+        let runtime = LuaRuntime::default();
         runtime.set_globals_val("test3", false).unwrap();
+        assert_eq!(runtime.try_get_globals_val::<bool>("test3"), Some(false));
+    }
+
+    #[test]
+    fn test_global_value_as_bool_to_string_fails() {
+        let runtime = LuaRuntime::default();
+        runtime.set_globals_val("test3", false).unwrap();
+        assert_eq!(runtime.try_get_globals_val::<String>("test3"), None);
+    }
+
+    #[test]
+    fn test_global_value_into_vnsl_data_type() {
+        let runtime = LuaRuntime::default();
+        runtime.set_globals_val("test", false).unwrap();
         assert_eq!(
-            runtime.try_get_globals_val_data_type::<bool>("test3"),
+            runtime
+                .try_get_globals_val::<bool>("test")
+                .map(|x| x.into()),
             Some(VnslDataType::Bool(false))
         );
+
+        runtime.set_globals_val("test2", "someString").unwrap();
         assert_eq!(
-            runtime.try_get_globals_val_data_type::<String>("test3"),
-            None
+            runtime
+                .try_get_globals_val::<String>("test2")
+                .map(|x| x.into()),
+            Some(VnslDataType::String("someString".to_string()))
         );
     }
 }

@@ -34,6 +34,11 @@ impl From<String> for VnslDataType {
         VnslDataType::String(value)
     }
 }
+impl From<&str> for VnslDataType {
+    fn from(value: &str) -> Self {
+        VnslDataType::String(value.to_string())
+    }
+}
 
 impl From<f64> for VnslDataType {
     fn from(value: f64) -> Self {
