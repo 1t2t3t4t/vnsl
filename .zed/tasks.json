@@ -8,6 +8,17 @@
   },
   {
     "label": "Build All",
-    "command": "cargo build --all"
+    "command": "cargo build --all",
+    "hide": "on_success"
+  },
+  {
+    "label": "Build Godot (Win)",
+    "command": "./buildGodot.bat",
+    "hide": "on_success"
+  },
+  {
+    "label": "Build Godot (Shell)",
+    "command": "./buildGodot.sh",
+    "hide": "on_success"
   }
 ]
