@@ -1,16 +1,14 @@
-use std::collections::HashMap;
-
 use crate::{
-    action::VnslActionHandler,
+    action_handler::{ActionHandlerStore, VnslActionHandler},
     model::{VnslRuntimeAction, VnslRuntimeChoice},
 };
 use godot::{
     builtin::{Array, GString, StringName},
     classes::{file_access::ModeFlags, FileAccess, INode, Node},
-    global::{godot_print, print},
+    global::{godot_warn, print},
     meta::ToGodot,
     obj::{Base, Gd, NewGd, WithBaseField},
-    prelude::{godot_api, GodotClass},
+    prelude::godot_api,
 };
 use thiserror::Error;
 use vnsl_core::model::{VnslAction, VnslChoice};
@@ -34,7 +32,7 @@ struct BaseVnslRuntime {
     #[var]
     scene_map: Gd<VnslSceneMap>,
 
-    action_handler: HashMap<String, Vec<Gd<VnslActionHandler>>>,
+    action_handler: ActionHandlerStore,
 
     #[base]
     base: Base<Node>,
@@ -71,11 +69,11 @@ impl BaseVnslRuntime {
 
     #[func]
     fn register_action_handler(&mut self, handler: Gd<VnslActionHandler>) {
-        let name = handler.bind().handle_action_name().to_string();
-        if !self.action_handler.contains_key(&name) {
-            self.action_handler.insert(name.clone(), vec![]);
+        let result = self.action_handler.register_action_handler(handler);
+        if let Some(existing_handler) = result {
+            let name = existing_handler.bind().handle_action_name();
+            godot_warn!("The action with name {} is already register", name);
         }
-        self.action_handler.get_mut(&name).unwrap().push(handler);
     }
 
     #[func]
@@ -160,17 +158,12 @@ impl BaseVnslRuntime {
 
 impl BaseVnslRuntime {
     fn handle_action(&mut self, action: VnslAction) {
-        let Some(handlers) = self.action_handler.get_mut(&action.name) else {
-            godot_print!("Action {} has no handle", action.name);
+        let Some(mut handler) = self.action_handler.get(&action.name) else {
+            godot_warn!("Action {} has no handle", action.name);
             return;
         };
-        if handlers.len() == 0 {
-            godot_print!("Action {} has no handle", action.name);
-        }
 
-        for handler in handlers {
-            handler.bind_mut().handle(map_action(&action));
-        }
+        handler.bind_mut().handle(map_action(&action));
     }
 }
 

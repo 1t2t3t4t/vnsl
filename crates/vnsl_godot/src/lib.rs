@@ -1,6 +1,6 @@
 use godot::prelude::*;
 
-mod action;
+mod action_handler;
 mod gd_result;
 mod gd_runtime;
 mod model;

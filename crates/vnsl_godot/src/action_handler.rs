@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 use godot::{
     builtin::GString,
     classes::RefCounted,
@@ -6,6 +8,30 @@ use godot::{
 };
 
 use crate::model::VnslRuntimeAction;
+
+#[derive(Debug, Default)]
+pub struct ActionHandlerStore {
+    handlers: HashMap<String, Gd<VnslActionHandler>>,
+}
+
+impl ActionHandlerStore {
+    pub fn register_action_handler(
+        &mut self,
+        handler: Gd<VnslActionHandler>,
+    ) -> Option<Gd<VnslActionHandler>> {
+        let name = handler.bind().handle_action_name().to_string();
+        if let Some(handler) = self.handlers.get(&name) {
+            Some(handler.clone())
+        } else {
+            self.handlers.insert(name.clone(), handler);
+            None
+        }
+    }
+
+    pub fn get(&self, name: &str) -> Option<Gd<VnslActionHandler>> {
+        self.handlers.get(name).map(|h| h.clone())
+    }
+}
 
 #[derive(GodotClass)]
 #[class(base=RefCounted, init)]

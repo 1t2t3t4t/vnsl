@@ -1,5 +1,7 @@
 mod processor;
 
+use std::cell::LazyCell;
+
 use processor::StringProcess;
 use regex::Regex;
 
@@ -12,8 +14,11 @@ pub fn process_display_text(txt: String, ctx: &RunContext) -> String {
         .string()
 }
 
+const TEXT_TEMPLATE_REGEX: LazyCell<Regex> =
+    LazyCell::new(|| Regex::new(r#"\{\{([A-z0-9_ ]+)\}\}"#).unwrap());
+
 fn replace_runtime_val(txt: String, ctx: &RunContext) -> String {
-    let var_template_regex = Regex::new(r#"\{\{([A-z0-9_ ]+)\}\}"#).unwrap();
+    let var_template_regex = TEXT_TEMPLATE_REGEX;
     let mut result = txt.to_string();
     let iter = var_template_regex.captures_iter(&txt);
 
