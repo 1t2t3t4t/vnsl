@@ -1,6 +1,7 @@
 use crate::{
     action_handler::{ActionHandlerStore, VnslActionHandler},
-    model::{VnslRuntimeAction, VnslRuntimeChoice},
+    model::{VnslRuntimeAction, VnslRuntimeActionArg, VnslRuntimeChoice},
+    ToGodotVariant,
 };
 use godot::{
     builtin::{Array, GString, StringName},
@@ -8,10 +9,10 @@ use godot::{
     global::{godot_warn, print},
     meta::ToGodot,
     obj::{Base, Gd, NewGd, WithBaseField},
-    prelude::godot_api,
+    prelude::{godot_api, GodotClass},
 };
 use thiserror::Error;
-use vnsl_core::model::{VnslAction, VnslChoice};
+use vnsl_core::model::{VnslAction, VnslActionArg, VnslChoice};
 use vnsl_runtime::{Runtime, RuntimeCommand};
 
 use crate::{
@@ -177,6 +178,14 @@ fn map_choice(c: VnslChoice) -> Gd<VnslRuntimeChoice> {
 fn map_action(a: &VnslAction) -> Gd<VnslRuntimeAction> {
     let mut action = VnslRuntimeAction::new_gd();
     action.bind_mut().name = a.name.to_string().into();
+    action.bind_mut().args = a.args.iter().map(map_action_arg).collect();
 
     action
+}
+
+fn map_action_arg(arg: &VnslActionArg) -> Gd<VnslRuntimeActionArg> {
+    let mut gd_arg = VnslRuntimeActionArg::new_gd();
+    gd_arg.bind_mut().name = arg.name.clone().unwrap_or_default().to_godot();
+    gd_arg.bind_mut().data_type = arg.data_type.to_gd_variant();
+    gd_arg
 }

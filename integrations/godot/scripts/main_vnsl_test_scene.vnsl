@@ -7,7 +7,7 @@ function doSomething()
 end
 ||
 
-[MyAction "boss" 123 true]
+[MyAction name: "boss" 123 true]
 
 character Boss
 
