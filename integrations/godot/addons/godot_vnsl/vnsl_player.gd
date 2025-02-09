@@ -36,3 +36,16 @@ func _on_vnsl_runtime_show_text(text: String) -> void:
 
 func _on_vnsl_runtime_set_character_id(id: String) -> void:
 	ui.set_speaker(id)
+
+
+func _on_vnsl_runtime_prompt_choices(choices: Array[VnslRuntimeChoice]) -> void:
+	lock = true
+	ui.choices_container.show()
+	ui.choices_container.configure(choices)
+
+	var selected := await ui.choices_container.choice_selected as VnslRuntimeChoice
+	vnsl_runtime.select_choice(selected)
+
+	ui.choices_container.hide()
+	lock = false
+	step()

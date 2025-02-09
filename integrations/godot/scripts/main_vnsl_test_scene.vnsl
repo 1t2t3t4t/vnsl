@@ -27,6 +27,12 @@ if |myPoint == 2|:
     "Alright.. no point in remembering all these things.
     It's time to move on."
 
+choice:
+    "Go home":
+        "Let's go!!"
+    "I will stay here a bit longer":
+        "Don't need to go now I guess"
+
 label tryRemember:
     || myPoint = doSomething() ||
 

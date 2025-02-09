@@ -139,6 +139,15 @@ impl BaseVnslRuntime {
     }
 
     #[func]
+    fn select_choice(&mut self, choice: Gd<VnslRuntimeChoice>) {
+        self.runtime.select_choice(&VnslChoice {
+            id: choice.bind().id.to_string(),
+            text: choice.bind().text.to_string(),
+            block: choice.bind().block.clone(),
+        });
+    }
+
+    #[func]
     fn scene_ended(&self) -> bool {
         self.runtime.scene_ended()
     }
@@ -205,6 +214,7 @@ fn map_choice(c: VnslChoice) -> Gd<VnslRuntimeChoice> {
     let mut choice = VnslRuntimeChoice::new_gd();
     choice.bind_mut().id = c.id.to_godot();
     choice.bind_mut().text = c.text.to_godot();
+    choice.bind_mut().block = c.block;
     choice
 }
 

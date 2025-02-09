@@ -4,14 +4,16 @@ use godot::{
     obj::Gd,
     prelude::{godot_api, GodotClass},
 };
+use vnsl_core::model::VnslBlock;
 
-#[derive(Debug, Clone, PartialEq, Eq, GodotClass)]
+#[derive(Debug, Clone, PartialEq, GodotClass)]
 #[class(base = RefCounted, init)]
 pub struct VnslRuntimeChoice {
     #[var]
     pub id: GString,
     #[var]
     pub text: GString,
+    pub block: VnslBlock,
 }
 
 #[derive(Debug, Clone, GodotClass)]
