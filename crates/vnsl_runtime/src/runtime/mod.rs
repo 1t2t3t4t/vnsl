@@ -85,6 +85,7 @@ impl Runtime {
                 text::process_display_text(vnsl_dialogue.text, &self.context),
             )),
             BlockCommand::SetCharacter(vnsl_set_character) => {
+                self.context.current_character_id = Some(vnsl_set_character.id.clone());
                 Ok(RuntimeCommand::SetCharacterId(vnsl_set_character.id))
             }
             BlockCommand::Action(vnsl_action) => Ok(RuntimeCommand::ExecuteAction(vnsl_action)),
@@ -110,6 +111,10 @@ impl Runtime {
 
     pub fn select_choice(&mut self, choice: &VnslChoice) {
         self.fork_block(choice.block.clone());
+    }
+
+    pub fn current_character_id(&self) -> Option<&String> {
+        self.context.current_character_id.as_ref()
     }
 
     fn clear_end_block_stack(&mut self) {

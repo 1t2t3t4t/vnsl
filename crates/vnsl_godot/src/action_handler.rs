@@ -7,7 +7,7 @@ use godot::{
     prelude::{godot_api, GodotClass},
 };
 
-use crate::model::VnslRuntimeAction;
+use crate::{gd_runtime::BaseVnslRuntime, model::VnslRuntimeAction};
 
 #[derive(Debug, Default)]
 pub struct ActionHandlerStore {
@@ -49,7 +49,7 @@ impl VnslActionHandler {
 
     #[func(virtual)]
     #[allow(unused_variables)]
-    pub fn handle(&mut self, action: Gd<VnslRuntimeAction>) {
+    pub fn handle(&mut self, action: Gd<VnslRuntimeAction>, runtime: Gd<BaseVnslRuntime>) {
         let global_name = self.base().get_script().call("get_global_name", &[]);
         unimplemented!("Action handler {} is not handled", global_name)
     }

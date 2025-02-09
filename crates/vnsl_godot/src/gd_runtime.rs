@@ -28,7 +28,7 @@ pub enum RuntimeError {
 
 #[derive(GodotClass)]
 #[class(base=Node)]
-struct BaseVnslRuntime {
+pub struct BaseVnslRuntime {
     runtime: Runtime,
     #[var]
     scene_map: Gd<VnslSceneMap>,
@@ -67,6 +67,15 @@ impl BaseVnslRuntime {
 
     #[signal]
     fn scene_end() {}
+
+    #[func]
+    fn get_current_character_id(&self) -> GString {
+        self.runtime
+            .current_character_id()
+            .cloned()
+            .unwrap_or_default()
+            .to_godot()
+    }
 
     #[func]
     fn register_action_handler(&mut self, handler: Gd<VnslActionHandler>) {
@@ -164,7 +173,7 @@ impl BaseVnslRuntime {
             return;
         };
 
-        handler.bind_mut().handle(map_action(&action));
+        handler.bind_mut().handle(map_action(&action), self.to_gd());
     }
 }
 
