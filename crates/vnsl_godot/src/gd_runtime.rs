@@ -1,6 +1,7 @@
 use crate::{
     action_handler::{ActionHandlerStore, VnslActionHandler},
     model::{VnslRuntimeAction, VnslRuntimeActionArg, VnslRuntimeChoice},
+    service_store::ServiceStore,
     ToGodotVariant,
 };
 use godot::{
@@ -32,6 +33,8 @@ pub struct BaseVnslRuntime {
     runtime: Runtime,
     #[var]
     scene_map: Gd<VnslSceneMap>,
+    #[var]
+    service_store: Gd<ServiceStore>,
 
     action_handler: ActionHandlerStore,
 
@@ -45,6 +48,7 @@ impl INode for BaseVnslRuntime {
         Self {
             runtime: Runtime::new(),
             scene_map: VnslSceneMap::new_gd(),
+            service_store: ServiceStore::new_gd(),
             action_handler: Default::default(),
             base,
         }
@@ -167,13 +171,15 @@ impl BaseVnslRuntime {
 }
 
 impl BaseVnslRuntime {
-    fn handle_action(&mut self, action: VnslAction) {
+    fn handle_action(&self, action: VnslAction) {
         let Some(mut handler) = self.action_handler.get(&action.name) else {
             godot_warn!("Action {} has no handle", action.name);
             return;
         };
 
-        handler.bind_mut().handle(map_action(&action), self.to_gd());
+        handler
+            .bind_mut()
+            .handle(map_action(&action), self.service_store.clone());
     }
 }
 

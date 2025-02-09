@@ -5,11 +5,9 @@ class_name VnslRuntime
 @export var vnsl_scripts_path: String = "res://scripts/"
 
 func _ready() -> void:
+	service_store.register_service("runtime", self)
 	var scripts := _scan_scripts(vnsl_scripts_path)
 	construct_scene_map(scripts)
-	var res := load_scene("MainScene")
-	if res.is_err():
-		print(res.err_message())
 
 
 func _scan_scripts(current_path: String) -> Array[String]:

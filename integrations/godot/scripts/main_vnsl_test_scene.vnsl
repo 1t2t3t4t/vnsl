@@ -7,11 +7,11 @@ function doSomething()
 end
 ||
 
-[MyAction name: "boss" 123 true]
-
 character Boss
 
 "This is it..."
+
+[MyAction name: "boss" 123 true]
 
 [UnHandleActionTest]
 

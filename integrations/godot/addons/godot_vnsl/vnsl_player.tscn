@@ -1,0 +1,16 @@
+[gd_scene load_steps=4 format=3 uid="uid://d0wsuamg5ygxt"]
+
+[ext_resource type="Script" path="res://addons/godot_vnsl/vnsl_player.gd" id="1_wf2uv"]
+[ext_resource type="Script" path="res://addons/godot_vnsl/vnsl_runtime.gd" id="2_w1p5w"]
+[ext_resource type="PackedScene" uid="uid://qnvctkhjptk" path="res://addons/godot_vnsl/ui/vnsl_player_ui.tscn" id="3_go60v"]
+
+[node name="VnslPlayer" type="Node"]
+script = ExtResource("1_wf2uv")
+
+[node name="VnslRuntime" type="BaseVnslRuntime" parent="."]
+unique_name_in_owner = true
+script = ExtResource("2_w1p5w")
+
+[node name="UI" parent="." instance=ExtResource("3_go60v")]
+
+[connection signal="show_text" from="VnslRuntime" to="." method="_on_vnsl_runtime_show_text"]

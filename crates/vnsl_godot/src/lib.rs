@@ -6,6 +6,7 @@ mod gd_result;
 mod gd_runtime;
 mod model;
 mod resources;
+mod service_store;
 
 struct Extension;
 

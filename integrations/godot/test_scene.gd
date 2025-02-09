@@ -3,9 +3,12 @@ extends Node
 @onready var vnsl_runtime: VnslRuntime = $VnslRuntime
 
 func _ready() -> void:
-	var handler := TestActionHandler.new()
-	self.get_script()
-	vnsl_runtime.register_action_handler(handler)
+	vnsl_runtime.register_action_handler(TestActionHandler.new())
+	vnsl_runtime.service_store.register_service("my_service", SomeService.new())
+
+	var res := vnsl_runtime.load_scene("MainScene")
+	if res.is_err():
+		print(res.err_message())
 
 
 func _process(_delta: float) -> void:
