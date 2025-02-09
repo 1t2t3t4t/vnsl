@@ -137,49 +137,54 @@ impl BaseVnslRuntime {
 
     #[func]
     fn step(&mut self) -> Gd<GdResult> {
-        wrap_gd_result(|| {
-            match self.runtime.step()? {
-                RuntimeCommand::SetCharacterId(char_id) => {
-                    self.base_mut()
-                        .emit_signal("set_character_id", &[char_id.to_variant()]);
-                }
-                RuntimeCommand::ShowText(text) => {
-                    self.base_mut()
-                        .emit_signal("show_text", &[text.to_variant()]);
-                }
-                RuntimeCommand::ExecuteAction(action) => {
-                    self.handle_action(action);
-                }
-                RuntimeCommand::PromptChoices(vnsl_choices) => {
-                    let choices = vnsl_choices
-                        .choices
-                        .into_iter()
-                        .map(map_choice)
-                        .collect::<Vec<_>>();
-                    self.base_mut()
-                        .emit_signal("prompt_choices", &[choices.to_variant()]);
-                }
-                RuntimeCommand::ChangeScene(name) => {
-                    self.base_mut()
-                        .emit_signal("change_scene", &[name.to_variant()]);
-                }
-                RuntimeCommand::EndOfScene => return Ok(false),
-            }
-            Ok(true)
-        })
+        wrap_gd_result(|| self._step())
     }
 }
 
 impl BaseVnslRuntime {
-    fn handle_action(&self, action: VnslAction) {
+    fn handle_action(&self, action: VnslAction) -> bool {
         let Some(mut handler) = self.action_handler.get(&action.name) else {
             godot_warn!("Action {} has no handle", action.name);
-            return;
+            return true;
         };
 
-        handler
-            .bind_mut()
-            .handle(map_action(&action), self.service_store.clone());
+        let mut bind = handler.bind_mut();
+        bind.handle(map_action(&action), self.service_store.clone())
+    }
+
+    fn _step(&mut self) -> anyhow::Result<bool> {
+        match self.runtime.step()? {
+            RuntimeCommand::SetCharacterId(char_id) => {
+                self.base_mut()
+                    .emit_signal("set_character_id", &[char_id.to_variant()]);
+                return self._step();
+            }
+            RuntimeCommand::ShowText(text) => {
+                self.base_mut()
+                    .emit_signal("show_text", &[text.to_variant()]);
+            }
+            RuntimeCommand::ExecuteAction(action) => {
+                let should_step_next = self.handle_action(action);
+                if should_step_next {
+                    return self._step();
+                }
+            }
+            RuntimeCommand::PromptChoices(vnsl_choices) => {
+                let choices = vnsl_choices
+                    .choices
+                    .into_iter()
+                    .map(map_choice)
+                    .collect::<Vec<_>>();
+                self.base_mut()
+                    .emit_signal("prompt_choices", &[choices.to_variant()]);
+            }
+            RuntimeCommand::ChangeScene(name) => {
+                self.base_mut()
+                    .emit_signal("change_scene", &[name.to_variant()]);
+            }
+            RuntimeCommand::EndOfScene => return Ok(false),
+        }
+        Ok(true)
     }
 }
 

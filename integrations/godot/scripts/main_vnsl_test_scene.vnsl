@@ -11,6 +11,8 @@ character Boss
 
 "This is it..."
 
+[textInput]
+
 [MyAction name: "boss" 123 true]
 
 [UnHandleActionTest]
