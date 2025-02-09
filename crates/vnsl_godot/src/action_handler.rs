@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 
 use godot::{
-    builtin::GString,
+    builtin::{GString, Variant},
     classes::RefCounted,
     obj::{Base, Gd, WithBaseField},
     prelude::{godot_api, GodotClass},
@@ -53,7 +53,7 @@ impl VnslActionHandler {
         &mut self,
         action: Gd<VnslRuntimeAction>,
         service_store: Gd<ServiceStore>,
-    ) -> bool {
+    ) -> Variant {
         let global_name = self.base().get_script().call("get_global_name", &[]);
         unimplemented!("Action handler {} is not handled", global_name)
     }

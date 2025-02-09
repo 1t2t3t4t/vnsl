@@ -2,7 +2,7 @@
 mod snapshot_test;
 mod text;
 
-use vnsl_core::model::{VnslAction, VnslBlock, VnslChoice, VnslChoices, VnslScene};
+use vnsl_core::model::{VnslAction, VnslBlock, VnslChoice, VnslChoices, VnslDataType, VnslScene};
 
 use crate::{
     block_runner::{BlockCommand, BlockRunner},
@@ -115,6 +115,12 @@ impl Runtime {
 
     pub fn current_character_id(&self) -> Option<&String> {
         self.context.current_character_id.as_ref()
+    }
+
+    pub fn set_global_val(&mut self, name: &str, val: VnslDataType) -> RuntimeResult<()> {
+        self.context
+            .lua_runtime
+            .set_globals_val_data_type(name, val)
     }
 
     fn clear_end_block_stack(&mut self) {

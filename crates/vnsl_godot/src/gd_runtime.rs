@@ -5,7 +5,7 @@ use crate::{
     ToGodotVariant,
 };
 use godot::{
-    builtin::{Array, GString, StringName},
+    builtin::{Array, GString, StringName, VariantType},
     classes::{file_access::ModeFlags, FileAccess, INode, Node},
     global::{godot_warn, print},
     meta::ToGodot,
@@ -116,6 +116,14 @@ impl BaseVnslRuntime {
     }
 
     #[func]
+    fn set_global_val_string(&mut self, name: String, val: String) -> Gd<GdResult> {
+        wrap_gd_result(|| {
+            self.runtime.set_global_val(&name, val.into())?;
+            Ok(())
+        })
+    }
+
+    #[func]
     fn load_scene(&mut self, scene_id: StringName) -> Gd<GdResult> {
         wrap_gd_result(move || {
             let script = self
@@ -149,7 +157,12 @@ impl BaseVnslRuntime {
         };
 
         let mut bind = handler.bind_mut();
-        bind.handle(map_action(&action), self.service_store.clone())
+        let res = bind.handle(map_action(&action), self.service_store.clone());
+        if res.get_type() == VariantType::BOOL {
+            res.to()
+        } else {
+            false
+        }
     }
 
     fn _step(&mut self) -> anyhow::Result<bool> {
@@ -206,6 +219,6 @@ fn map_action(a: &VnslAction) -> Gd<VnslRuntimeAction> {
 fn map_action_arg(arg: &VnslActionArg) -> Gd<VnslRuntimeActionArg> {
     let mut gd_arg = VnslRuntimeActionArg::new_gd();
     gd_arg.bind_mut().name = arg.name.clone().unwrap_or_default().to_godot();
-    gd_arg.bind_mut().data_type = arg.data_type.to_gd_variant();
+    gd_arg.bind_mut().data = arg.data_type.to_gd_variant();
     gd_arg
 }

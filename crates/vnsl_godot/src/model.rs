@@ -52,13 +52,13 @@ pub struct VnslRuntimeActionArg {
     #[var]
     pub name: GString,
     #[var]
-    pub data_type: Variant,
+    pub data: Variant,
 }
 
 #[godot_api]
 impl VnslRuntimeActionArg {
     #[func]
     pub fn get_as_string(&self) -> String {
-        self.data_type.to()
+        self.data.to()
     }
 }

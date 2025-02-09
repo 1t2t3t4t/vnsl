@@ -12,6 +12,7 @@ unique_name_in_owner = true
 script = ExtResource("2_w1p5w")
 
 [node name="UI" parent="." instance=ExtResource("3_go60v")]
+unique_name_in_owner = true
 
 [connection signal="set_character_id" from="VnslRuntime" to="." method="_on_vnsl_runtime_set_character_id"]
 [connection signal="show_text" from="VnslRuntime" to="." method="_on_vnsl_runtime_show_text"]

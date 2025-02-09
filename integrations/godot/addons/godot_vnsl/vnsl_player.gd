@@ -3,7 +3,7 @@ extends Node
 class_name VnslPlayer
 
 @onready var vnsl_runtime: VnslRuntime = %VnslRuntime
-@onready var ui: VnslPlayerUi = $UI
+@onready var ui: VnslPlayerUi = %UI
 
 @export var entry_point: StringName = "MainScene"
 

@@ -11,7 +11,7 @@ character Boss
 
 "This is it..."
 
-[textInput]
+[textInput key: "MC" label: "What is your name?"]
 
 [MyAction name: "boss" 123 true]
 
@@ -19,7 +19,7 @@ character Boss
 
 "Since when that I left this town?.."
 
-"Why don't you just move around? \"Arthur\""
+"Why don't you just move around? \"{{MC}}\"?"
 
 jump tryRemember
 
