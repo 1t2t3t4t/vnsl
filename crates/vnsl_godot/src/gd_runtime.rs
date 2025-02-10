@@ -7,7 +7,7 @@ use crate::{
 use godot::{
     builtin::{Array, GString, StringName, VariantType},
     classes::{file_access::ModeFlags, FileAccess, INode, Node},
-    global::{godot_warn, print},
+    global::{godot_print, godot_warn, print},
     meta::ToGodot,
     obj::{Base, Gd, NewGd, WithBaseField},
     prelude::{godot_api, GodotClass},
@@ -68,9 +68,6 @@ impl BaseVnslRuntime {
 
     #[signal]
     fn prompt_choices(choices: Array<Gd<VnslRuntimeChoice>>) {}
-
-    #[signal]
-    fn scene_end() {}
 
     #[func]
     fn get_current_character_id(&self) -> GString {
@@ -155,6 +152,12 @@ impl BaseVnslRuntime {
     #[func]
     fn step(&mut self) -> Gd<GdResult> {
         wrap_gd_result(|| self._step())
+    }
+
+    #[cfg(debug_assertions)]
+    #[func]
+    fn debug_print_run_stack(&self) {
+        godot_print!("{}", self.runtime.run_stack_string());
     }
 }
 

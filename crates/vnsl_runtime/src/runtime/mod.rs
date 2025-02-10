@@ -144,3 +144,10 @@ impl Runtime {
         self.run_stack.push(runner);
     }
 }
+
+#[cfg(debug_assertions)]
+impl Runtime {
+    pub fn run_stack_string(&self) -> String {
+        format!("{:#?}", self.run_stack)
+    }
+}
