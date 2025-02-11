@@ -27,9 +27,7 @@ mod tests {
     use crate::compile_dir;
 
     #[test]
-    fn test_compile_dir() -> anyhow::Result<()> {
-        let result = compile_dir("./test_scripts")?;
-        println!("{:#?}", result);
-        Ok(())
+    fn test_compile_dir() {
+        compile_dir("./test_scripts").unwrap();
     }
 }

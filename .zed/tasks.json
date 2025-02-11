@@ -4,7 +4,8 @@
 [
   {
     "label": "Test All",
-    "command": "cargo test --all"
+    "command": "cargo test --all",
+    "reveal_target": "center"
   },
   {
     "label": "Build All",
