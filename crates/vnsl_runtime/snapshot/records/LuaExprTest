@@ -4,4 +4,6 @@ ShowText(
 ShowText(
     "B",
 )
-EndOfScene
+ShowText(
+    "Correct",
+)

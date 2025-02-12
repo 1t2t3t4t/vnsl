@@ -1,4 +1,4 @@
-use mlua::{FromLua, FromLuaMulti, IntoLua, Lua, Value};
+use mlua::{FromLua, FromLuaMulti, IntoLua, Lua, Table};
 use vnsl_core::model::VnslDataType;
 
 use crate::runtime_result::{RuntimeError, RuntimeResult};
@@ -6,12 +6,17 @@ use crate::runtime_result::{RuntimeError, RuntimeResult};
 #[derive(Debug)]
 pub struct LuaRuntime {
     lua: Lua,
+    global_table: Table,
 }
 
 impl Default for LuaRuntime {
     fn default() -> Self {
         let lua = Lua::new();
-        Self { lua }
+        let global_table = lua.create_table().expect("create global table");
+        lua.globals()
+            .set("global", global_table.clone())
+            .expect("assign global table to lua");
+        Self { lua, global_table }
     }
 }
 
@@ -20,27 +25,22 @@ impl LuaRuntime {
     where
         V: FromLua,
     {
-        let Ok(val) = self.lua.globals().get::<V>(key) else {
+        let Ok(val) = self.global_table.get::<V>(key) else {
             return None;
         };
         Some(val.into())
     }
 
     pub fn set_globals_val_data_type(&self, key: &str, val: VnslDataType) -> RuntimeResult<()> {
-        self.lua
-            .globals()
-            .set(key, val.to_lua(&self.lua)?)
-            .map_err(|e| RuntimeError::LuaError(e))
+        self.set_globals_val(key, val)
     }
 
-    #[allow(dead_code)]
     pub fn set_globals_val<T: IntoLua + Into<VnslDataType>>(
         &self,
         key: &str,
         val: T,
     ) -> RuntimeResult<()> {
-        self.lua
-            .globals()
+        self.global_table
             .set(key, val)
             .map_err(|e| RuntimeError::LuaError(e))
     }
@@ -57,20 +57,6 @@ impl LuaRuntime {
             .load(expr)
             .exec()
             .map_err(|e| RuntimeError::LuaEvalError(expr.to_string(), e))
-    }
-}
-
-pub trait ToLua {
-    fn to_lua(self, lua: &Lua) -> mlua::Result<Value>;
-}
-
-impl ToLua for VnslDataType {
-    fn to_lua(self, lua: &Lua) -> mlua::Result<Value> {
-        match self {
-            VnslDataType::String(s) => s.into_lua(lua),
-            VnslDataType::Number(n) => n.into_lua(lua),
-            VnslDataType::Bool(b) => b.into_lua(lua),
-        }
     }
 }
 

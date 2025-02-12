@@ -1,5 +1,6 @@
 use std::fmt::Display;
 
+use mlua::{IntoLua, Lua, Value};
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -59,5 +60,15 @@ impl From<i32> for VnslDataType {
 impl From<bool> for VnslDataType {
     fn from(value: bool) -> Self {
         VnslDataType::Bool(value)
+    }
+}
+
+impl IntoLua for VnslDataType {
+    fn into_lua(self, lua: &Lua) -> mlua::Result<Value> {
+        match self {
+            VnslDataType::String(s) => s.into_lua(lua),
+            VnslDataType::Number(n) => n.into_lua(lua),
+            VnslDataType::Bool(b) => b.into_lua(lua),
+        }
     }
 }

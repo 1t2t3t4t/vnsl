@@ -1,0 +1,6 @@
+scene EndWithIfElse
+
+if |1 == 1|:
+    "correct"
+else:
+    "wrong"
