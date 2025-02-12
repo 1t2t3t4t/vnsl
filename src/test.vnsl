@@ -1,46 +1,12 @@
 scene TestScene
 
+global MC "Boss"
+
 char Boss
 
-1 + 2 - (3 * (4 / 5))
-
 "test"
-"this is it"
+"this is it {{MC}}"
 
 "Multiline
 test
 tset"
-
-global test "this is it"
-
-choice:
-    "Choice A":
-        "Hey!!! Stop right there scumm"
-        [PUNCH]
-        "This is not a joke
-        Go back to your mama!!!"
-    "Choice B":
-        "I love you..."
-
-[action]
-
-[action "abc" "DeF"]
-[action 1 10 .23 0.123]
-[action true  false]
-
-[action namedArg: "test" namedArg2: 1234 namedArg3: true]
-
-jump testScope123
-
-if ( thisIsCond):
-    "A"
-elif (cond2):
-    "B"
-else:
-    "C"
-
-label testScope:
-    [doSomething]
-    "Yoooo
-    this is it
-    This is what I'have been waiting for for a long time"

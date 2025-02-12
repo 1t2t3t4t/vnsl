@@ -6,8 +6,9 @@ use vnsl_core::model::{VnslAction, VnslBlock, VnslChoice, VnslChoices, VnslDataT
 
 use crate::{
     block_runner::{BlockCommand, BlockRunner},
-    block_stack::RunStack,
-    runtime_result::{RuntimeError, RuntimeResult},
+    result::{RuntimeError, RuntimeResult},
+    runstack::RunStack,
+    snapshot::Snapshot,
     RunContext,
 };
 
@@ -37,6 +38,18 @@ impl Runtime {
             context,
             run_stack,
         }
+    }
+
+    pub fn get_current_scene(&self) -> Option<&VnslScene> {
+        self.current_scene.as_ref()
+    }
+
+    pub fn get_run_context(&self) -> &RunContext {
+        &self.context
+    }
+
+    pub fn get_run_stack(&self) -> &RunStack {
+        &self.run_stack
     }
 
     pub fn load_scene(&mut self, scene: VnslScene) {
@@ -123,6 +136,10 @@ impl Runtime {
             .set_globals_val_data_type(name, val)
     }
 
+    pub fn snapshot(&self) -> Snapshot {
+        self.into()
+    }
+
     fn clear_end_block_stack(&mut self) {
         while self.run_stack.top().map(|b| b.block_ended()) == Some(true) {
             self.pop_block_stack();
@@ -142,6 +159,21 @@ impl Runtime {
     fn fork_block(&mut self, block: VnslBlock) {
         let runner = BlockRunner::new(block);
         self.run_stack.push(runner);
+    }
+}
+
+impl From<Snapshot> for Runtime {
+    fn from(value: Snapshot) -> Self {
+        let mut ctx = RunContext::default();
+        ctx.current_character_id = value.current_character_id;
+        ctx.lua_runtime
+            .import_globals(value.lua_globals)
+            .expect("import globals");
+        Self {
+            current_scene: value.current_scene,
+            context: ctx,
+            run_stack: value.run_stack,
+        }
     }
 }
 

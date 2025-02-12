@@ -1,14 +1,15 @@
 #[cfg(test)]
 mod test;
 
+use serde::{Deserialize, Serialize};
 use vnsl_core::model::{
     VnslAction, VnslBlock, VnslChoices, VnslCommand, VnslCondition, VnslDialogue, VnslGlobal,
     VnslGoTo, VnslJump, VnslSetCharacter, VnslStatement,
 };
 
-use crate::{runtime_result::RuntimeResult, RunContext};
+use crate::{result::RuntimeResult, RunContext};
 
-#[derive(Debug)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct BlockRunner {
     block: VnslBlock,
     current_stmt: usize,

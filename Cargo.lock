@@ -878,6 +878,7 @@ name = "vnsl"
 version = "0.1.0"
 dependencies = [
  "anyhow",
+ "serde_json",
  "vnsl_compiler",
  "vnsl_runtime",
 ]
@@ -947,6 +948,7 @@ dependencies = [
  "mlua",
  "pretty_assertions",
  "regex",
+ "serde",
  "thiserror",
  "vnsl_compiler",
  "vnsl_core",

@@ -3,7 +3,7 @@ use std::collections::HashMap;
 use mlua::{FromLua, FromLuaMulti, IntoLua, Lua, Table, Value};
 use vnsl_core::model::VnslDataType;
 
-use crate::runtime_result::{RuntimeError, RuntimeResult};
+use crate::result::{RuntimeError, RuntimeResult};
 
 #[derive(Debug)]
 pub struct LuaRuntime {
@@ -59,6 +59,14 @@ impl LuaRuntime {
             .load(expr)
             .exec()
             .map_err(|e| RuntimeError::LuaEvalError(expr.to_string(), e))
+    }
+
+    pub fn import_globals(&self, globals: HashMap<String, VnslDataType>) -> RuntimeResult<()> {
+        for (k, v) in globals.into_iter() {
+            let val = v.into_lua(&self.lua)?;
+            self.global_table.set(k, val)?;
+        }
+        Ok(())
     }
 
     pub fn export_globals(&self) -> HashMap<String, VnslDataType> {

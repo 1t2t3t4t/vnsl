@@ -1,6 +1,8 @@
+use serde::{Deserialize, Serialize};
+
 use crate::block_runner::BlockRunner;
 
-#[derive(Debug, Default)]
+#[derive(Debug, Default, PartialEq, Clone, Serialize, Deserialize)]
 pub struct RunStack {
     blocks: Vec<BlockRunner>,
 }

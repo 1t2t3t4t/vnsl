@@ -1,26 +1,29 @@
 use std::time;
 
-fn elapsed<T>(f: impl FnOnce() -> T) -> T {
+fn elapsed<T>(label: &str, f: impl FnOnce() -> T) -> T {
     let start = time::Instant::now();
     let res = f();
-    println!("Elapsed time: {} us.", start.elapsed().as_micros());
+    println!(
+        "Elapsed time {}: {} us.",
+        label,
+        start.elapsed().as_micros()
+    );
     res
 }
 
 fn main() -> anyhow::Result<()> {
     let test_script = include_str!("../spec.vnsl");
-    let scene = elapsed(|| vnsl_compiler::compile(test_script))?;
+    let scene = elapsed("compile", || vnsl_compiler::compile(test_script))?;
 
     let mut runtime = vnsl_runtime::Runtime::new();
     runtime.load_scene(scene);
 
-    loop {
-        let res = runtime.step().unwrap();
-        println!("{:?}", res);
+    runtime.step().unwrap();
+    runtime.step().unwrap();
+    runtime.step().unwrap();
 
-        if runtime.scene_ended() {
-            break;
-        }
-    }
+    let snapshot = elapsed("snapshot", || runtime.snapshot());
+    let val = serde_json::to_string_pretty(&snapshot).unwrap();
+    std::fs::write("./snapshot.json", &val).unwrap();
     Ok(())
 }

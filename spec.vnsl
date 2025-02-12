@@ -14,9 +14,11 @@ scene SceneName
 
 ## Example Script:
 
+global MC "Boss"
+
 character Boss
 
-"Dialogue goes here."
+"Dialogue goes here. {{MC}}"
 
 "This is not good...
 We should do better than this."
