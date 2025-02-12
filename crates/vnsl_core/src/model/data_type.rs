@@ -18,6 +18,16 @@ impl VnslDataType {
             _ => panic!("Data type {:?} is not a number", self),
         }
     }
+
+    pub fn try_from(value: Value) -> Option<Self> {
+        match value {
+            Value::Boolean(b) => Some(Self::Bool(b)),
+            Value::Integer(i) => Some(Self::Number(i as f64)),
+            Value::Number(n) => Some(Self::Number(n)),
+            Value::String(s) => Some(Self::String(s.to_string_lossy())),
+            _ => None,
+        }
+    }
 }
 
 impl Display for VnslDataType {
@@ -56,10 +66,21 @@ impl From<i32> for VnslDataType {
         VnslDataType::Number(value as f64)
     }
 }
+impl From<i64> for VnslDataType {
+    fn from(value: i64) -> Self {
+        VnslDataType::Number(value as f64)
+    }
+}
 
 impl From<bool> for VnslDataType {
     fn from(value: bool) -> Self {
         VnslDataType::Bool(value)
+    }
+}
+
+impl From<Value> for VnslDataType {
+    fn from(value: Value) -> Self {
+        Self::try_from(value.clone()).expect(&format!("No compatible data type {:?}", value))
     }
 }
 

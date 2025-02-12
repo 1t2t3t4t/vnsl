@@ -1,4 +1,6 @@
-use mlua::{FromLua, FromLuaMulti, IntoLua, Lua, Table};
+use std::collections::HashMap;
+
+use mlua::{FromLua, FromLuaMulti, IntoLua, Lua, Table, Value};
 use vnsl_core::model::VnslDataType;
 
 use crate::runtime_result::{RuntimeError, RuntimeResult};
@@ -58,10 +60,28 @@ impl LuaRuntime {
             .exec()
             .map_err(|e| RuntimeError::LuaEvalError(expr.to_string(), e))
     }
+
+    pub fn export_globals(&self) -> HashMap<String, VnslDataType> {
+        let pairs = self.global_table.pairs::<String, Value>();
+        pairs
+            .into_iter()
+            .filter_map(|p| p.ok())
+            .map(|p| (p.0, VnslDataType::try_from(p.1)))
+            .filter_map(|p| {
+                if let Some(val) = p.1 {
+                    Some((p.0, val))
+                } else {
+                    None
+                }
+            })
+            .collect()
+    }
 }
 
 #[cfg(test)]
 mod test {
+    use std::collections::HashMap;
+
     use vnsl_core::model::VnslDataType;
 
     use super::LuaRuntime;
@@ -133,5 +153,22 @@ mod test {
                 .map(|x| x.into()),
             Some(VnslDataType::String("someString".to_string()))
         );
+    }
+
+    #[test]
+    fn test_export_globals() {
+        let rt = LuaRuntime::default();
+        rt.set_globals_val("a", "val").unwrap();
+        rt.set_globals_val("b", 20).unwrap();
+        rt.set_globals_val("c", 30.123).unwrap();
+        rt.set_globals_val("d", true).unwrap();
+
+        let globals = rt.export_globals();
+        let mut map = HashMap::new();
+        map.insert("a".to_string(), VnslDataType::String("val".to_string()));
+        map.insert("b".to_string(), VnslDataType::Number(20.));
+        map.insert("c".to_string(), VnslDataType::Number(30.123));
+        map.insert("d".to_string(), VnslDataType::Bool(true));
+        assert_eq!(globals, map);
     }
 }
