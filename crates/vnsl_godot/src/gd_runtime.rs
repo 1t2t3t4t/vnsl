@@ -7,7 +7,7 @@ use crate::{
 use godot::{
     builtin::{Array, GString, StringName, VariantType},
     classes::{file_access::ModeFlags, FileAccess, INode, Node},
-    global::{godot_print, godot_warn, print},
+    global::{godot_warn, print},
     meta::ToGodot,
     obj::{Base, Gd, NewGd, WithBaseField},
     prelude::{godot_api, GodotClass},
@@ -154,9 +154,19 @@ impl BaseVnslRuntime {
         wrap_gd_result(|| self._step())
     }
 
+    #[func]
+    fn take_snapshot(&self) -> Gd<GdResult> {
+        wrap_gd_result(|| {
+            let s = serde_json::to_string(&self.runtime.snapshot())?;
+            Ok(s)
+        })
+    }
+
     #[cfg(debug_assertions)]
     #[func]
     fn debug_print_run_stack(&self) {
+        use godot::global::godot_print;
+
         godot_print!("{}", self.runtime.run_stack_string());
     }
 }

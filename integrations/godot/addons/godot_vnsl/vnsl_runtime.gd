@@ -3,8 +3,7 @@ extends BaseVnslRuntime
 class_name VnslRuntime
 
 @export var vnsl_scripts_path: String = "res://scripts/"
-
-var persistent_store := PersistentStore.new()
+@export var persistent_store := PersistentStore.new()
 
 func _ready() -> void:
 	service_store.register_service("runtime", self)

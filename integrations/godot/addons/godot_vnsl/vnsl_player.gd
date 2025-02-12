@@ -22,6 +22,15 @@ func _ready() -> void:
 
 
 func _input(event: InputEvent) -> void:
+	if event.is_action_pressed("force_save"):
+		var snapshot_res := vnsl_runtime.take_snapshot()
+		if snapshot_res.is_ok():
+			var snapshot = snapshot_res.result() as String
+			var persistent := vnsl_runtime.persistent_store.duplicate(true) as PersistentStore
+			persistent.runtime_snapshot_json = snapshot
+			ResourceSaver.save(persistent, "res://save.tres")
+			print("Save!!")
+
 	if event is InputEventMouseButton:
 		if event.button_index == 1 and event.is_pressed():
 			step()
@@ -30,7 +39,6 @@ func _input(event: InputEvent) -> void:
 func step():
 	if not lock:
 		vnsl_runtime.step()
-
 
 # Signals
 
