@@ -4,9 +4,14 @@ class_name VnslRuntime
 
 @export var vnsl_scripts_path: String = "res://scripts/"
 
+var persistent_store := PersistentStore.new()
+
 func _ready() -> void:
 	service_store.register_service("runtime", self)
+	service_store.register_service("persistent_store", persistent_store)
+
 	var scripts := _scan_scripts(vnsl_scripts_path)
+
 	construct_scene_map(scripts)
 
 

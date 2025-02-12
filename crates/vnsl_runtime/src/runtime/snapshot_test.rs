@@ -19,7 +19,7 @@ struct SceneSnapshotRunner {
 
 impl SceneSnapshotRunner {
     fn run_scene(&mut self, scene: VnslScene, record: bool) {
-        let mut runtime = Runtime::new();
+        let mut runtime = Runtime::default();
         let name = scene.name.clone();
         let mut result = String::new();
         runtime.load_scene(scene);

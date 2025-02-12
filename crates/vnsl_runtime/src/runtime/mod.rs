@@ -12,7 +12,7 @@ use crate::{
     RunContext,
 };
 
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub struct Runtime {
     current_scene: Option<VnslScene>,
     context: RunContext,
@@ -30,16 +30,6 @@ pub enum RuntimeCommand {
 }
 
 impl Runtime {
-    pub fn new() -> Self {
-        let context = RunContext::default();
-        let run_stack = RunStack::default();
-        Self {
-            current_scene: None,
-            context,
-            run_stack,
-        }
-    }
-
     pub fn get_current_scene(&self) -> Option<&VnslScene> {
         self.current_scene.as_ref()
     }

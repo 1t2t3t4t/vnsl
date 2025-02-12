@@ -15,7 +15,7 @@ fn main() -> anyhow::Result<()> {
     let test_script = include_str!("../spec.vnsl");
     let scene = elapsed("compile", || vnsl_compiler::compile(test_script))?;
 
-    let mut runtime = vnsl_runtime::Runtime::new();
+    let mut runtime = vnsl_runtime::Runtime::default();
     runtime.load_scene(scene);
 
     runtime.step().unwrap();

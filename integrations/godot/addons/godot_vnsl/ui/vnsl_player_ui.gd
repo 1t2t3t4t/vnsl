@@ -6,6 +6,7 @@ class_name VnslPlayerUi
 @onready var display_text_box: RichTextLabel = %DisplayTextBox
 @onready var choices_container: ChoicesContainer = %ChoicesContainer
 @onready var text_input_prompt: TextInputPrompt = %TextInputPrompt
+@onready var background_texture: TextureRect = %BackgroundTexture
 
 func set_display_text(text: String):
 	display_text_box.text = text

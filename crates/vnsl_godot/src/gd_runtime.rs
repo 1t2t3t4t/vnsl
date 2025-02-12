@@ -46,7 +46,7 @@ pub struct BaseVnslRuntime {
 impl INode for BaseVnslRuntime {
     fn init(base: Base<Node>) -> Self {
         Self {
-            runtime: Runtime::new(),
+            runtime: Runtime::default(),
             scene_map: VnslSceneMap::new_gd(),
             service_store: ServiceStore::new_gd(),
             action_handler: Default::default(),

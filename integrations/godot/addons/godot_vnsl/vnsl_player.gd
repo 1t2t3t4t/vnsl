@@ -15,8 +15,10 @@ func _ready() -> void:
 	vnsl_runtime.service_store.register_service("ui", ui)
 
 	vnsl_runtime.register_action_handler(TextInputActionHandler.new())
+	vnsl_runtime.register_action_handler(BackgroundActionHandler.new())
 
 	vnsl_runtime.load_scene(entry_point)
+	vnsl_runtime.step()
 
 
 func _input(event: InputEvent) -> void:
@@ -29,6 +31,8 @@ func step():
 	if not lock:
 		vnsl_runtime.step()
 
+
+# Signals
 
 func _on_vnsl_runtime_show_text(text: String) -> void:
 	ui.set_display_text(text)

@@ -14,12 +14,10 @@
   },
   {
     "label": "Build Godot (Win)",
-    "command": "./buildGodot.bat",
-    "hide": "on_success"
+    "command": "./buildGodot.bat"
   },
   {
     "label": "Build Godot (Shell)",
-    "command": "./buildGodot.sh",
-    "hide": "on_success"
+    "command": "./buildGodot.sh"
   }
 ]

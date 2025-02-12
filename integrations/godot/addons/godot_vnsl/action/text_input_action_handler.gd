@@ -1,4 +1,4 @@
-extends VnslActionHandler
+extends BaseActionHandler
 
 class_name TextInputActionHandler
 
@@ -7,8 +7,8 @@ func _handle_action_name() -> String:
 
 
 func _handle(action: VnslRuntimeAction, service_store: ServiceStore):
-	var ui := service_store.get_service("ui") as VnslPlayerUi
-	var player := service_store.get_service("player") as VnslPlayer
+	var ui := _get_ui(service_store)
+	var player := _get_player(service_store)
 	player.lock = true
 	ui.text_input_prompt.show()
 

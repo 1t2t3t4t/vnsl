@@ -7,13 +7,13 @@ function doSomething()
 end
 ||
 
+[bg path: "res://icon.svg"]
+
 char Boss
 
 "This is it..."
 
 [textInput key: "MC" label: "What is your name?"]
-
-[MyAction name: "boss" 123 true]
 
 [UnHandleActionTest]
 
