@@ -1,0 +1,11 @@
+scene MixedStmtLabels
+
+"Test"
+
+label A:
+    "Hello"
+
+"Yo"
+
+label B:
+    global x 123

@@ -7,7 +7,7 @@ function doSomething()
 end
 ||
 
-character Boss
+char Boss
 
 "This is it..."
 

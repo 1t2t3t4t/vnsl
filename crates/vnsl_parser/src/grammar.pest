@@ -1,4 +1,4 @@
-script = { SOI ~ scene ~ main_statement ~ labels ~ EOI }
+script = { SOI ~ scene ~ (stmt | label_scope)* ~ EOI }
 
 WHITESPACE  = _{ NEWLINE }
 COMMENT     = _{ "#" ~ (!"\n" ~ ANY)* }
@@ -75,6 +75,3 @@ label_scope =  {
     "label" ~ spacer ~ identifier ~ block
 }
 scene       =  { "scene" ~ spacer ~ identifier }
-
-main_statement =  { stmt* }
-labels         = _{ label_scope* }

@@ -9,21 +9,6 @@ pub mod lua_expr;
 
 use crate::Rule;
 
-pub fn parse_statements(rule: Pair<Rule>) -> anyhow::Result<Vec<VnslStatement>> {
-    let inner = rule.into_inner();
-    let mut result = Vec::new();
-    for rule in inner {
-        match rule.as_rule() {
-            Rule::stmt => {
-                result.push(parse_statement(rule)?);
-            }
-            _ => unreachable!(),
-        }
-    }
-
-    Ok(result)
-}
-
 pub fn parse_statement(rule: Pair<Rule>) -> anyhow::Result<VnslStatement> {
     let mut inner = rule.into_inner();
     assert_eq!(inner.len(), 1);

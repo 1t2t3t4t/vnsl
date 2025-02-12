@@ -1,0 +1,54 @@
+VnslScene {
+    name: "MixedStmtLabels",
+    main_block: VnslBlock {
+        statements: [
+            Command(
+                Dialogue(
+                    VnslDialogue {
+                        text: "Test",
+                    },
+                ),
+            ),
+            Command(
+                Dialogue(
+                    VnslDialogue {
+                        text: "Yo",
+                    },
+                ),
+            ),
+        ],
+    },
+    labels: {
+        "A": VnslLabel {
+            name: "A",
+            block: VnslBlock {
+                statements: [
+                    Command(
+                        Dialogue(
+                            VnslDialogue {
+                                text: "Hello",
+                            },
+                        ),
+                    ),
+                ],
+            },
+        },
+        "B": VnslLabel {
+            name: "B",
+            block: VnslBlock {
+                statements: [
+                    Command(
+                        Global(
+                            VnslGlobal {
+                                name: "x",
+                                value: Number(
+                                    123.0,
+                                ),
+                            },
+                        ),
+                    ),
+                ],
+            },
+        },
+    },
+}
