@@ -7,7 +7,7 @@ use crate::{
 use godot::{
     builtin::{Array, GString, StringName, VariantType},
     classes::{file_access::ModeFlags, FileAccess, INode, Node},
-    global::{godot_print, godot_warn, print},
+    global::{godot_warn, print},
     meta::ToGodot,
     obj::{Base, Gd, NewGd, WithBaseField},
     prelude::{godot_api, GodotClass},
@@ -58,16 +58,16 @@ impl INode for BaseVnslRuntime {
 #[godot_api]
 impl BaseVnslRuntime {
     #[signal]
-    fn set_character_id(id: String) {}
+    fn set_character_id(id: String);
 
     #[signal]
-    fn show_text(text: String) {}
+    fn show_text(text: String);
 
     #[signal]
-    fn change_scene(scene_name: String) {}
+    fn change_scene(scene_name: String);
 
     #[signal]
-    fn prompt_choices(choices: Array<Gd<VnslRuntimeChoice>>) {}
+    fn prompt_choices(choices: Array<Gd<VnslRuntimeChoice>>);
 
     #[func]
     fn get_current_character_id(&self) -> GString {
@@ -157,7 +157,7 @@ impl BaseVnslRuntime {
     #[cfg(debug_assertions)]
     #[func]
     fn debug_print_run_stack(&self) {
-        godot_print!("{}", self.runtime.run_stack_string());
+        godot::global::godot_print!("{}", self.runtime.run_stack_string());
     }
 }
 
