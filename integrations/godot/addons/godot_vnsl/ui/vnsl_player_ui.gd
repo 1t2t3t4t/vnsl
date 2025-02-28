@@ -8,6 +8,11 @@ class_name VnslPlayerUi
 @onready var text_input_prompt: TextInputPrompt = %TextInputPrompt
 @onready var background_texture: TextureRect = %BackgroundTexture
 
+func _ready() -> void:
+	choices_container.hide()
+	text_input_prompt.hide()
+
+
 func set_display_text(text: String):
 	display_text_box.text = text
 
