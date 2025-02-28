@@ -8,7 +8,7 @@ crate-type = ["cdylib"]
 
 [dependencies]
 anyhow.workspace = true
-godot = { version = "0.2.3", features = ["api-4-3"] }
+godot = { version = "0.2.4", features = ["api-4-3"] }
 serde_json.workspace = true
 vnsl_compiler.workspace = true
 vnsl_runtime.workspace = true
