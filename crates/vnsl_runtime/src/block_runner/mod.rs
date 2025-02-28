@@ -41,11 +41,25 @@ impl BlockRunner {
         self.block.statements.get(self.current_stmt).is_none()
     }
 
-    pub fn step(&mut self, context: &mut RunContext) -> RuntimeResult<BlockCommand> {
+    pub fn get_current_command(&mut self, context: &mut RunContext) -> RuntimeResult<BlockCommand> {
         let Some(stmt) = self.block.statements.get(self.current_stmt) else {
             return Ok(BlockCommand::NoOps);
         };
-        let result = match stmt {
+        self.process_stmt(context, &stmt.clone())
+    }
+
+    pub fn step(&mut self, context: &mut RunContext) -> RuntimeResult<BlockCommand> {
+        let cmd = self.get_current_command(context);
+        self.current_stmt += 1;
+        cmd
+    }
+
+    fn process_stmt(
+        &mut self,
+        context: &mut RunContext,
+        stmt: &VnslStatement,
+    ) -> RuntimeResult<BlockCommand> {
+        match stmt {
             VnslStatement::Command(vnsl_command) => Ok(exec_command(vnsl_command)),
             VnslStatement::Choices(vnsl_choices) => Ok(BlockCommand::Choices(vnsl_choices.clone())),
             VnslStatement::Condition(vnsl_condition) => exec_condition(vnsl_condition, context),
@@ -53,11 +67,7 @@ impl BlockRunner {
                 context.lua_runtime.exec_expr(&expr.lua)?;
                 Ok(BlockCommand::NoOps)
             }
-        };
-
-        self.current_stmt += 1;
-
-        result
+        }
     }
 }
 

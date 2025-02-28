@@ -1,6 +1,22 @@
-[gd_resource type="Theme" format=3 uid="uid://t1b470k6xcr5"]
+[gd_resource type="Theme" load_steps=3 format=3 uid="uid://t1b470k6xcr5"]
+
+[ext_resource type="Texture2D" uid="uid://fun31jraqvvv" path="res://icon.svg" id="1_gvyb5"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_dtxnd"]
+texture = ExtResource("1_gvyb5")
+texture_margin_left = 15.0
+texture_margin_top = 10.0
+texture_margin_right = 15.0
+texture_margin_bottom = 10.0
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 2
+region_rect = Rect2(0, 0, 128, 128)
 
 [resource]
+DisplayRichTextLabel/base_type = &"RichTextLabel"
+DisplayRichTextLabel/constants/outline_size = 5
+DisplayTextPanel/base_type = &"PanelContainer"
+DisplayTextPanel/styles/panel = SubResource("StyleBoxTexture_dtxnd")
 MarginContainer/constants/margin_bottom = 8
 MarginContainer/constants/margin_left = 8
 MarginContainer/constants/margin_right = 8

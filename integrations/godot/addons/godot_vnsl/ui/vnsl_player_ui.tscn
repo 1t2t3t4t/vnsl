@@ -1,15 +1,9 @@
 [gd_scene load_steps=5 format=3 uid="uid://qnvctkhjptk"]
 
+[ext_resource type="Theme" uid="uid://t1b470k6xcr5" path="res://addons/godot_vnsl/ui/default_vnsl_theme.tres" id="1_5b6pp"]
 [ext_resource type="Script" path="res://addons/godot_vnsl/ui/vnsl_player_ui.gd" id="1_gbkn6"]
 [ext_resource type="PackedScene" uid="uid://b47vxt7ostmqx" path="res://addons/godot_vnsl/ui/choices_container.tscn" id="2_mg0gx"]
 [ext_resource type="PackedScene" uid="uid://d140mnmejyvbm" path="res://addons/godot_vnsl/ui/text_input_prompt.tscn" id="3_c7k16"]
-
-[sub_resource type="Theme" id="Theme_x5rv8"]
-MarginContainer/constants/margin_bottom = 8
-MarginContainer/constants/margin_left = 8
-MarginContainer/constants/margin_right = 8
-MarginContainer/constants/margin_top = 8
-VBoxContainer/constants/separation = 8
 
 [node name="UI" type="Control"]
 layout_mode = 3
@@ -20,7 +14,7 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme = SubResource("Theme_x5rv8")
+theme = ExtResource("1_5b6pp")
 script = ExtResource("1_gbkn6")
 metadata/_edit_use_anchors_ = true
 
@@ -59,6 +53,7 @@ metadata/_edit_use_anchors_ = true
 [node name="DisplayTextPanel" type="PanelContainer" parent="VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
+theme_type_variation = &"DisplayTextPanel"
 metadata/_edit_use_anchors_ = true
 
 [node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/DisplayTextPanel"]
@@ -67,6 +62,7 @@ layout_mode = 2
 [node name="DisplayTextBox" type="RichTextLabel" parent="VBoxContainer/DisplayTextPanel/MarginContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+theme_type_variation = &"DisplayRichTextLabel"
 bbcode_enabled = true
 text = "Hello World
 
