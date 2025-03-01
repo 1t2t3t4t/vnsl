@@ -1,6 +1,8 @@
-[gd_resource type="Theme" load_steps=4 format=3 uid="uid://t1b470k6xcr5"]
+[gd_resource type="Theme" load_steps=5 format=3 uid="uid://t1b470k6xcr5"]
 
 [ext_resource type="Texture2D" uid="uid://fun31jraqvvv" path="res://icon.svg" id="1_gvyb5"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_pn4tf"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_s110u"]
 
@@ -15,6 +17,9 @@ axis_stretch_vertical = 2
 region_rect = Rect2(0, 0, 128, 128)
 
 [resource]
+ChoiceButton/base_type = &"Button"
+ChoiceButton/constants/outline_size = 5
+ChoiceButton/styles/normal = SubResource("StyleBoxEmpty_pn4tf")
 ChoicesPanelContainer/base_type = &"PanelContainer"
 ChoicesPanelContainer/styles/panel = SubResource("StyleBoxEmpty_s110u")
 DisplayRichTextLabel/base_type = &"RichTextLabel"

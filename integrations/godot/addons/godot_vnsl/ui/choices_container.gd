@@ -14,6 +14,7 @@ func configure(choices: Array[VnslRuntimeChoice]):
 	clear_button()
 	for choice in choices:
 		var button := Button.new()
+		button.theme_type_variation = "ChoiceButton"
 		button.text = choice.text
 		button.pressed.connect(func(): choice_selected.emit(choice))
 		button_container.add_child(button)

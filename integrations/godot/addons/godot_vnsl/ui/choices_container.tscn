@@ -23,36 +23,45 @@ alignment = 1
 
 [node name="Button" type="Button" parent="ScrollContainer/ButtonContainer"]
 layout_mode = 2
+theme_type_variation = &"ChoiceButton"
 text = "Button"
 
 [node name="Button2" type="Button" parent="ScrollContainer/ButtonContainer"]
 layout_mode = 2
+theme_type_variation = &"ChoiceButton"
 text = "Button"
 
 [node name="Button3" type="Button" parent="ScrollContainer/ButtonContainer"]
 layout_mode = 2
+theme_type_variation = &"ChoiceButton"
 text = "Button"
 
 [node name="Button4" type="Button" parent="ScrollContainer/ButtonContainer"]
 layout_mode = 2
+theme_type_variation = &"ChoiceButton"
 text = "Button"
 
 [node name="Button5" type="Button" parent="ScrollContainer/ButtonContainer"]
 layout_mode = 2
+theme_type_variation = &"ChoiceButton"
 text = "Button"
 
 [node name="Button6" type="Button" parent="ScrollContainer/ButtonContainer"]
 layout_mode = 2
+theme_type_variation = &"ChoiceButton"
 text = "Button"
 
 [node name="Button7" type="Button" parent="ScrollContainer/ButtonContainer"]
 layout_mode = 2
+theme_type_variation = &"ChoiceButton"
 text = "Button"
 
 [node name="Button8" type="Button" parent="ScrollContainer/ButtonContainer"]
 layout_mode = 2
+theme_type_variation = &"ChoiceButton"
 text = "Button"
 
 [node name="Button9" type="Button" parent="ScrollContainer/ButtonContainer"]
 layout_mode = 2
+theme_type_variation = &"ChoiceButton"
 text = "Button"
