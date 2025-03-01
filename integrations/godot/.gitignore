@@ -4,3 +4,5 @@
 
 addons/godot_vnsl/bin/
 addons/script-ide/
+
+*.save.tres
