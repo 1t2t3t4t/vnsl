@@ -945,6 +945,7 @@ dependencies = [
  "thiserror 1.0.62",
  "vnsl_compiler",
  "vnsl_core",
+ "vnsl_parser",
  "vnsl_runtime",
 ]
 

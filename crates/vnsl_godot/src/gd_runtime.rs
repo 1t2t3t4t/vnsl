@@ -92,12 +92,12 @@ impl BaseVnslRuntime {
         for path in scripts_path.iter_shared() {
             let res = FileAccess::open(&path, ModeFlags::READ);
             let content = res.unwrap().get_as_text().to_string();
-            match vnsl_compiler::compile(&content) {
+            match vnsl_parser::parse_scene_name(&content) {
                 Ok(scene) => {
                     let path = path.to_string();
                     self.scene_map
                         .bind_mut()
-                        .set_scene_lazy(scene.name.into(), move || {
+                        .set_scene_lazy(scene.into(), move || {
                             let res = FileAccess::open(&path, ModeFlags::READ);
                             let content = res.unwrap().get_as_text().to_string();
                             let mut script = VnslScript::new_gd();
@@ -106,7 +106,7 @@ impl BaseVnslRuntime {
                         });
                 }
                 Err(err) => {
-                    print(&[format!("Compile error: {}", err).to_variant()]);
+                    print(&[format!("Parse scene name error: {}", err).to_variant()]);
                 }
             }
         }

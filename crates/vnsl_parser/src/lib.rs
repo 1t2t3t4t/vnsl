@@ -6,7 +6,7 @@ mod parser;
 mod statement;
 mod utils;
 
-pub use parser::parse;
+pub use parser::*;
 use pest_derive::Parser;
 
 #[derive(Parser)]
