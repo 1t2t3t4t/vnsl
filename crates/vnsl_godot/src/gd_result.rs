@@ -57,10 +57,7 @@ impl GdResult {
     #[func]
     pub fn print_err_if_available(&self) {
         if self.is_err() {
-            global::printerr(&[
-                "Vnsl error: %s".to_variant(),
-                self.err_message().to_variant(),
-            ]);
+            global::printerr(&[format!("Vnsl error: {}", self.err_message()).to_variant()]);
         }
     }
 }

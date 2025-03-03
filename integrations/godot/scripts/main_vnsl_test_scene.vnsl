@@ -7,8 +7,6 @@ function doSomething()
 end
 ||
 
-[bg path: "res://icon.svg"]
-
 char Boss
 
 "This is it..."
@@ -21,11 +19,15 @@ char Boss
 
 "Why don't you just move around? \"{{MC}}\"?"
 
+[bg path: "res://icon.svg"]
+
 jump tryRemember
 
 if |myPoint == 2|:
     "Alright.. no point in remembering all these things.
     It's time to move on."
+
+jump notExistLabel
 
 choice:
     "Go home":
