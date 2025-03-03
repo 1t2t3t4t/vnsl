@@ -33,6 +33,8 @@ choice:
     "I will stay here a bit longer":
         "Don't need to go now I guess"
 
+goto SubScene
+
 label tryRemember:
     || myPoint = doSomething() ||
 

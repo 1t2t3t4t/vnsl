@@ -30,4 +30,4 @@ MarginContainer/constants/margin_bottom = 8
 MarginContainer/constants/margin_left = 8
 MarginContainer/constants/margin_right = 8
 MarginContainer/constants/margin_top = 8
-VBoxContainer/constants/separation = 8
+VBoxContainer/constants/separation = 16

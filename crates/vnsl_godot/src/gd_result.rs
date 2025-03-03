@@ -1,5 +1,6 @@
 use godot::{
     builtin::Variant,
+    global,
     meta::ToGodot,
     obj::Gd,
     prelude::{godot_api, GodotClass},
@@ -50,6 +51,16 @@ impl GdResult {
         match &self.err {
             Some(err) => format!("{}", err),
             None => "Ok".to_string(),
+        }
+    }
+
+    #[func]
+    pub fn print_err_if_available(&self) {
+        if self.is_err() {
+            global::printerr(&[
+                "Vnsl error: %s".to_variant(),
+                self.err_message().to_variant(),
+            ]);
         }
     }
 }

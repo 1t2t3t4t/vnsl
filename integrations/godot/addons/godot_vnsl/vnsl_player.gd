@@ -17,8 +17,7 @@ func _ready() -> void:
 	vnsl_runtime.register_action_handler(TextInputActionHandler.new())
 	vnsl_runtime.register_action_handler(BackgroundActionHandler.new())
 
-	vnsl_runtime.load_scene(entry_point)
-	vnsl_runtime.step()
+	start_scene(entry_point)
 
 
 func _input(event: InputEvent) -> void:
@@ -34,8 +33,16 @@ func _input(event: InputEvent) -> void:
 
 
 func step():
+	if vnsl_runtime.scene_ended():
+		get_tree().quit()
+
 	if not lock:
-		vnsl_runtime.step()
+		vnsl_runtime.step().print_err_if_available()
+
+
+func start_scene(name: StringName):
+	vnsl_runtime.load_scene(name).print_err_if_available()
+	step()
 
 
 func take_snapshot() -> PersistentStore:
@@ -69,3 +76,7 @@ func _on_vnsl_runtime_prompt_choices(choices: Array[VnslRuntimeChoice]) -> void:
 	ui.choices_container.hide()
 	lock = false
 	step()
+
+
+func _on_vnsl_runtime_change_scene(scene_name: String) -> void:
+	start_scene(scene_name)
