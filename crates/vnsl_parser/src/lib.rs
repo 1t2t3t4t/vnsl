@@ -2,23 +2,73 @@ mod block;
 mod data_type;
 mod error;
 mod label;
-mod parser;
 mod statement;
 mod utils;
 
-pub use parser::*;
+use pest::Parser;
 use pest_derive::Parser;
+use thiserror::Error;
+use vnsl_core::model::VnslScene;
 
 #[derive(Parser)]
 #[grammar = "grammar.pest"]
 struct VnslParser;
 
+#[derive(Debug, Clone, Copy, Error)]
+pub enum ParseError {
+    #[error("Parsing got empty rule")]
+    EmptyRule,
+    #[error("Parsing got invalid scene")]
+    NoSceneName,
+}
+
+pub fn parse_scene_name(script: &str) -> anyhow::Result<String> {
+    let mut scene = VnslParser::parse(Rule::scene, script)?;
+    anyhow::Ok(scene.next().ok_or(ParseError::NoSceneName)?.into_inner().as_str().to_string())
+}
+
+pub fn parse_scene(script: &str) -> anyhow::Result<VnslScene> {
+    let scene = VnslParser::parse(Rule::script, script)?
+        .next()
+        .ok_or(ParseError::EmptyRule)?;
+    let rules = scene.into_inner();
+    let mut scene = VnslScene::default();
+
+    for rule in rules {
+        match rule.as_rule() {
+            Rule::scene => {
+                let scene_name = rule.into_inner().next().unwrap().as_str().to_string();
+                scene.name = scene_name;
+            }
+            Rule::stmt => {
+                let statement = statement::parse_statement(rule)?;
+                scene.main_block.statements.push(statement);
+            }
+            Rule::label_scope => {
+                let label = label::parse_label(rule)?;
+                scene.labels.insert(label.name.clone(), label);
+            }
+            Rule::EOI => (),
+            _ => unreachable!("Got unexpected rule {:?} in main loop", rule.as_rule()),
+        }
+    }
+
+    anyhow::Ok(scene)
+}
+
 #[cfg(test)]
 mod tests {
+    use crate::parse_scene_name;
     use pretty_assertions::assert_str_eq;
     use std::fs;
 
     const FORCE_RECORD: bool = false;
+
+    #[test]
+    fn test_parse_scene_name() {
+        let res = parse_scene_name(r#"scene TestName"#);
+        assert_eq!(&res.expect("successfully parse"), "TestName");
+    }
 
     #[test]
     fn test_parsing_snapshot() {
@@ -41,7 +91,7 @@ mod tests {
 
         let script = fs::read_to_string(format!("./snapshot/{}.vnsl", name)).unwrap();
 
-        let scn_str = match super::parse(&script) {
+        let scn_str = match super::parse_scene(&script) {
             Ok(result) => format!("{:#?}", result).replace("\r\n", "\n"),
             Err(err) => format!("{err:?}").trim().to_string(),
         };

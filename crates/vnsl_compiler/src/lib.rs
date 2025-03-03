@@ -8,7 +8,7 @@ mod fs;
 pub fn compile_dir(path: &str) -> anyhow::Result<Vec<VnslScene>> {
     let scripts: io::Result<Vec<String>> = fs::scan_scripts(path, true)?
         .iter()
-        .map(|p| std::fs::read_to_string(p))
+        .map(std::fs::read_to_string)
         .collect();
     compile_scripts(&scripts?)
 }
@@ -19,7 +19,7 @@ pub fn compile_scripts(scripts: &[String]) -> anyhow::Result<Vec<VnslScene>> {
 
 pub fn compile(script: &str) -> anyhow::Result<VnslScene> {
     // TODO: - Impl some validation of the script
-    vnsl_parser::parse(script)
+    vnsl_parser::parse_scene(script)
 }
 
 #[cfg(test)]

@@ -3,7 +3,7 @@ use vnsl_core::model::VnslDataType;
 
 mod action_handler;
 mod gd_result;
-mod gd_runtime;
+mod runtime;
 mod model;
 mod resources;
 mod service_store;

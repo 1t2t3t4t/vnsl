@@ -26,7 +26,7 @@ pub fn scan_scripts(path: &str, use_absolute: bool) -> anyhow::Result<Vec<String
     let mut result = vec![];
     for entry in dir {
         let path = entry?.path();
-        if path.extension().map_or(false, |e| e == "vnsl") {
+        if path.extension().is_some_and(|e| e == "vnsl") {
             let path_str = path_to_str(&path, use_absolute)?;
             result.push(path_str);
         } else if path.metadata()?.is_dir() {

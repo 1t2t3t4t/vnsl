@@ -29,7 +29,7 @@ impl ActionHandlerStore {
     }
 
     pub fn get(&self, name: &str) -> Option<Gd<VnslActionHandler>> {
-        self.handlers.get(name).map(|h| h.clone())
+        self.handlers.get(name).cloned()
     }
 }
 
