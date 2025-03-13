@@ -18,12 +18,12 @@ fn main() -> anyhow::Result<()> {
     let mut runtime = vnsl_runtime::Runtime::default();
     runtime.load_scene(scene);
 
-    runtime.step().unwrap();
-    runtime.step().unwrap();
-    runtime.step().unwrap();
+    runtime.step()?;
+    runtime.step()?;
+    runtime.step()?;
 
     let snapshot = elapsed("snapshot", || runtime.snapshot());
-    let val = serde_json::to_string_pretty(&snapshot).unwrap();
-    std::fs::write("./snapshot.json", &val).unwrap();
+    let val = serde_json::to_string_pretty(&snapshot)?;
+    std::fs::write("./snapshot.json", &val)?;
     Ok(())
 }

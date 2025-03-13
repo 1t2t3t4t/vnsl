@@ -1,0 +1,802 @@
+{
+  "current_scene": {
+    "name": "SceneName",
+    "main_block": {
+      "statements": [
+        {
+          "type": "Command",
+          "content": {
+            "type": "Action",
+            "content": {
+              "name": "ACTION",
+              "args": [
+                {
+                  "name": null,
+                  "data_type": {
+                    "type": "String",
+                    "content": "Action descriptions in square brackets"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "Command",
+          "content": {
+            "type": "Global",
+            "content": {
+              "name": "MC",
+              "value": {
+                "type": "String",
+                "content": "Boss"
+              }
+            }
+          }
+        },
+        {
+          "type": "Command",
+          "content": {
+            "type": "SetCharacter",
+            "content": {
+              "id": "Boss"
+            }
+          }
+        },
+        {
+          "type": "Command",
+          "content": {
+            "type": "Dialogue",
+            "content": {
+              "text": "Dialogue goes here. {{MC}}"
+            }
+          }
+        },
+        {
+          "type": "Command",
+          "content": {
+            "type": "Dialogue",
+            "content": {
+              "text": "This is not good...\nWe should do better than this."
+            }
+          }
+        },
+        {
+          "type": "Command",
+          "content": {
+            "type": "Global",
+            "content": {
+              "name": "clues",
+              "value": {
+                "type": "Number",
+                "content": 4.0
+              }
+            }
+          }
+        },
+        {
+          "type": "Command",
+          "content": {
+            "type": "Action",
+            "content": {
+              "name": "transitionScene",
+              "args": [
+                {
+                  "name": null,
+                  "data_type": {
+                    "type": "String",
+                    "content": "EnterScript"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "Command",
+          "content": {
+            "type": "SetCharacter",
+            "content": {
+              "id": "DETECTIVE"
+            }
+          }
+        },
+        {
+          "type": "Command",
+          "content": {
+            "type": "Dialogue",
+            "content": {
+              "text": "Let's see what we have here..."
+            }
+          }
+        },
+        {
+          "type": "Command",
+          "content": {
+            "type": "Jump",
+            "content": {
+              "to_label": "question_witness"
+            }
+          }
+        },
+        {
+          "type": "Command",
+          "content": {
+            "type": "Global",
+            "content": {
+              "name": "victim_behavior",
+              "value": {
+                "type": "String",
+                "content": "nervous"
+              }
+            }
+          }
+        },
+        {
+          "type": "Command",
+          "content": {
+            "type": "Jump",
+            "content": {
+              "to_label": "case_summary"
+            }
+          }
+        },
+        {
+          "type": "Command",
+          "content": {
+            "type": "SetCharacter",
+            "content": {
+              "id": "DETECTIVE"
+            }
+          }
+        },
+        {
+          "type": "Command",
+          "content": {
+            "type": "Dialogue",
+            "content": {
+              "text": "I think I'm starting to piece this together."
+            }
+          }
+        },
+        {
+          "type": "Command",
+          "content": {
+            "type": "GoTo",
+            "content": {
+              "scene_id": "NextScene"
+            }
+          }
+        }
+      ]
+    },
+    "labels": {
+      "evidence_search": {
+        "name": "evidence_search",
+        "block": {
+          "statements": [
+            {
+              "type": "Choices",
+              "content": {
+                "choices": [
+                  {
+                    "id": "38350db8-629f-4292-b750-25382381bf6f",
+                    "text": "Check the window",
+                    "block": {
+                      "statements": [
+                        {
+                          "type": "Command",
+                          "content": {
+                            "type": "SetCharacter",
+                            "content": {
+                              "id": "DETECTIVE"
+                            }
+                          }
+                        },
+                        {
+                          "type": "Command",
+                          "content": {
+                            "type": "Dialogue",
+                            "content": {
+                              "text": "Hmm, the window's locked from the inside."
+                            }
+                          }
+                        },
+                        {
+                          "type": "Command",
+                          "content": {
+                            "type": "Jump",
+                            "content": {
+                              "to_label": "question_witness"
+                            }
+                          }
+                        },
+                        {
+                          "type": "Command",
+                          "content": {
+                            "type": "Global",
+                            "content": {
+                              "name": "clues",
+                              "value": {
+                                "type": "Number",
+                                "content": 1.0
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "id": "9ac5b9d5-087f-4045-81bc-d4c054a8e8a1",
+                    "text": "Examine the floor",
+                    "block": {
+                      "statements": [
+                        {
+                          "type": "Command",
+                          "content": {
+                            "type": "SetCharacter",
+                            "content": {
+                              "id": "DETECTIVE"
+                            }
+                          }
+                        },
+                        {
+                          "type": "Command",
+                          "content": {
+                            "type": "Dialogue",
+                            "content": {
+                              "text": "Interesting footprints here."
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "id": "38d5d8ed-97eb-4ffc-b99e-9bac4be646d4",
+                    "text": "Look at the desk",
+                    "block": {
+                      "statements": [
+                        {
+                          "type": "Command",
+                          "content": {
+                            "type": "SetCharacter",
+                            "content": {
+                              "id": "DETECTIVE"
+                            }
+                          }
+                        },
+                        {
+                          "type": "Command",
+                          "content": {
+                            "type": "Dialogue",
+                            "content": {
+                              "text": "A half-written letter... could be important."
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "type": "Condition",
+              "content": {
+                "if_block": {
+                  "condition": {
+                    "code": "clues < 3",
+                    "return_type": "Bool"
+                  },
+                  "block": {
+                    "statements": [
+                      {
+                        "type": "Command",
+                        "content": {
+                          "type": "SetCharacter",
+                          "content": {
+                            "id": "DETECTIVE"
+                          }
+                        }
+                      },
+                      {
+                        "type": "Command",
+                        "content": {
+                          "type": "Dialogue",
+                          "content": {
+                            "text": "I should take another look around."
+                          }
+                        }
+                      },
+                      {
+                        "type": "Command",
+                        "content": {
+                          "type": "Jump",
+                          "content": {
+                            "to_label": "evidence_search"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                },
+                "elif_block": [],
+                "else_block": null
+              }
+            }
+          ]
+        }
+      },
+      "case_summary": {
+        "name": "case_summary",
+        "block": {
+          "statements": [
+            {
+              "type": "Condition",
+              "content": {
+                "if_block": {
+                  "condition": {
+                    "code": "clues >= 3 and (car_clue or victim_behavior == \"nervous\")",
+                    "return_type": "Bool"
+                  },
+                  "block": {
+                    "statements": [
+                      {
+                        "type": "Command",
+                        "content": {
+                          "type": "SetCharacter",
+                          "content": {
+                            "id": "JOE"
+                          }
+                        }
+                      },
+                      {
+                        "type": "Command",
+                        "content": {
+                          "type": "Dialogue",
+                          "content": {
+                            "text": "Here's what we know so far..."
+                          }
+                        }
+                      },
+                      {
+                        "type": "Command",
+                        "content": {
+                          "type": "Action",
+                          "content": {
+                            "name": "ACTION",
+                            "args": [
+                              {
+                                "name": "summary",
+                                "data_type": {
+                                  "type": "String",
+                                  "content": "Detective summarizes the findings"
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    ]
+                  }
+                },
+                "elif_block": [],
+                "else_block": {
+                  "statements": [
+                    {
+                      "type": "Command",
+                      "content": {
+                        "type": "SetCharacter",
+                        "content": {
+                          "id": "DETECTIVE"
+                        }
+                      }
+                    },
+                    {
+                      "type": "Command",
+                      "content": {
+                        "type": "Dialogue",
+                        "content": {
+                          "text": "Something's still missing. I should review the evidence."
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      },
+      "question_witness": {
+        "name": "question_witness",
+        "block": {
+          "statements": [
+            {
+              "type": "Command",
+              "content": {
+                "type": "SetCharacter",
+                "content": {
+                  "id": "WITNESS"
+                }
+              }
+            },
+            {
+              "type": "Command",
+              "content": {
+                "type": "Dialogue",
+                "content": {
+                  "text": "I saw something strange last night."
+                }
+              }
+            },
+            {
+              "type": "Choices",
+              "content": {
+                "choices": [
+                  {
+                    "id": "bcc05974-c92b-488d-853f-7fae75580132",
+                    "text": "Ask about the strange occurrence",
+                    "block": {
+                      "statements": [
+                        {
+                          "type": "Command",
+                          "content": {
+                            "type": "SetCharacter",
+                            "content": {
+                              "id": "WITNESS"
+                            }
+                          }
+                        },
+                        {
+                          "type": "Command",
+                          "content": {
+                            "type": "Dialogue",
+                            "content": {
+                              "text": "There was a car parked outside for hours."
+                            }
+                          }
+                        },
+                        {
+                          "type": "Command",
+                          "content": {
+                            "type": "Global",
+                            "content": {
+                              "name": "victim_behavior",
+                              "value": {
+                                "type": "Number",
+                                "content": 1.0
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "id": "2d6f8de7-35d2-4b0c-8c49-e6ce50258581",
+                    "text": "Inquire about the victim",
+                    "block": {
+                      "statements": [
+                        {
+                          "type": "Command",
+                          "content": {
+                            "type": "SetCharacter",
+                            "content": {
+                              "id": "WITNESS"
+                            }
+                          }
+                        },
+                        {
+                          "type": "Command",
+                          "content": {
+                            "type": "Dialogue",
+                            "content": {
+                              "text": "They seemed nervous lately."
+                            }
+                          }
+                        },
+                        {
+                          "type": "Command",
+                          "content": {
+                            "type": "Global",
+                            "content": {
+                              "name": "victim_behavior",
+                              "value": {
+                                "type": "Number",
+                                "content": 2.0
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "type": "Condition",
+              "content": {
+                "if_block": {
+                  "condition": {
+                    "code": "car_clue",
+                    "return_type": "Bool"
+                  },
+                  "block": {
+                    "statements": [
+                      {
+                        "type": "Command",
+                        "content": {
+                          "type": "SetCharacter",
+                          "content": {
+                            "id": "DETECTIVE"
+                          }
+                        }
+                      },
+                      {
+                        "type": "Command",
+                        "content": {
+                          "type": "Dialogue",
+                          "content": {
+                            "text": "That car might be crucial to the case."
+                          }
+                        }
+                      }
+                    ]
+                  }
+                },
+                "elif_block": [
+                  {
+                    "condition": {
+                      "code": "victim_behavior == 2",
+                      "return_type": "Bool"
+                    },
+                    "block": {
+                      "statements": [
+                        {
+                          "type": "Command",
+                          "content": {
+                            "type": "SetCharacter",
+                            "content": {
+                              "id": "DETECTIVE"
+                            }
+                          }
+                        },
+                        {
+                          "type": "Command",
+                          "content": {
+                            "type": "Dialogue",
+                            "content": {
+                              "text": "The victim's behavior could be a key factor."
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ],
+                "else_block": {
+                  "statements": [
+                    {
+                      "type": "Command",
+                      "content": {
+                        "type": "SetCharacter",
+                        "content": {
+                          "id": "DETECTIVE"
+                        }
+                      }
+                    },
+                    {
+                      "type": "Command",
+                      "content": {
+                        "type": "Dialogue",
+                        "content": {
+                          "text": "I need more information."
+                        }
+                      }
+                    },
+                    {
+                      "type": "Command",
+                      "content": {
+                        "type": "Jump",
+                        "content": {
+                          "to_label": "evidence_search"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "current_character_id": "Boss",
+  "run_stack": {
+    "blocks": [
+      {
+        "block": {
+          "statements": [
+            {
+              "type": "Command",
+              "content": {
+                "type": "Action",
+                "content": {
+                  "name": "ACTION",
+                  "args": [
+                    {
+                      "name": null,
+                      "data_type": {
+                        "type": "String",
+                        "content": "Action descriptions in square brackets"
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "type": "Command",
+              "content": {
+                "type": "Global",
+                "content": {
+                  "name": "MC",
+                  "value": {
+                    "type": "String",
+                    "content": "Boss"
+                  }
+                }
+              }
+            },
+            {
+              "type": "Command",
+              "content": {
+                "type": "SetCharacter",
+                "content": {
+                  "id": "Boss"
+                }
+              }
+            },
+            {
+              "type": "Command",
+              "content": {
+                "type": "Dialogue",
+                "content": {
+                  "text": "Dialogue goes here. {{MC}}"
+                }
+              }
+            },
+            {
+              "type": "Command",
+              "content": {
+                "type": "Dialogue",
+                "content": {
+                  "text": "This is not good...\nWe should do better than this."
+                }
+              }
+            },
+            {
+              "type": "Command",
+              "content": {
+                "type": "Global",
+                "content": {
+                  "name": "clues",
+                  "value": {
+                    "type": "Number",
+                    "content": 4.0
+                  }
+                }
+              }
+            },
+            {
+              "type": "Command",
+              "content": {
+                "type": "Action",
+                "content": {
+                  "name": "transitionScene",
+                  "args": [
+                    {
+                      "name": null,
+                      "data_type": {
+                        "type": "String",
+                        "content": "EnterScript"
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "type": "Command",
+              "content": {
+                "type": "SetCharacter",
+                "content": {
+                  "id": "DETECTIVE"
+                }
+              }
+            },
+            {
+              "type": "Command",
+              "content": {
+                "type": "Dialogue",
+                "content": {
+                  "text": "Let's see what we have here..."
+                }
+              }
+            },
+            {
+              "type": "Command",
+              "content": {
+                "type": "Jump",
+                "content": {
+                  "to_label": "question_witness"
+                }
+              }
+            },
+            {
+              "type": "Command",
+              "content": {
+                "type": "Global",
+                "content": {
+                  "name": "victim_behavior",
+                  "value": {
+                    "type": "String",
+                    "content": "nervous"
+                  }
+                }
+              }
+            },
+            {
+              "type": "Command",
+              "content": {
+                "type": "Jump",
+                "content": {
+                  "to_label": "case_summary"
+                }
+              }
+            },
+            {
+              "type": "Command",
+              "content": {
+                "type": "SetCharacter",
+                "content": {
+                  "id": "DETECTIVE"
+                }
+              }
+            },
+            {
+              "type": "Command",
+              "content": {
+                "type": "Dialogue",
+                "content": {
+                  "text": "I think I'm starting to piece this together."
+                }
+              }
+            },
+            {
+              "type": "Command",
+              "content": {
+                "type": "GoTo",
+                "content": {
+                  "scene_id": "NextScene"
+                }
+              }
+            }
+          ]
+        },
+        "current_stmt": 4
+      }
+    ]
+  },
+  "lua_globals": {
+    "MC": {
+      "type": "String",
+      "content": "Boss"
+    }
+  }
+}

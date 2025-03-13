@@ -29,14 +29,14 @@ impl SceneSnapshotRunner {
             let cmd = runtime.step().unwrap();
             match cmd {
                 RuntimeCommand::ExecuteAction(action)
-                    if action.name == "forceChoice".to_string() =>
-                {
-                    let choices = action
-                        .args
-                        .into_iter()
-                        .map(|a| a.data_type.get_number() as usize);
-                    self.force_choice_pick = choices.collect();
-                }
+                if action.name == "forceChoice".to_string() =>
+                    {
+                        let choices = action
+                            .args
+                            .into_iter()
+                            .map(|a| a.data_type.get_number() as usize);
+                        self.force_choice_pick = choices.collect();
+                    }
                 RuntimeCommand::PromptChoices(vnsl_choices) => {
                     assert!(
                         self.force_choice_pick.len() > 0,

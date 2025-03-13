@@ -16,8 +16,9 @@ use thiserror::Error;
 use vnsl_core::model::{VnslAction, VnslActionArg, VnslChoice};
 use vnsl_runtime::{Runtime, RuntimeCommand};
 
+use crate::gd_result::{GdResultBool, GdResultString};
 use crate::{
-    gd_result::{wrap_gd_result, GdResult},
+    gd_result::GdResult,
     resources::{VnslSceneMap, VnslScript},
 };
 
@@ -114,7 +115,7 @@ impl BaseVnslRuntime {
 
     #[func]
     fn set_global_val_string(&mut self, name: String, val: String) -> Gd<GdResult> {
-        wrap_gd_result(|| {
+        GdResult::wrap_gd_result(|| {
             self.runtime.set_global_val(&name, val.into())?;
             Ok(())
         })
@@ -122,7 +123,7 @@ impl BaseVnslRuntime {
 
     #[func]
     fn load_scene(&mut self, scene_id: StringName) -> Gd<GdResult> {
-        wrap_gd_result(move || {
+        GdResult::wrap_gd_result(move || {
             let script = self
                 .scene_map
                 .bind()
@@ -150,13 +151,13 @@ impl BaseVnslRuntime {
     }
 
     #[func]
-    fn step(&mut self) -> Gd<GdResult> {
-        wrap_gd_result(|| self._step())
+    fn step(&mut self) -> Gd<GdResultBool> {
+        GdResultBool::wrap_gd_result(|| self._step())
     }
 
     #[func]
-    fn take_snapshot(&self) -> Gd<GdResult> {
-        wrap_gd_result(|| {
+    fn take_snapshot(&self) -> Gd<GdResultString> {
+        GdResultString::wrap_gd_result(|| {
             let s = serde_json::to_string(&self.runtime.snapshot())?;
             Ok(s)
         })

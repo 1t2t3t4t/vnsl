@@ -8,7 +8,7 @@ pub trait GlobalAccess {
 
 impl<T> GlobalAccess for T
 where
-    T: Deref<Target = [VnslStatement]>,
+    T: Deref<Target=[VnslStatement]>,
 {
     fn get_globals(&self) -> Vec<VnslGlobal> {
         self.iter()

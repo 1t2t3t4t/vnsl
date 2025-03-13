@@ -9,12 +9,6 @@ use vnsl_core::model::{
 
 use crate::{result::RuntimeResult, RunContext};
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct BlockRunner {
-    block: VnslBlock,
-    current_stmt: usize,
-}
-
 #[derive(Debug, Clone, PartialEq)]
 pub enum BlockCommand {
     DisplayText(VnslDialogue),
@@ -29,6 +23,11 @@ pub enum BlockCommand {
     NoOps,
 }
 
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct BlockRunner {
+    block: VnslBlock,
+    current_stmt: usize,
+}
 impl BlockRunner {
     pub fn new(block: VnslBlock) -> Self {
         Self {
