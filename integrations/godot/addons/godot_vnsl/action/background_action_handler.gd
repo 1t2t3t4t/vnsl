@@ -12,3 +12,10 @@ func _handle(action: VnslRuntimeAction, service_store: ServiceStore) -> Variant:
 	_get_ui(service_store).background_texture.texture = img
 	_get_persistent_store(service_store).current_bg_texture = img
 	return true
+
+
+func _restore_from_snapshot(service_store: ServiceStore) -> void:
+	var store := _get_persistent_store(service_store)
+	var img := store.current_bg_texture
+	if img != null:
+		_get_ui(service_store).background_texture.texture = img

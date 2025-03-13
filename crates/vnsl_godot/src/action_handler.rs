@@ -31,6 +31,14 @@ impl ActionHandlerStore {
     pub fn get(&self, name: &str) -> Option<Gd<VnslActionHandler>> {
         self.handlers.get(name).cloned()
     }
+
+    pub fn restore(&mut self, service_store: Gd<ServiceStore>) {
+        for handler in self.handlers.values_mut() {
+            handler
+                .bind_mut()
+                .restore_from_snapshot(service_store.clone());
+        }
+    }
 }
 
 #[derive(GodotClass)]
@@ -44,7 +52,7 @@ pub struct VnslActionHandler {
 impl VnslActionHandler {
     #[func(virtual)]
     pub fn handle_action_name(&self) -> GString {
-        unimplemented!("Action handler didn't implement handle_action_name", )
+        unimplemented!("Action handler didn't implement handle_action_name",)
     }
 
     #[func(virtual)]
@@ -57,4 +65,8 @@ impl VnslActionHandler {
         let global_name = self.base().get_script().call("get_global_name", &[]);
         unimplemented!("Action handler {} is not handled", global_name)
     }
+
+    #[func(virtual)]
+    #[allow(unused_variables)]
+    pub fn restore_from_snapshot(&mut self, service_store: Gd<ServiceStore>) {}
 }

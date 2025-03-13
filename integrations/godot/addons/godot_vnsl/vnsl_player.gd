@@ -30,7 +30,7 @@ func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("force_load"):
 		if FileAccess.file_exists("res://save.save.tres"):
 			var store := load("res://save.save.tres") as PersistentStore
-			vnsl_runtime.load_snapshot(store.runtime_snapshot_json).print_err_if_available()
+			vnsl_runtime.load_persistent(store)
 			print("Loaded!!")
 
 	if event is InputEventMouseButton:

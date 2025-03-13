@@ -5,9 +5,20 @@ class_name VnslRuntime
 @export var vnsl_scripts_path: String = "res://scripts/"
 @export var persistent_store := PersistentStore.new()
 
-func _ready() -> void:
+
+func load_persistent(store: PersistentStore):
+	persistent_store = store
+	_register_services()
+	load_snapshot(store.runtime_snapshot_json).print_err_if_available()
+
+
+func _register_services():
 	service_store.register_service("runtime", self)
 	service_store.register_service("persistent_store", persistent_store)
+
+
+func _ready() -> void:
+	_register_services()
 
 	var scripts := _scan_scripts(vnsl_scripts_path)
 

@@ -172,6 +172,7 @@ impl BaseVnslRuntime {
                 self.base_mut()
                     .emit_signal("set_character_id", &[char_id.to_variant()]);
             }
+            self.action_handler.restore(self.service_store.clone());
             let cmd = self.runtime.process_current_command()?;
             self.process_command(cmd)
         })
