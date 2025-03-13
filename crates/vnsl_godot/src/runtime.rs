@@ -115,7 +115,7 @@ impl BaseVnslRuntime {
 
     #[func]
     fn set_global_val_string(&mut self, name: String, val: String) -> Gd<GdResult> {
-        GdResult::wrap_gd_result(|| {
+        GdResult::new(|| {
             self.runtime.set_global_val(&name, val.into())?;
             Ok(())
         })
@@ -123,7 +123,7 @@ impl BaseVnslRuntime {
 
     #[func]
     fn load_scene(&mut self, scene_id: StringName) -> Gd<GdResult> {
-        GdResult::wrap_gd_result(move || {
+        GdResult::new(move || {
             let script = self
                 .scene_map
                 .bind()
@@ -152,12 +152,12 @@ impl BaseVnslRuntime {
 
     #[func]
     fn step(&mut self) -> Gd<GdResultBool> {
-        GdResultBool::wrap_gd_result(|| self._step())
+        GdResultBool::new(|| self._step())
     }
 
     #[func]
     fn take_snapshot(&self) -> Gd<GdResultString> {
-        GdResultString::wrap_gd_result(|| {
+        GdResultString::new(|| {
             let s = serde_json::to_string(&self.runtime.snapshot())?;
             Ok(s)
         })

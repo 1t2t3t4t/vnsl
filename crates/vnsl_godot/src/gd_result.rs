@@ -16,7 +16,7 @@ macro_rules! decl_result {
         }
 
         impl $name {
-            pub fn wrap_gd_result(f: impl FnOnce() -> anyhow::Result<$type>) -> Gd<Self> {
+            pub fn new(f: impl FnOnce() -> anyhow::Result<$type>) -> Gd<Self> {
                 match f() {
                     Ok(res) => Self::ok(res),
                     Err(err) => Self::err(err),

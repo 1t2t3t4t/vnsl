@@ -8,16 +8,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="dacd0123-087d-4394-899e-b1e838fe702b" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.vscode/launch.json" beforeDir="false" afterPath="$PROJECT_DIR$/.vscode/launch.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/crates/vnsl_core/src/utils.rs" beforeDir="false" afterPath="$PROJECT_DIR$/crates/vnsl_core/src/utils.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/crates/vnsl_godot/src/action_handler.rs" beforeDir="false" afterPath="$PROJECT_DIR$/crates/vnsl_godot/src/action_handler.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/crates/vnsl_godot/src/gd_result.rs" beforeDir="false" afterPath="$PROJECT_DIR$/crates/vnsl_godot/src/gd_result.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/crates/vnsl_godot/src/model.rs" beforeDir="false" afterPath="$PROJECT_DIR$/crates/vnsl_godot/src/model.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/crates/vnsl_godot/src/runtime.rs" beforeDir="false" afterPath="$PROJECT_DIR$/crates/vnsl_godot/src/runtime.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/crates/vnsl_runtime/src/block_runner/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/crates/vnsl_runtime/src/block_runner/mod.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/crates/vnsl_runtime/src/runtime/snapshot_test.rs" beforeDir="false" afterPath="$PROJECT_DIR$/crates/vnsl_runtime/src/runtime/snapshot_test.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -171,7 +164,7 @@
       <option name="presentableId" value="Default" />
       <updated>1741869527058</updated>
       <workItem from="1741869527600" duration="2554000" />
-      <workItem from="1741873750982" duration="2222000" />
+      <workItem from="1741873750982" duration="2329000" />
     </task>
     <servers />
   </component>
