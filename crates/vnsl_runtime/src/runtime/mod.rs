@@ -52,11 +52,23 @@ impl Runtime {
         self.run_stack.len() == 0
     }
 
-    pub fn step(&mut self) -> RuntimeResult<RuntimeCommand> {
-        let Some(current_scene) = &self.current_scene else {
-            return Err(RuntimeError::NoSceneLoaded);
+    pub fn process_current_command(&mut self) -> RuntimeResult<RuntimeCommand> {
+        if self.scene_ended() {
+            return Ok(RuntimeCommand::EndOfScene);
+        }
+
+        let Some(cmd) = self
+            .run_stack
+            .top_mut()
+            .map(|s| s.get_current_command(&mut self.context, -1))
+        else {
+            return Err(RuntimeError::EndOfStack);
         };
 
+        self.process_block_command(cmd?)
+    }
+
+    pub fn step(&mut self) -> RuntimeResult<RuntimeCommand> {
         if self.scene_ended() {
             return Ok(RuntimeCommand::EndOfScene);
         }
@@ -65,7 +77,14 @@ impl Runtime {
             return Err(RuntimeError::EndOfStack);
         };
 
-        let cmd = match cmd? {
+        self.process_block_command(cmd?)
+    }
+
+    fn process_block_command(&mut self, cmd: BlockCommand) -> RuntimeResult<RuntimeCommand> {
+        let Some(current_scene) = &self.current_scene else {
+            return Err(RuntimeError::NoSceneLoaded);
+        };
+        let cmd = match cmd {
             BlockCommand::ForkBlock(vnsl_block) => {
                 self.fork_block(vnsl_block);
                 self.step()
@@ -106,9 +125,7 @@ impl Runtime {
                 self.step()
             }
         };
-
         self.clear_end_block_stack();
-
         cmd
     }
 

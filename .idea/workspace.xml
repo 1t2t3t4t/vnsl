@@ -11,6 +11,9 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/crates/vnsl_godot/src/gd_result.rs" beforeDir="false" afterPath="$PROJECT_DIR$/crates/vnsl_godot/src/gd_result.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/crates/vnsl_godot/src/runtime.rs" beforeDir="false" afterPath="$PROJECT_DIR$/crates/vnsl_godot/src/runtime.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crates/vnsl_runtime/src/lib.rs" beforeDir="false" afterPath="$PROJECT_DIR$/crates/vnsl_runtime/src/lib.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/integrations/godot/addons/godot_vnsl/vnsl_player.gd" beforeDir="false" afterPath="$PROJECT_DIR$/integrations/godot/addons/godot_vnsl/vnsl_player.gd" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/integrations/godot/project.godot" beforeDir="false" afterPath="$PROJECT_DIR$/integrations/godot/project.godot" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,27 +36,27 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Cargo.Expand vnsl_godot::gd_result.executor": "Run",
-    "Cargo.Run vnsl (1).executor": "Run",
-    "Cargo.Run vnsl.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.rust.reset.selective.auto.import": "true",
-    "git-widget-placeholder": "master",
-    "ignore.virus.scanning.warn.message": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "org.rust.cargo.project.model.PROJECT_DISCOVERY": "true",
-    "org.rust.first.attach.projects": "true",
-    "settings.editor.selected.configurable": "preferences.lookFeel",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Cargo.Expand vnsl_godot::gd_result.executor&quot;: &quot;Run&quot;,
+    &quot;Cargo.Run vnsl (1).executor&quot;: &quot;Run&quot;,
+    &quot;Cargo.Run vnsl.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.rust.reset.selective.auto.import&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;org.rust.cargo.project.model.PROJECT_DISCOVERY&quot;: &quot;true&quot;,
+    &quot;org.rust.first.attach.projects&quot;: &quot;true&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RsExternalLinterProjectSettings">
     <option name="runOnTheFly" value="true" />
   </component>
@@ -148,6 +151,7 @@
     <recent_temporary>
       <list>
         <item itemvalue="Cargo.Expand vnsl_godot::gd_result" />
+        <item itemvalue="Cargo.Expand vnsl_godot::gd_result" />
         <item itemvalue="Cargo.Run vnsl (1)" />
       </list>
     </recent_temporary>
@@ -164,7 +168,8 @@
       <option name="presentableId" value="Default" />
       <updated>1741869527058</updated>
       <workItem from="1741869527600" duration="2554000" />
-      <workItem from="1741873750982" duration="2329000" />
+      <workItem from="1741873750982" duration="2639000" />
+      <workItem from="1741876423358" duration="876000" />
     </task>
     <servers />
   </component>

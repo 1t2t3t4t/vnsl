@@ -1,12 +1,5 @@
 scene MainScene
 
-||
-function doSomething()
-    local x = 1 + math.floor(math.random(0, 2))
-    return x
-end
-||
-
 char Boss
 
 "This is it..."
@@ -16,6 +9,8 @@ char Boss
 [UnHandleActionTest]
 
 "Since when that I left this town?.."
+
+char MrMan
 
 "Why don't you just move around? \"{{MC}}\"?"
 
@@ -38,8 +33,6 @@ choice:
 goto SubScene
 
 label tryRemember:
-    || myPoint = doSomething() ||
-
     if |myPoint == 2|:
         "2 years I assume?"
     else:

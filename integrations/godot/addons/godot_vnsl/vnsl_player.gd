@@ -22,10 +22,16 @@ func _ready() -> void:
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("force_save"):
-		var snapshot_res := vnsl_runtime.take_snapshot()
-		if snapshot_res.is_ok():
-			ResourceSaver.save(take_snapshot(), "res://save.save.tres")
+		var snapshot_res := take_snapshot()
+		if snapshot_res != null:
+			ResourceSaver.save(snapshot_res, "res://save.save.tres")
 			print("Save!!")
+
+	if event.is_action_pressed("force_load"):
+		if FileAccess.file_exists("res://save.save.tres"):
+			var store := load("res://save.save.tres") as PersistentStore
+			vnsl_runtime.load_snapshot(store.runtime_snapshot_json).print_err_if_available()
+			print("Loaded!!")
 
 	if event is InputEventMouseButton:
 		if event.button_index == 1 and event.is_pressed():

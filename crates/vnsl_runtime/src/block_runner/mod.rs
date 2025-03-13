@@ -40,15 +40,20 @@ impl BlockRunner {
         self.block.statements.get(self.current_stmt).is_none()
     }
 
-    pub fn get_current_command(&mut self, context: &mut RunContext) -> RuntimeResult<BlockCommand> {
-        let Some(stmt) = self.block.statements.get(self.current_stmt) else {
+    pub fn get_current_command(
+        &mut self,
+        context: &mut RunContext,
+        offset: i32,
+    ) -> RuntimeResult<BlockCommand> {
+        let stmt = self.current_stmt as i32 + offset;
+        let Some(stmt) = self.block.statements.get(stmt.max(0) as usize) else {
             return Ok(BlockCommand::NoOps);
         };
         self.process_stmt(context, &stmt.clone())
     }
 
     pub fn step(&mut self, context: &mut RunContext) -> RuntimeResult<BlockCommand> {
-        let cmd = self.get_current_command(context);
+        let cmd = self.get_current_command(context, 0);
         self.current_stmt += 1;
         cmd
     }

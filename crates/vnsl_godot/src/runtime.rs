@@ -1,8 +1,13 @@
+use crate::gd_result::{GdResultBool, GdResultString};
 use crate::{
     action_handler::{ActionHandlerStore, VnslActionHandler},
     model::{VnslRuntimeAction, VnslRuntimeActionArg, VnslRuntimeChoice},
     service_store::ServiceStore,
     ToGodotVariant,
+};
+use crate::{
+    gd_result::GdResult,
+    resources::{VnslSceneMap, VnslScript},
 };
 use godot::{
     builtin::{Array, GString, StringName, VariantType},
@@ -14,13 +19,8 @@ use godot::{
 };
 use thiserror::Error;
 use vnsl_core::model::{VnslAction, VnslActionArg, VnslChoice};
+use vnsl_runtime::snapshot::Snapshot;
 use vnsl_runtime::{Runtime, RuntimeCommand};
-
-use crate::gd_result::{GdResultBool, GdResultString};
-use crate::{
-    gd_result::GdResult,
-    resources::{VnslSceneMap, VnslScript},
-};
 
 #[derive(Debug, Error)]
 pub enum RuntimeError {
@@ -163,6 +163,20 @@ impl BaseVnslRuntime {
         })
     }
 
+    #[func]
+    fn load_snapshot(&mut self, snapshot_str: String) -> Gd<GdResultBool> {
+        GdResultBool::new(|| {
+            let snapshot = serde_json::from_str::<Snapshot>(&snapshot_str)?;
+            self.runtime = snapshot.into();
+            if let Some(char_id) = self.runtime.current_character_id().cloned() {
+                self.base_mut()
+                    .emit_signal("set_character_id", &[char_id.to_variant()]);
+            }
+            let cmd = self.runtime.process_current_command()?;
+            self.process_command(cmd)
+        })
+    }
+
     #[cfg(debug_assertions)]
     #[func]
     fn debug_print_run_stack(&self) {
@@ -179,6 +193,8 @@ impl BaseVnslRuntime {
 
         let mut bind = handler.bind_mut();
         let res = bind.handle(map_action(&action), self.service_store.clone());
+
+        // It's possible that result from handle is async in which we should not perform step automatically
         if res.get_type() == VariantType::BOOL {
             res.to()
         } else {
@@ -187,7 +203,12 @@ impl BaseVnslRuntime {
     }
 
     fn _step(&mut self) -> anyhow::Result<bool> {
-        match self.runtime.step()? {
+        let cmd = self.runtime.step()?;
+        self.process_command(cmd)
+    }
+
+    fn process_command(&mut self, command: RuntimeCommand) -> anyhow::Result<bool> {
+        match command {
             RuntimeCommand::SetCharacterId(char_id) => {
                 self.base_mut()
                     .emit_signal("set_character_id", &[char_id.to_variant()]);

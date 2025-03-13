@@ -3,7 +3,7 @@ mod lua_runtime;
 mod result;
 mod runstack;
 mod runtime;
-mod snapshot;
+pub mod snapshot;
 
 use lua_runtime::LuaRuntime;
 pub use runtime::*;

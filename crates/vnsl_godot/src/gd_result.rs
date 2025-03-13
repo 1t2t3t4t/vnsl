@@ -1,5 +1,4 @@
 use godot::{
-    builtin::Variant,
     global,
     meta::ToGodot,
     obj::Gd,
