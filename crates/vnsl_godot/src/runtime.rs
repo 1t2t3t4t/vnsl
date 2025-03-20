@@ -1,7 +1,7 @@
 use crate::gd_result::{GdResultBool, GdResultString};
+use crate::resources::{VnslRuntimeAction, VnslRuntimeActionArg, VnslRuntimeChoice};
 use crate::{
     action_handler::{ActionHandlerStore, VnslActionHandler},
-    model::{VnslRuntimeAction, VnslRuntimeActionArg, VnslRuntimeChoice},
     service_store::ServiceStore,
     ToGodotVariant,
 };

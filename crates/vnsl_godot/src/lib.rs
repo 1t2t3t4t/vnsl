@@ -3,9 +3,8 @@ use vnsl_core::model::VnslDataType;
 
 mod action_handler;
 mod gd_result;
-mod runtime;
-mod model;
 mod resources;
+mod runtime;
 mod service_store;
 
 struct Extension;

@@ -7,7 +7,7 @@ use godot::{
     prelude::{godot_api, GodotClass},
 };
 
-use crate::{model::VnslRuntimeAction, service_store::ServiceStore};
+use crate::{resources::VnslRuntimeAction, service_store::ServiceStore};
 
 #[derive(Debug, Default)]
 pub struct ActionHandlerStore {
