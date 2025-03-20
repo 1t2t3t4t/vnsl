@@ -7,21 +7,28 @@ use godot::{
 use vnsl_core::model::VnslBlock;
 
 #[derive(Debug, Clone, PartialEq, GodotClass)]
-#[class(base = RefCounted, init)]
+#[class(base = Resource, init)]
 pub struct VnslRuntimeChoice {
-    #[var]
+    #[export]
     pub id: GString,
-    #[var]
+    #[export]
     pub text: GString,
-    pub block: VnslBlock,
+    #[export]
+    block_str: GString,
+}
+
+impl VnslRuntimeChoice {
+    pub fn get_block(&self) -> VnslBlock {
+        serde_json::from_str(&self.block_str.to_string()).unwrap()
+    }
 }
 
 #[derive(Debug, Clone, GodotClass)]
-#[class(base = RefCounted, init)]
+#[class(base = Resource, init)]
 pub struct VnslRuntimeAction {
-    #[var]
+    #[export]
     pub name: GString,
-    #[var]
+    #[export]
     pub args: Array<Gd<VnslRuntimeActionArg>>,
 }
 
@@ -49,11 +56,11 @@ impl VnslRuntimeAction {
 }
 
 #[derive(Debug, Clone, GodotClass)]
-#[class(base = RefCounted, init)]
+#[class(base = Resource, init)]
 pub struct VnslRuntimeActionArg {
-    #[var]
+    #[export]
     pub name: GString,
-    #[var]
+    #[export]
     pub data: Variant,
 }
 

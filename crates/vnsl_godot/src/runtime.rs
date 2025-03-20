@@ -141,7 +141,7 @@ impl BaseVnslRuntime {
         self.runtime.select_choice(&VnslChoice {
             id: choice.bind().id.to_string(),
             text: choice.bind().text.to_string(),
-            block: choice.bind().block.clone(),
+            block: choice.bind().get_block().clone(),
         });
     }
 
@@ -164,8 +164,8 @@ impl BaseVnslRuntime {
     }
 
     #[func]
-    fn load_snapshot(&mut self, snapshot_str: String) -> Gd<GdResultBool> {
-        GdResultBool::new(|| {
+    fn load_snapshot(&mut self, snapshot_str: String) -> Gd<GdResult> {
+        GdResult::new(|| {
             let snapshot = serde_json::from_str::<Snapshot>(&snapshot_str)?;
             self.runtime = snapshot.into();
             if let Some(char_id) = self.runtime.current_character_id().cloned() {
@@ -173,12 +173,14 @@ impl BaseVnslRuntime {
                     .emit_signal("set_character_id", &[char_id.to_variant()]);
             }
             self.action_handler.restore(self.service_store.clone());
-            let cmd = self.runtime.process_current_command()?;
-            self.process_command(cmd)
+            Ok(())
         })
     }
+}
 
-    #[cfg(debug_assertions)]
+#[cfg(debug_assertions)]
+#[godot_api(secondary)]
+impl BaseVnslRuntime {
     #[func]
     fn debug_print_run_stack(&self) {
         godot::global::godot_print!("{}", self.runtime.run_stack_string());
@@ -248,7 +250,9 @@ fn map_choice(c: VnslChoice) -> Gd<VnslRuntimeChoice> {
     let mut choice = VnslRuntimeChoice::new_gd();
     choice.bind_mut().id = c.id.to_godot();
     choice.bind_mut().text = c.text.to_godot();
-    choice.bind_mut().block = c.block;
+    choice
+        .bind_mut()
+        .set_block_str(serde_json::to_string(&c.block).unwrap().to_godot());
     choice
 }
 

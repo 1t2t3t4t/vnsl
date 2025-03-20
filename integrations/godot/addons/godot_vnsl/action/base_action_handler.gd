@@ -2,6 +2,10 @@ extends VnslActionHandler
 
 class_name BaseActionHandler
 
+func _ready(service_store: ServiceStore) -> void:
+	pass
+
+
 func _get_runtime(service_store: ServiceStore) -> VnslRuntime:
 	return service_store.get_service("runtime") as VnslRuntime
 

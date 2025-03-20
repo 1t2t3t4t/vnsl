@@ -7,15 +7,22 @@ class_name VnslPlayer
 
 @export var entry_point: StringName = "MainScene"
 
-var lock = false
+var _handlers := [
+	TextInputActionHandler.new(),
+	BackgroundActionHandler.new()
+] as Array[BaseActionHandler]
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	ui._player = self
+	ui.choices_container.choice_selected.connect(_on_choice_selected)
+
 	vnsl_runtime.service_store.register_service("player", self)
 	vnsl_runtime.service_store.register_service("ui", ui)
 
-	vnsl_runtime.register_action_handler(TextInputActionHandler.new())
-	vnsl_runtime.register_action_handler(BackgroundActionHandler.new())
+	for handler in _handlers:
+		vnsl_runtime.register_action_handler(handler)
+		handler._ready(vnsl_runtime.service_store)
 
 	start_scene(entry_point)
 
@@ -29,8 +36,12 @@ func _input(event: InputEvent) -> void:
 
 	if event.is_action_pressed("force_load"):
 		if FileAccess.file_exists("res://save.save.tres"):
-			var store := load("res://save.save.tres") as PersistentStore
-			vnsl_runtime.load_persistent(store)
+			var store := ResourceLoader.load(
+				"res://save.save.tres",
+				"PersistentStore",
+				ResourceLoader.CACHE_MODE_IGNORE_DEEP
+			) as PersistentStore
+			load_snapshot(store)
 			print("Loaded!!")
 
 	if event is InputEventMouseButton:
@@ -42,7 +53,7 @@ func step():
 	if vnsl_runtime.scene_ended():
 		get_tree().quit()
 
-	if not lock:
+	if !_is_locked():
 		vnsl_runtime.step().print_err_if_available()
 
 
@@ -61,6 +72,15 @@ func take_snapshot() -> PersistentStore:
 	return persistent
 
 
+func load_snapshot(store: PersistentStore):
+	ui.reset_ui_state()
+	vnsl_runtime.load_persistent(store)
+	ui.restore_ui_from_snapshot(store)
+
+func _is_locked() -> bool:
+	return ui.choices_container.visible || ui.text_input_prompt.visible
+
+
 # Signals
 
 func _on_vnsl_runtime_show_text(text: String) -> void:
@@ -72,17 +92,18 @@ func _on_vnsl_runtime_set_character_id(id: String) -> void:
 
 
 func _on_vnsl_runtime_prompt_choices(choices: Array[VnslRuntimeChoice]) -> void:
-	lock = true
+	vnsl_runtime.persistent_store.current_choice_selection = choices.duplicate(true)
 	ui.choices_container.show()
 	ui.choices_container.configure(choices)
-
-	var selected := await ui.choices_container.choice_selected as VnslRuntimeChoice
-	vnsl_runtime.select_choice(selected)
-
-	ui.choices_container.hide()
-	lock = false
-	step()
 
 
 func _on_vnsl_runtime_change_scene(scene_name: String) -> void:
 	start_scene(scene_name)
+
+
+func _on_choice_selected(selected: VnslRuntimeChoice):
+	vnsl_runtime.select_choice(selected)
+
+	ui.choices_container.hide()
+	vnsl_runtime.persistent_store.current_choice_selection = []
+	step()

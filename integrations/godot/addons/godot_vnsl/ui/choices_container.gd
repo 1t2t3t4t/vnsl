@@ -23,3 +23,9 @@ func configure(choices: Array[VnslRuntimeChoice]):
 func clear_button():
 	for child in button_container.get_children():
 		child.queue_free()
+
+
+func restore_ui_from_snapshot(store: PersistentStore):
+	if !store.current_choice_selection.is_empty():
+		show()
+		configure(store.current_choice_selection)
