@@ -77,6 +77,7 @@ func load_snapshot(store: PersistentStore):
 	vnsl_runtime.load_persistent(store)
 	ui.restore_ui_from_snapshot(store)
 
+
 func _is_locked() -> bool:
 	return ui.choices_container.visible || ui.text_input_prompt.visible
 

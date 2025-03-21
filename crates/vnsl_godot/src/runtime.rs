@@ -1,3 +1,4 @@
+use crate::compression;
 use crate::gd_result::{GdResultBool, GdResultString};
 use crate::resources::{VnslRuntimeAction, VnslRuntimeActionArg, VnslRuntimeChoice};
 use crate::{
@@ -159,13 +160,14 @@ impl BaseVnslRuntime {
     fn take_snapshot(&self) -> Gd<GdResultString> {
         GdResultString::new(|| {
             let s = serde_json::to_string(&self.runtime.snapshot())?;
-            Ok(s)
+            Ok(compression::compress_str(&s)?)
         })
     }
 
     #[func]
     fn load_snapshot(&mut self, snapshot_str: String) -> Gd<GdResult> {
         GdResult::new(|| {
+            let snapshot_str = compression::decompress_str(&snapshot_str)?;
             let snapshot = serde_json::from_str::<Snapshot>(&snapshot_str)?;
             self.runtime = snapshot.into();
             if let Some(char_id) = self.runtime.current_character_id().cloned() {

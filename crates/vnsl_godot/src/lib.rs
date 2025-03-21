@@ -2,6 +2,7 @@ use godot::prelude::*;
 use vnsl_core::model::VnslDataType;
 
 mod action_handler;
+mod compression;
 mod gd_result;
 mod resources;
 mod runtime;
