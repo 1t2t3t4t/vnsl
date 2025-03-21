@@ -3,7 +3,6 @@ use crate::impl_deref;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-#[serde(tag = "type", content = "content")]
 pub enum VnslStatement {
     Command(VnslCommand),
     Choices(VnslChoices),

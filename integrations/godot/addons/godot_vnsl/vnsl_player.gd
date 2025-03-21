@@ -66,9 +66,9 @@ func take_snapshot() -> PersistentStore:
 	var snapshot_res := vnsl_runtime.take_snapshot()
 	if snapshot_res.is_err():
 		return null
-	var snapshot = snapshot_res.result() as String
+	var snapshot := snapshot_res.result()
 	var persistent := vnsl_runtime.persistent_store.duplicate(true) as PersistentStore
-	persistent.runtime_snapshot_json = snapshot
+	persistent.runtime_snapshot = snapshot
 	return persistent
 
 

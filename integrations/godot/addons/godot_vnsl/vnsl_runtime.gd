@@ -9,7 +9,7 @@ class_name VnslRuntime
 func load_persistent(store: PersistentStore):
 	persistent_store = store
 	_register_services()
-	load_snapshot(store.runtime_snapshot_json).print_err_if_available()
+	load_snapshot(store.runtime_snapshot).print_err_if_available()
 
 
 func _register_services():

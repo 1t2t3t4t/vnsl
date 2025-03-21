@@ -1,4 +1,3 @@
-use crate::compression;
 use crate::gd_result::{GdResultBool, GdResultString};
 use crate::resources::{VnslRuntimeAction, VnslRuntimeActionArg, VnslRuntimeChoice};
 use crate::{
@@ -10,6 +9,9 @@ use crate::{
     gd_result::GdResult,
     resources::{VnslSceneMap, VnslScript},
 };
+use base64::engine::GeneralPurpose;
+use base64::prelude::BASE64_STANDARD;
+use base64::Engine;
 use godot::{
     builtin::{Array, GString, StringName, VariantType},
     classes::{file_access::ModeFlags, FileAccess, INode, Node},
@@ -22,6 +24,8 @@ use thiserror::Error;
 use vnsl_core::model::{VnslAction, VnslActionArg, VnslChoice};
 use vnsl_runtime::snapshot::Snapshot;
 use vnsl_runtime::{Runtime, RuntimeCommand};
+
+const BASE64: GeneralPurpose = BASE64_STANDARD;
 
 #[derive(Debug, Error)]
 pub enum RuntimeError {
@@ -159,16 +163,20 @@ impl BaseVnslRuntime {
     #[func]
     fn take_snapshot(&self) -> Gd<GdResultString> {
         GdResultString::new(|| {
-            let s = serde_json::to_string(&self.runtime.snapshot())?;
-            Ok(compression::compress_str(&s)?)
+            let snapshot = self.runtime.snapshot();
+            let bytes = bincode::serde::encode_to_vec(snapshot, bincode::config::standard())?;
+            Ok(BASE64.encode(bytes))
         })
     }
 
     #[func]
     fn load_snapshot(&mut self, snapshot_str: String) -> Gd<GdResult> {
         GdResult::new(|| {
-            let snapshot_str = compression::decompress_str(&snapshot_str)?;
-            let snapshot = serde_json::from_str::<Snapshot>(&snapshot_str)?;
+            let snapshot_bytes = BASE64.decode(snapshot_str)?;
+            let (snapshot, _) = bincode::serde::decode_from_slice::<Snapshot, _>(
+                &snapshot_bytes[..],
+                bincode::config::standard(),
+            )?;
             self.runtime = snapshot.into();
             if let Some(char_id) = self.runtime.current_character_id().cloned() {
                 self.base_mut()

@@ -4,7 +4,6 @@ use mlua::{IntoLua, Lua, Value};
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-#[serde(tag = "type", content = "content")]
 pub enum VnslDataType {
     String(String),
     Number(f64),

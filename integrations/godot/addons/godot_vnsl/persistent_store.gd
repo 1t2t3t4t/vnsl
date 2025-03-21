@@ -8,4 +8,4 @@ class_name PersistentStore
 @export var current_text_input: VnslRuntimeAction
 
 
-@export var runtime_snapshot_json: String
+@export var runtime_snapshot: String
