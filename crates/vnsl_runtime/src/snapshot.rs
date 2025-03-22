@@ -1,5 +1,6 @@
 use std::collections::HashMap;
 
+use anyhow::Result;
 use serde::{Deserialize, Serialize};
 use vnsl_core::model::{VnslDataType, VnslScene};
 
@@ -11,6 +12,21 @@ pub struct Snapshot {
     pub current_character_id: Option<String>,
     pub run_stack: RunStack,
     pub lua_globals: HashMap<String, VnslDataType>,
+}
+
+impl Snapshot {
+    pub fn encode(&self) -> Result<Vec<u8>> {
+        let bytes = bincode::serde::encode_to_vec(self, bincode::config::standard())?;
+        Ok(bytes)
+    }
+
+    pub fn decode(bytes: &[u8]) -> Result<Self> {
+        let (snapshot, _) = bincode::serde::decode_from_slice::<Snapshot, _>(
+            &bytes[..],
+            bincode::config::standard(),
+        )?;
+        Ok(snapshot)
+    }
 }
 
 impl From<&Runtime> for Snapshot {

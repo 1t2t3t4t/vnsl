@@ -163,9 +163,8 @@ impl BaseVnslRuntime {
     #[func]
     fn take_snapshot(&self) -> Gd<GdResultString> {
         GdResultString::new(|| {
-            let snapshot = self.runtime.snapshot();
-            let bytes = bincode::serde::encode_to_vec(snapshot, bincode::config::standard())?;
-            Ok(BASE64.encode(bytes))
+            let snapshot = self.runtime.snapshot().encode()?;
+            Ok(BASE64.encode(snapshot))
         })
     }
 
@@ -173,10 +172,7 @@ impl BaseVnslRuntime {
     fn load_snapshot(&mut self, snapshot_str: String) -> Gd<GdResult> {
         GdResult::new(|| {
             let snapshot_bytes = BASE64.decode(snapshot_str)?;
-            let (snapshot, _) = bincode::serde::decode_from_slice::<Snapshot, _>(
-                &snapshot_bytes[..],
-                bincode::config::standard(),
-            )?;
+            let snapshot = Snapshot::decode(&snapshot_bytes)?;
             self.runtime = snapshot.into();
             if let Some(char_id) = self.runtime.current_character_id().cloned() {
                 self.base_mut()

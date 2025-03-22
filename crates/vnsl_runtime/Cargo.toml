@@ -9,6 +9,8 @@ regex = "1.11.1"
 serde.workspace = true
 thiserror.workspace = true
 vnsl_core.workspace = true
+bincode.workspace = true
+anyhow.workspace = true
 
 [dev-dependencies]
 vnsl_compiler.workspace = true

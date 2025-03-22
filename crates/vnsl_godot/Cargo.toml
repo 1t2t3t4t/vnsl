@@ -16,4 +16,4 @@ thiserror.workspace = true
 vnsl_core.workspace = true
 vnsl_parser.workspace = true
 base64 = "0.22.1"
-bincode = { version = "2.0.1", features = ["serde"] }
+bincode.workspace = true

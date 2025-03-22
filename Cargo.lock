@@ -1006,6 +1006,8 @@ dependencies = [
 name = "vnsl_runtime"
 version = "0.1.0"
 dependencies = [
+ "anyhow",
+ "bincode",
  "mlua",
  "pretty_assertions",
  "regex",
