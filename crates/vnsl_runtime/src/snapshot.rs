@@ -39,3 +39,23 @@ impl From<&Runtime> for Snapshot {
         }
     }
 }
+
+#[cfg(test)]
+mod test {
+    use vnsl_core::model::VnslScene;
+
+    use super::Snapshot;
+
+    #[test]
+    fn test_encode_decode() -> anyhow::Result<()> {
+        let mut snapshot = Snapshot::default();
+        snapshot.current_character_id = Some("My name".into());
+        snapshot.current_scene = Some(VnslScene::default());
+
+        let bytes = snapshot.encode()?;
+        let dec = Snapshot::decode(&bytes)?;
+
+        assert_eq!(snapshot, dec);
+        Ok(())
+    }
+}
