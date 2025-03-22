@@ -89,6 +89,7 @@ func _on_vnsl_runtime_show_text(text: String) -> void:
 
 
 func _on_vnsl_runtime_set_character_id(id: String) -> void:
+	vnsl_runtime.persistent_store.current_character = id
 	ui.set_speaker(id)
 
 

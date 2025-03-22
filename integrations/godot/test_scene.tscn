@@ -5,4 +5,3 @@
 [node name="TestScene" type="Node"]
 
 [node name="VnslPlayer" parent="." instance=ExtResource("1_oc5ge")]
-entry_point = null

@@ -11,5 +11,4 @@ pub use runtime::*;
 #[derive(Debug, Default)]
 pub struct RunContext {
     lua_runtime: LuaRuntime,
-    current_character_id: Option<String>,
 }

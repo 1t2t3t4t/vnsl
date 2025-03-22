@@ -76,15 +76,6 @@ impl BaseVnslRuntime {
     fn prompt_choices(choices: Array<Gd<VnslRuntimeChoice>>);
 
     #[func]
-    fn get_current_character_id(&self) -> GString {
-        self.runtime
-            .current_character_id()
-            .cloned()
-            .unwrap_or_default()
-            .to_godot()
-    }
-
-    #[func]
     fn register_action_handler(&mut self, handler: Gd<VnslActionHandler>) {
         let result = self.action_handler.register_action_handler(handler);
         if let Some(existing_handler) = result {
@@ -174,10 +165,6 @@ impl BaseVnslRuntime {
             let snapshot_bytes = BASE64.decode(snapshot_str)?;
             let snapshot = Snapshot::decode(&snapshot_bytes)?;
             self.runtime = snapshot.into();
-            if let Some(char_id) = self.runtime.current_character_id().cloned() {
-                self.base_mut()
-                    .emit_signal("set_character_id", &[char_id.to_variant()]);
-            }
             self.action_handler.restore(self.service_store.clone());
             Ok(())
         })

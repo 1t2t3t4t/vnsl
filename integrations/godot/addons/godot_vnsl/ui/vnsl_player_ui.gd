@@ -36,8 +36,7 @@ func reset_ui_state():
 func restore_ui_from_snapshot(store: PersistentStore):
 	background_texture.texture = store.current_bg_texture
 	display_text_box.text = store.current_display_text
-	speaker_label.text = _player.vnsl_runtime.get_current_character_id()
+	speaker_label.text = store.current_character
 
 	text_input_prompt.restore_ui_from_snapshot(store)
 	choices_container.restore_ui_from_snapshot(store)
-	print(store.current_display_text)
