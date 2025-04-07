@@ -20,6 +20,16 @@ theme = ExtResource("1_5b6pp")
 script = ExtResource("1_gbkn6")
 metadata/_edit_use_anchors_ = true
 
+[node name="Companion" type="Node" parent="."]
+
+[node name="VnslPlayer" type="Node" parent="Companion"]
+unique_name_in_owner = true
+script = ExtResource("5_n3b4w")
+
+[node name="VnslRuntime" type="BaseVnslRuntime" parent="Companion/VnslPlayer"]
+unique_name_in_owner = true
+script = ExtResource("6_358fg")
+
 [node name="BackgroundTexture" type="TextureRect" parent="."]
 unique_name_in_owner = true
 layout_mode = 1
@@ -95,16 +105,6 @@ offset_left = -40.0
 offset_top = -46.5
 offset_right = 40.0
 offset_bottom = 46.5
-
-[node name="Companion" type="Node" parent="."]
-
-[node name="VnslPlayer" type="Node" parent="Companion"]
-unique_name_in_owner = true
-script = ExtResource("5_n3b4w")
-
-[node name="VnslRuntime" type="BaseVnslRuntime" parent="Companion/VnslPlayer"]
-unique_name_in_owner = true
-script = ExtResource("6_358fg")
 
 [connection signal="change_scene" from="Companion/VnslPlayer/VnslRuntime" to="Companion/VnslPlayer" method="_on_vnsl_runtime_change_scene"]
 [connection signal="prompt_choices" from="Companion/VnslPlayer/VnslRuntime" to="Companion/VnslPlayer" method="_on_vnsl_runtime_prompt_choices"]
