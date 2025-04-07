@@ -3,9 +3,12 @@ extends Node
 class_name VnslPlayer
 
 @onready var vnsl_runtime: VnslRuntime = %VnslRuntime
-@onready var ui: VnslPlayerUi = %UI
 
 @export var entry_point: StringName = "MainScene"
+
+signal on_scene_ended(scene_name: String)
+
+var ui: VnslPlayerUi
 
 var _handlers := [
 	TextInputActionHandler.new(),
@@ -14,16 +17,19 @@ var _handlers := [
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	ui._player = self
-	ui.choices_container.choice_selected.connect(_on_choice_selected)
-
 	vnsl_runtime.service_store.register_service("player", self)
+
+
+func set_ui_node(ui: VnslPlayerUi):
+	self.ui = ui
+	ui.choices_container.choice_selected.connect(_on_choice_selected)
 	vnsl_runtime.service_store.register_service("ui", ui)
 
 	for handler in _handlers:
 		vnsl_runtime.register_action_handler(handler)
 		handler._ready(vnsl_runtime.service_store)
 
+	vnsl_runtime.load_scripts(ui.scripts_path)
 	start_scene(entry_point)
 
 
@@ -51,7 +57,7 @@ func _input(event: InputEvent) -> void:
 
 func step():
 	if vnsl_runtime.scene_ended():
-		get_tree().quit()
+		on_scene_ended.emit(vnsl_runtime.scene_name())
 
 	if !_is_locked():
 		vnsl_runtime.step().print_err_if_available()

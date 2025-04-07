@@ -12,18 +12,15 @@ fn elapsed<T>(label: &str, f: impl FnOnce() -> T) -> T {
 }
 
 fn main() -> anyhow::Result<()> {
-    let test_script = include_str!("../spec.vnsl");
-    let scene = elapsed("compile", || vnsl_compiler::compile(test_script))?;
+    let mut test_script = "scene TestScript\n".to_string();
+    for i in 0..10_000 {
+        test_script.push_str(&format!("\"Line number {}\"\n", i));
+    }
+    std::fs::write("./test.vnsl", &test_script)?;
 
-    let mut runtime = vnsl_runtime::Runtime::default();
-    runtime.load_scene(scene);
-
-    runtime.step()?;
-    runtime.step()?;
-    runtime.step()?;
-
-    let snapshot = elapsed("snapshot", || runtime.snapshot());
-    let val = serde_json::to_string_pretty(&snapshot)?;
-    std::fs::write("./snapshot.json", &val)?;
+    elapsed("parse scene", || vnsl_parser::parse_scene(&test_script))?;
+    elapsed("parse scene name", || {
+        vnsl_parser::parse_scene_name(&test_script)
+    })?;
     Ok(())
 }

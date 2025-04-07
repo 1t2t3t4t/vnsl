@@ -36,3 +36,4 @@ vnsl_compiler.workspace = true
 vnsl_runtime.workspace = true
 anyhow.workspace = true
 serde_json.workspace = true
+vnsl_parser.workspace = true

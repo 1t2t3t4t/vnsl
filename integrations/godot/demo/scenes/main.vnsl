@@ -1,0 +1,24 @@
+scene MainScene
+
+char Annonymous
+
+"It's been a long time since I been here..."
+"When was it again?"
+
+choice:
+    "It was yesterday.":
+        pass
+    "It was last week.":
+        pass
+    "It was last month.":
+        pass
+    "It was last year.":
+        pass
+
+"Anyway. Now it's time to go."
+
+[textInput label: "What's your name?" key: "MC"]
+
+char MC
+
+"My name is {{MC}}"

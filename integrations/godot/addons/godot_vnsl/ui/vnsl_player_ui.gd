@@ -2,22 +2,26 @@ extends Control
 
 class_name VnslPlayerUi
 
+@export var scripts_path: String = "res://scenes/"
+
 @onready var speaker_label: Label = %SpeakerLabel
 @onready var display_text_box: RichTextLabel = %DisplayTextBox
-@onready var choices_container: ChoicesContainer = %ChoicesContainer
-@onready var text_input_prompt: TextInputPrompt = %TextInputPrompt
 @onready var background_texture: TextureRect = %BackgroundTexture
 
-var _player: VnslPlayer
+@onready var choices_container: ChoicesContainer = %ChoicesContainer
+@onready var text_input_prompt: TextInputPrompt = %TextInputPrompt
+
+@onready var player: VnslPlayer = %VnslPlayer
 
 func _ready() -> void:
 	choices_container.hide()
 	text_input_prompt.hide()
+	player.set_ui_node(self)
 
 
 func set_display_text(text: String):
 	display_text_box.text = text
-	_player.vnsl_runtime.persistent_store.current_display_text = text
+	player.vnsl_runtime.persistent_store.current_display_text = text
 
 
 func set_speaker(name: String):

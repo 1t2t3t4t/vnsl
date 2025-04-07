@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://d0wsuamg5ygxt"]
+[gd_scene load_steps=4 format=3 uid="uid://mblq2pxl6rs0"]
 
 [ext_resource type="Script" path="res://addons/godot_vnsl/vnsl_player.gd" id="1_wf2uv"]
 [ext_resource type="Script" path="res://addons/godot_vnsl/vnsl_runtime.gd" id="2_w1p5w"]

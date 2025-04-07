@@ -169,6 +169,14 @@ impl BaseVnslRuntime {
             Ok(())
         })
     }
+
+    #[func]
+    fn scene_name(&self) -> String {
+        self.runtime
+            .get_current_scene()
+            .map(|s| s.name.to_owned())
+            .unwrap_or_default()
+    }
 }
 
 #[cfg(debug_assertions)]

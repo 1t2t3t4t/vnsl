@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://b42y0txtcudkm"]
 
-[ext_resource type="PackedScene" uid="uid://d0wsuamg5ygxt" path="res://addons/godot_vnsl/vnsl_player.tscn" id="1_oc5ge"]
+[ext_resource type="PackedScene" uid="uid://mblq2pxl6rs0" path="res://addons/godot_vnsl/vnsl_player.tscn" id="1_oc5ge"]
 
 [node name="TestScene" type="Node"]
 
