@@ -1,0 +1,7 @@
+ShowText(
+    "A",
+)
+Select choice B
+ShowText(
+    "B",
+)

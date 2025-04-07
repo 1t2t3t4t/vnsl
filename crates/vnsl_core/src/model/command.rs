@@ -10,6 +10,7 @@ pub enum VnslCommand {
     Jump(VnslJump),
     Global(VnslGlobal),
     GoTo(VnslGoTo),
+    Pass,
     Return,
 }
 
