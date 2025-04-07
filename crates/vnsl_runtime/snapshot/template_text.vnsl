@@ -3,4 +3,5 @@ scene TemplateTextTest
 global BOSS "Mr. Boss"
 global AGE 200
 
+char BOSS
 "Hi. This is {{BOSS}}. I'm {{AGE}} years old"

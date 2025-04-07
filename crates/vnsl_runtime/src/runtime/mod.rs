@@ -107,7 +107,14 @@ impl Runtime {
                 text::process_display_text(vnsl_dialogue.text, &self.context),
             )),
             BlockCommand::SetCharacter(vnsl_set_character) => {
-                Ok(RuntimeCommand::SetCharacterId(vnsl_set_character.id))
+                let Some(name) = self
+                    .context
+                    .lua_runtime
+                    .try_get_globals_val(&vnsl_set_character.id)
+                else {
+                    return Ok(RuntimeCommand::SetCharacterId(vnsl_set_character.id));
+                };
+                Ok(RuntimeCommand::SetCharacterId(name))
             }
             BlockCommand::Action(vnsl_action) => Ok(RuntimeCommand::ExecuteAction(vnsl_action)),
             BlockCommand::Choices(vnsl_choices) => Ok(RuntimeCommand::PromptChoices(vnsl_choices)),
