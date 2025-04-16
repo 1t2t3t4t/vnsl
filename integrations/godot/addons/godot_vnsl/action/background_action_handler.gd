@@ -2,8 +2,8 @@ extends BaseActionHandler
 
 class_name BackgroundActionHandler
 
-func _handle_action_name() -> String:
-	return "bg"
+func _handle_action_name() -> Array[String]:
+	return ["bg"]
 
 
 func _handle(action: VnslRuntimeAction, service_store: ServiceStore) -> Variant:

@@ -77,11 +77,7 @@ impl BaseVnslRuntime {
 
     #[func]
     fn register_action_handler(&mut self, handler: Gd<VnslActionHandler>) {
-        let result = self.action_handler.register_action_handler(handler);
-        if let Some(existing_handler) = result {
-            let name = existing_handler.bind().handle_action_name();
-            godot_warn!("The action with name {} is already register", name);
-        }
+        self.action_handler.register_action_handler(handler);
     }
 
     #[func]
@@ -165,7 +161,6 @@ impl BaseVnslRuntime {
             let snapshot_bytes = BASE64.decode(snapshot_str)?;
             let snapshot = Snapshot::decode(&snapshot_bytes)?;
             self.runtime = snapshot.into();
-            self.action_handler.restore(self.service_store.clone());
             Ok(())
         })
     }
