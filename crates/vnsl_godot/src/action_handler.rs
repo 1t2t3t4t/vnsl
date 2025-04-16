@@ -1,8 +1,9 @@
 use std::collections::HashMap;
 
 use godot::{
-    builtin::{GString, Variant},
+    builtin::{Array, GString, Variant},
     classes::RefCounted,
+    global::godot_warn,
     obj::{Base, Gd, WithBaseField},
     prelude::{godot_api, GodotClass},
 };
@@ -15,29 +16,21 @@ pub struct ActionHandlerStore {
 }
 
 impl ActionHandlerStore {
-    pub fn register_action_handler(
-        &mut self,
-        handler: Gd<VnslActionHandler>,
-    ) -> Option<Gd<VnslActionHandler>> {
-        let name = handler.bind().handle_action_name().to_string();
-        if let Some(handler) = self.handlers.get(&name) {
-            Some(handler.clone())
-        } else {
-            self.handlers.insert(name.clone(), handler);
-            None
+    pub fn register_action_handler(&mut self, handler: Gd<VnslActionHandler>) {
+        let names = handler.bind().handle_action_name();
+        for name in names.iter_shared() {
+            if self
+                .handlers
+                .insert(name.to_string(), handler.clone())
+                .is_some()
+            {
+                godot_warn!("Handler with name {} is already registered", name)
+            }
         }
     }
 
     pub fn get(&self, name: &str) -> Option<Gd<VnslActionHandler>> {
         self.handlers.get(name).cloned()
-    }
-
-    pub fn restore(&mut self, service_store: Gd<ServiceStore>) {
-        for handler in self.handlers.values_mut() {
-            handler
-                .bind_mut()
-                .restore_from_snapshot(service_store.clone());
-        }
     }
 }
 
@@ -51,7 +44,12 @@ pub struct VnslActionHandler {
 #[godot_api]
 impl VnslActionHandler {
     #[func(virtual)]
-    pub fn handle_action_name(&self) -> GString {
+    pub fn should_handle_action(&self, _name: String) -> bool {
+        unimplemented!("Action handler didn't implement should_handle_action",)
+    }
+
+    #[func(virtual)]
+    pub fn handle_action_name(&self) -> Array<GString> {
         unimplemented!("Action handler didn't implement handle_action_name",)
     }
 
@@ -65,8 +63,4 @@ impl VnslActionHandler {
         let global_name = self.base().get_script().call("get_global_name", &[]);
         unimplemented!("Action handler {} is not handled", global_name)
     }
-
-    #[func(virtual)]
-    #[allow(unused_variables)]
-    pub fn restore_from_snapshot(&mut self, service_store: Gd<ServiceStore>) {}
 }
