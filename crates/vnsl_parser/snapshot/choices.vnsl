@@ -22,14 +22,14 @@ choice:
     "B" if |globals.x == false|:
         "BB"
 
-choice:
+choices:
     "this is
     Multiple line
     choice":
         "it works"
 
 label testScope:
-    choice:
+    choices:
         "sub A":
             "test text"
         "sub B":
