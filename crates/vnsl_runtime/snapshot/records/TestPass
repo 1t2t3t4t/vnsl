@@ -1,6 +1,9 @@
 ShowText(
     "A",
 )
+Prompt choice
+	Choice A
+	Choice B
 Select choice B
 ShowText(
     "B",

@@ -2,7 +2,7 @@
 mod snapshot_test;
 mod text;
 
-use vnsl_core::model::{VnslAction, VnslBlock, VnslChoice, VnslChoices, VnslDataType, VnslScene};
+use vnsl_core::model::{VnslAction, VnslBlock, VnslChoice, VnslDataType, VnslScene};
 
 use crate::{
     block_runner::{BlockCommand, BlockRunner},
@@ -24,7 +24,7 @@ pub enum RuntimeCommand {
     SetCharacterId(String),
     ShowText(String),
     ExecuteAction(VnslAction),
-    PromptChoices(VnslChoices),
+    PromptChoices(Vec<VnslChoice>),
     ChangeScene(String),
     EndOfScene,
 }
@@ -117,7 +117,20 @@ impl Runtime {
                 Ok(RuntimeCommand::SetCharacterId(name))
             }
             BlockCommand::Action(vnsl_action) => Ok(RuntimeCommand::ExecuteAction(vnsl_action)),
-            BlockCommand::Choices(vnsl_choices) => Ok(RuntimeCommand::PromptChoices(vnsl_choices)),
+            BlockCommand::Choices(vnsl_choices) => {
+                let mut choices = vec![];
+                for choice in vnsl_choices.choices {
+                    if let Some(eval) = &choice.condition {
+                        let result = self.context.lua_runtime.eval_expr::<bool>(&eval.code)?;
+                        if result == true {
+                            choices.push(choice);
+                        }
+                    } else {
+                        choices.push(choice);
+                    }
+                }
+                Ok(RuntimeCommand::PromptChoices(choices))
+            }
             BlockCommand::ChangeScene(vnsl_go_to) => {
                 self.clear_block_stack();
                 Ok(RuntimeCommand::ChangeScene(vnsl_go_to.scene_id))

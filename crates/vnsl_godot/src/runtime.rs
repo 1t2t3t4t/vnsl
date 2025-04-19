@@ -21,7 +21,7 @@ use godot::{
     prelude::{godot_api, GodotClass},
 };
 use thiserror::Error;
-use vnsl_core::model::{VnslAction, VnslActionArg, VnslChoice};
+use vnsl_core::model::{VnslAction, VnslActionArg, VnslChoice, VnslLuaEvalExpr, VnslLuaEvalType};
 use vnsl_runtime::snapshot::Snapshot;
 use vnsl_runtime::{Runtime, RuntimeCommand};
 
@@ -134,7 +134,14 @@ impl BaseVnslRuntime {
             id: choice.bind().id.to_string(),
             text: choice.bind().text.to_string(),
             block: choice.bind().get_block().clone(),
-            condition: todo!(),
+            condition: if choice.bind().get_condition().is_empty() {
+                None
+            } else {
+                Some(VnslLuaEvalExpr {
+                    code: choice.bind().get_condition().to_string(),
+                    return_type: VnslLuaEvalType::Bool,
+                })
+            },
         });
     }
 
@@ -225,11 +232,7 @@ impl BaseVnslRuntime {
                 }
             }
             RuntimeCommand::PromptChoices(vnsl_choices) => {
-                let choices = vnsl_choices
-                    .choices
-                    .into_iter()
-                    .map(map_choice)
-                    .collect::<Vec<_>>();
+                let choices = vnsl_choices.into_iter().map(map_choice).collect::<Vec<_>>();
                 self.base_mut()
                     .emit_signal("prompt_choices", &[choices.to_variant()]);
             }

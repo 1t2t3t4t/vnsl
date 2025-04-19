@@ -1,0 +1,13 @@
+scene ConditionalChoices
+
+[forceChoice 1]
+
+global val false
+
+choices:
+    "A":
+        "A"
+    "B" if |global.val == true|:
+        "B"
+    "C":
+        "C"
