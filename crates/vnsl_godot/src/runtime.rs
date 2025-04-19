@@ -134,6 +134,7 @@ impl BaseVnslRuntime {
             id: choice.bind().id.to_string(),
             text: choice.bind().text.to_string(),
             block: choice.bind().get_block().clone(),
+            condition: todo!(),
         });
     }
 

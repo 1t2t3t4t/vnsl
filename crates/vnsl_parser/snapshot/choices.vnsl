@@ -17,6 +17,12 @@ choice:
                 enough"
 
 choice:
+    "A" if |globals.x == true|:
+        "AA"
+    "B" if |globals.x == false|:
+        "BB"
+
+choice:
     "this is
     Multiple line
     choice":

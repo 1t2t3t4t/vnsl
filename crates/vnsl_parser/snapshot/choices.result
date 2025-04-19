@@ -34,6 +34,7 @@ VnslScene {
                                     ),
                                 ],
                             },
+                            condition: None,
                         },
                         VnslChoice {
                             id: "TestUuid",
@@ -49,6 +50,7 @@ VnslScene {
                                     ),
                                 ],
                             },
+                            condition: None,
                         },
                         VnslChoice {
                             id: "TestUuid",
@@ -72,12 +74,62 @@ VnslScene {
                                                             ),
                                                         ],
                                                     },
+                                                    condition: None,
                                                 },
                                             ],
                                         },
                                     ),
                                 ],
                             },
+                            condition: None,
+                        },
+                    ],
+                },
+            ),
+            Choices(
+                VnslChoices {
+                    choices: [
+                        VnslChoice {
+                            id: "TestUuid",
+                            text: "A",
+                            block: VnslBlock {
+                                statements: [
+                                    Command(
+                                        Dialogue(
+                                            VnslDialogue {
+                                                text: "AA",
+                                            },
+                                        ),
+                                    ),
+                                ],
+                            },
+                            condition: Some(
+                                VnslLuaEvalExpr {
+                                    code: "globals.x == true",
+                                    return_type: Bool,
+                                },
+                            ),
+                        },
+                        VnslChoice {
+                            id: "TestUuid",
+                            text: "B",
+                            block: VnslBlock {
+                                statements: [
+                                    Command(
+                                        Dialogue(
+                                            VnslDialogue {
+                                                text: "BB",
+                                            },
+                                        ),
+                                    ),
+                                ],
+                            },
+                            condition: Some(
+                                VnslLuaEvalExpr {
+                                    code: "globals.x == false",
+                                    return_type: Bool,
+                                },
+                            ),
                         },
                     ],
                 },
@@ -99,6 +151,7 @@ VnslScene {
                                     ),
                                 ],
                             },
+                            condition: None,
                         },
                     ],
                 },
@@ -127,6 +180,7 @@ VnslScene {
                                             ),
                                         ],
                                     },
+                                    condition: None,
                                 },
                                 VnslChoice {
                                     id: "TestUuid",
@@ -150,12 +204,14 @@ VnslScene {
                                                                     ),
                                                                 ],
                                                             },
+                                                            condition: None,
                                                         },
                                                     ],
                                                 },
                                             ),
                                         ],
                                     },
+                                    condition: None,
                                 },
                             ],
                         },
