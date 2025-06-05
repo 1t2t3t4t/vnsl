@@ -22,8 +22,6 @@ fn create_test_scene(name: &str) -> VnslScene {
         },
         #[cfg(debug_assertions)]
         labels: BTreeMap::new(),
-        #[cfg(not(debug_assertions))]
-        labels: HashMap::new(),
     }
 }
 
@@ -32,10 +30,6 @@ fn create_test_scene_with_labels(name: &str) -> VnslScene {
         #[cfg(debug_assertions)]
         {
             BTreeMap::new()
-        }
-        #[cfg(not(debug_assertions))]
-        {
-            HashMap::new()
         }
     };
 
@@ -176,8 +170,6 @@ fn test_global_variable() {
         },
         #[cfg(debug_assertions)]
         labels: BTreeMap::new(),
-        #[cfg(not(debug_assertions))]
-        labels: HashMap::new(),
     };
 
     runtime.load_scene(scene);
@@ -208,8 +200,6 @@ fn test_action_command() {
         },
         #[cfg(debug_assertions)]
         labels: BTreeMap::new(),
-        #[cfg(not(debug_assertions))]
-        labels: HashMap::new(),
     };
 
     runtime.load_scene(scene);
@@ -296,8 +286,6 @@ fn test_change_scene() {
         },
         #[cfg(debug_assertions)]
         labels: BTreeMap::new(),
-        #[cfg(not(debug_assertions))]
-        labels: HashMap::new(),
     };
 
     runtime.load_scene(scene);
@@ -339,8 +327,6 @@ fn test_jump_to_invalid_label() {
         },
         #[cfg(debug_assertions)]
         labels: BTreeMap::new(),
-        #[cfg(not(debug_assertions))]
-        labels: HashMap::new(),
     };
 
     runtime.load_scene(scene);
