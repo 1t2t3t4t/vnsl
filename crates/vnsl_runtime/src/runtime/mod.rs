@@ -1,5 +1,8 @@
 #[cfg(test)]
 mod snapshot_test;
+#[cfg(test)]
+mod test;
+
 mod text;
 
 use vnsl_core::model::{VnslAction, VnslBlock, VnslChoice, VnslChoices, VnslDataType, VnslScene};
@@ -143,6 +146,10 @@ impl Runtime {
             .set_globals_val_data_type(name, val)
     }
 
+    pub fn get_global_val(&self, name: &str) -> Option<VnslDataType> {
+        self.context.lua_runtime.try_get_globals_val(name)
+    }
+
     pub fn snapshot(&self) -> Snapshot {
         self.into()
     }
@@ -188,5 +195,38 @@ impl From<Snapshot> for Runtime {
 impl Runtime {
     pub fn run_stack_string(&self) -> String {
         format!("{:#?}", self.run_stack)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_runtime_gloal_var() {
+        let mut runtime = Runtime::default();
+        assert_eq!(runtime.current_character_id(), None);
+        runtime
+            .set_global_val("test", VnslDataType::String("test".to_string()))
+            .unwrap();
+        assert_eq!(
+            runtime.get_global_val("test"),
+            Some(VnslDataType::String("test".to_string()))
+        );
+        runtime
+            .set_global_val("num", VnslDataType::Number(42.0))
+            .unwrap();
+        assert_eq!(
+            runtime.get_global_val("num"),
+            Some(VnslDataType::Number(42.0))
+        );
+        runtime
+            .set_global_val("bool", VnslDataType::Bool(true))
+            .unwrap();
+        assert_eq!(
+            runtime.get_global_val("bool"),
+            Some(VnslDataType::Bool(true))
+        );
+        assert_eq!(runtime.get_global_val("empty"), None);
     }
 }

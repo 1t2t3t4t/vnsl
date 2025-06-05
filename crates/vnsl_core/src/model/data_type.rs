@@ -1,6 +1,6 @@
 use std::fmt::Display;
 
-use mlua::{IntoLua, Lua, Value};
+use mlua::{Error, FromLua, IntoLua, Lua, Value};
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -24,6 +24,7 @@ impl VnslDataType {
             Value::Integer(i) => Some(Self::Number(i as f64)),
             Value::Number(n) => Some(Self::Number(n)),
             Value::String(s) => Some(Self::String(s.to_string_lossy())),
+            Value::Nil => None,
             _ => None,
         }
     }
@@ -90,5 +91,14 @@ impl IntoLua for VnslDataType {
             VnslDataType::Number(n) => n.into_lua(lua),
             VnslDataType::Bool(b) => b.into_lua(lua),
         }
+    }
+}
+
+impl FromLua for VnslDataType {
+    fn from_lua(value: Value, _lua: &Lua) -> mlua::Result<Self> {
+        Self::try_from(value.clone()).ok_or(Error::RuntimeError(format!(
+            "Value of type {} cannot be converted from lua type",
+            value.type_name()
+        )))
     }
 }
