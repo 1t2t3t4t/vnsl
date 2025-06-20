@@ -33,6 +33,7 @@ func _scan_scripts(current_path: String) -> Array[String]:
 		result.append_array(_scan_scripts(current_path.path_join(sub_dir)))
 
 	for file in dir.get_files():
-		result.append(current_path.path_join(file))
+		if file.get_extension() == "vnsl":
+			result.append(current_path.path_join(file))
 
 	return result
