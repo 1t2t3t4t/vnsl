@@ -1,6 +1,7 @@
-use std::collections::HashMap;
+use std::{collections::HashMap, io::Write};
 
 use anyhow::Result;
+use flate2::{write::GzDecoder, write::GzEncoder, Compression};
 use serde::{Deserialize, Serialize};
 use vnsl_core::model::{VnslDataType, VnslScene};
 
@@ -16,12 +17,18 @@ pub struct Snapshot {
 impl Snapshot {
     pub fn encode(&self) -> Result<Vec<u8>> {
         let bytes = bincode::serde::encode_to_vec(self, bincode::config::standard())?;
-        Ok(bytes)
+        let mut enc = GzEncoder::new(Vec::new(), Compression::best());
+        enc.write_all(&bytes)?;
+        Ok(enc.finish()?)
     }
 
     pub fn decode(bytes: &[u8]) -> Result<Self> {
+        let mut dec = GzDecoder::new(Vec::new());
+        dec.write_all(bytes)?;
+        let decompressed = dec.finish()?;
+
         let (snapshot, _) = bincode::serde::decode_from_slice::<Snapshot, _>(
-            &bytes[..],
+            &decompressed[..],
             bincode::config::standard(),
         )?;
         Ok(snapshot)
