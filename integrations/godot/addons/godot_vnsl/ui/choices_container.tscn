@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://b47vxt7ostmqx"]
 
-[ext_resource type="Script" path="res://addons/godot_vnsl/ui/choices_container.gd" id="1_mph7r"]
+[ext_resource type="Script" uid="uid://un17usipl0b0" path="res://addons/godot_vnsl/ui/choices_container.gd" id="1_mph7r"]
 
 [node name="ChoicesContainer" type="PanelContainer"]
 anchors_preset = 15

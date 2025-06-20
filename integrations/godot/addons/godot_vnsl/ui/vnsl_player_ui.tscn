@@ -1,11 +1,11 @@
 [gd_scene load_steps=7 format=3 uid="uid://qnvctkhjptk"]
 
 [ext_resource type="Theme" uid="uid://t1b470k6xcr5" path="res://addons/godot_vnsl/ui/default_vnsl_theme.tres" id="1_5b6pp"]
-[ext_resource type="Script" path="res://addons/godot_vnsl/ui/vnsl_player_ui.gd" id="1_gbkn6"]
+[ext_resource type="Script" uid="uid://bgghri5qua0kc" path="res://addons/godot_vnsl/ui/vnsl_player_ui.gd" id="1_gbkn6"]
 [ext_resource type="PackedScene" uid="uid://b47vxt7ostmqx" path="res://addons/godot_vnsl/ui/choices_container.tscn" id="2_mg0gx"]
 [ext_resource type="PackedScene" uid="uid://d140mnmejyvbm" path="res://addons/godot_vnsl/ui/text_input_prompt.tscn" id="3_c7k16"]
-[ext_resource type="Script" path="res://addons/godot_vnsl/vnsl_player.gd" id="5_n3b4w"]
-[ext_resource type="Script" path="res://addons/godot_vnsl/vnsl_runtime.gd" id="6_358fg"]
+[ext_resource type="Script" uid="uid://cm7m8stegrwcb" path="res://addons/godot_vnsl/vnsl_player.gd" id="5_n3b4w"]
+[ext_resource type="Script" uid="uid://buykpvs0emsuk" path="res://addons/godot_vnsl/vnsl_runtime.gd" id="6_358fg"]
 
 [node name="UI" type="Control"]
 layout_mode = 3

@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://d140mnmejyvbm"]
 
-[ext_resource type="Script" path="res://addons/godot_vnsl/ui/text_input_prompt.gd" id="1_86vxv"]
+[ext_resource type="Script" uid="uid://bc3n880o2527l" path="res://addons/godot_vnsl/ui/text_input_prompt.gd" id="1_86vxv"]
 
 [node name="TextInputPrompt" type="PanelContainer"]
 anchors_preset = 15
