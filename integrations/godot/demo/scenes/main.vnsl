@@ -4,6 +4,7 @@ char Annonymous
 
 "It's been a long time since I been here..."
 "When was it again?"
+"[color=red]Hellooooo[/color]"
 
 choice:
     "It was yesterday.":
@@ -15,6 +16,7 @@ choice:
     "It was last year.":
         pass
 
+[bg path:"res://icon.svg"]
 "Anyway. Now it's time to go."
 
 [textInput label: "What's your name?" key: "MC"]
@@ -41,7 +43,7 @@ char MC
 char DAD
 "Ah ha ha ha!! Glad to hear that you like it!"
 
-char mc
+char MC
 "I didn't say that I like it."
 
 char dad
@@ -52,3 +54,5 @@ char dad
 
 char mc
 "Aughhh. You told me that thousands of times already."
+
+goto BedroomMorning
