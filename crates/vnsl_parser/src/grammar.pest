@@ -37,16 +37,20 @@ global        = { "global" ~ spacer ~ identifier ~ spacer ~ data_type }
 set_character = { ("character" | "char") ~ spacer ~ identifier }
 goto          = { "goto" ~ spacer ~ identifier }
 return        = { "return" }
-command       = { dialogue | set_character | action | global | jump | goto | return }
+pass          = { "pass" }
+command       = { dialogue | set_character | action | global | jump | goto | return | pass }
 
-choice        =  {
-    string ~ block
+choice_condition =  {
+    spacer ~ "if" ~ spacer ~ condition_block ~ spacer
 }
-choices_block = _{
+choice           =  {
+    string ~ choice_condition? ~ block
+}
+choices_block    = _{
     ":" ~ PEEK_ALL ~ PUSH(indentation) ~ choice ~ (PEEK_ALL ~ choice)* ~ DROP
 }
-choices       =  {
-    "choice" ~ choices_block
+choices          =  {
+    ("choices" | "choice") ~ choices_block
 }
 
 condition       =  {

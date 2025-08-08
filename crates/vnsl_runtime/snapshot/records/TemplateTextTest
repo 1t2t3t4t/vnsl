@@ -1,3 +1,6 @@
+SetCharacterId(
+    "Mr. Boss",
+)
 ShowText(
     "Hi. This is Mr. Boss. I'm 200 years old",
 )

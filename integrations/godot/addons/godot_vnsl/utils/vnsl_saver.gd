@@ -5,8 +5,10 @@ extends ResourceFormatSaver
 func _get_recognized_extensions(resource: Resource) -> PackedStringArray:
 	return ["vnsl"]
 
+
 func _recognize(resource: Resource) -> bool:
 	return resource is VnslScript
+
 
 func _save(resource: Resource, path: String, flags: int) -> Error:
 	var vnsl_script := resource as VnslScript

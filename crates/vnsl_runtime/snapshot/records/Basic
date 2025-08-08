@@ -23,6 +23,8 @@ ShowText(
 ShowText(
     "And he told me \"This is not good!!\" Boss",
 )
+Prompt choice
+	Choice A
 Select choice A
 ShowText(
     "A",

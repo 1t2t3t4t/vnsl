@@ -1,7 +1,9 @@
 use crate::{block, data_type, Rule};
 use pest::iterators::Pair;
 use uuid::Uuid;
-use vnsl_core::model::{VnslChoice, VnslChoices};
+use vnsl_core::model::{VnslChoice, VnslChoices, VnslLuaEvalType};
+
+use super::lua_expr;
 
 fn gen_uuid() -> String {
     if cfg!(test) {
@@ -36,6 +38,10 @@ fn parse_choice(rule: Pair<Rule>) -> anyhow::Result<VnslChoice> {
             }
             Rule::block => {
                 choice.block = block::parse_block(rule)?;
+            }
+            Rule::choice_condition => {
+                choice.condition =
+                    Some(lua_expr::parse_lua_eval_expr(rule, VnslLuaEvalType::Bool)?);
             }
             _ => unreachable!("Found unexpected rule {:?} for choice", rule.as_rule()),
         }

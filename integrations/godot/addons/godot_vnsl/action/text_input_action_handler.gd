@@ -7,8 +7,8 @@ func _ready(store: ServiceStore):
 	_get_ui(store).text_input_prompt.submit_input.connect(_on_text_submitted.bind(store))
 
 
-func _handle_action_name() -> String:
-	return "textInput"
+func _handle_action_name() -> Array[String]:
+	return ["textInput"]
 
 
 func _handle(action: VnslRuntimeAction, service_store: ServiceStore):

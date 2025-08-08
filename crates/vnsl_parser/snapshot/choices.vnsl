@@ -17,13 +17,19 @@ choice:
                 enough"
 
 choice:
+    "A" if |globals.x == true|:
+        "AA"
+    "B" if |globals.x == false|:
+        "BB"
+
+choices:
     "this is
     Multiple line
     choice":
         "it works"
 
 label testScope:
-    choice:
+    choices:
         "sub A":
             "test text"
         "sub B":

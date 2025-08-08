@@ -1,0 +1,58 @@
+scene MainScene
+
+char Annonymous
+
+"It's been a long time since I been here..."
+"When was it again?"
+"[color=red]Hellooooo[/color]"
+
+choice:
+    "It was yesterday.":
+        pass
+    "It was last week.":
+        pass
+    "It was last month.":
+        pass
+    "It was last year.":
+        pass
+
+[bg path:"res://icon.svg"]
+"Anyway. Now it's time to go."
+
+[textInput label: "What's your name?" key: "MC"]
+
+char MC
+
+"Huh?"
+
+char DAD
+
+"Hey! {{MC}}!"
+
+char MC
+"Hey dad."
+
+char DAD
+"Have you made it?"
+"How is your new place? All good I hope"
+
+char MC
+"I just arrive. Haven't even enter the room yet."
+"But it's looking decent, from the front at least."
+
+char DAD
+"Ah ha ha ha!! Glad to hear that you like it!"
+
+char MC
+"I didn't say that I like it."
+
+char dad
+"Anyway, I will transfer money to you every Monday."
+"But don't expect this treatment to continue forever!!"
+"You will have to start looking for a part-time job."
+"I will give you a month before I stop giving you any more money."
+
+char mc
+"Aughhh. You told me that thousands of times already."
+
+goto BedroomMorning

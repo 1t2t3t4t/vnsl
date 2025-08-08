@@ -1,0 +1,22 @@
+[gd_scene load_steps=3 format=3 uid="uid://0odaurfj4t4b"]
+
+[ext_resource type="Script" uid="uid://byt3wf10n8nj4" path="res://demo/demo_scene.gd" id="1_jujnh"]
+[ext_resource type="PackedScene" uid="uid://qnvctkhjptk" path="res://addons/godot_vnsl/ui/vnsl_player_ui.tscn" id="2_n0oqs"]
+
+[node name="DemoScene" type="Node2D"]
+script = ExtResource("1_jujnh")
+
+[node name="UiLayer" type="CanvasLayer" parent="."]
+
+[node name="MainUi" type="Control" parent="UiLayer"]
+unique_name_in_owner = true
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VnslPlayerUi" parent="UiLayer" instance=ExtResource("2_n0oqs")]
+unique_name_in_owner = true
+scripts_path = "res://demo/scenes/"

@@ -5,7 +5,7 @@ mod test;
 
 mod text;
 
-use vnsl_core::model::{VnslAction, VnslBlock, VnslChoice, VnslChoices, VnslDataType, VnslScene};
+use vnsl_core::model::{VnslAction, VnslBlock, VnslChoice, VnslDataType, VnslScene};
 
 use crate::{
     block_runner::{BlockCommand, BlockRunner},
@@ -27,7 +27,7 @@ pub enum RuntimeCommand {
     SetCharacterId(String),
     ShowText(String),
     ExecuteAction(VnslAction),
-    PromptChoices(VnslChoices),
+    PromptChoices(Vec<VnslChoice>),
     ChangeScene(String),
     EndOfScene,
 }
@@ -110,11 +110,30 @@ impl Runtime {
                 text::process_display_text(vnsl_dialogue.text, &self.context),
             )),
             BlockCommand::SetCharacter(vnsl_set_character) => {
-                self.context.current_character_id = Some(vnsl_set_character.id.clone());
-                Ok(RuntimeCommand::SetCharacterId(vnsl_set_character.id))
+                let Some(name) = self
+                    .context
+                    .lua_runtime
+                    .try_get_globals_val(&vnsl_set_character.id)
+                else {
+                    return Ok(RuntimeCommand::SetCharacterId(vnsl_set_character.id));
+                };
+                Ok(RuntimeCommand::SetCharacterId(name))
             }
             BlockCommand::Action(vnsl_action) => Ok(RuntimeCommand::ExecuteAction(vnsl_action)),
-            BlockCommand::Choices(vnsl_choices) => Ok(RuntimeCommand::PromptChoices(vnsl_choices)),
+            BlockCommand::Choices(vnsl_choices) => {
+                let mut choices = vec![];
+                for choice in vnsl_choices.choices {
+                    if let Some(eval) = &choice.condition {
+                        let result = self.context.lua_runtime.eval_expr::<bool>(&eval.code)?;
+                        if result == true {
+                            choices.push(choice);
+                        }
+                    } else {
+                        choices.push(choice);
+                    }
+                }
+                Ok(RuntimeCommand::PromptChoices(choices))
+            }
             BlockCommand::ChangeScene(vnsl_go_to) => {
                 self.clear_block_stack();
                 Ok(RuntimeCommand::ChangeScene(vnsl_go_to.scene_id))
@@ -134,10 +153,6 @@ impl Runtime {
 
     pub fn select_choice(&mut self, choice: &VnslChoice) {
         self.fork_block(choice.block.clone());
-    }
-
-    pub fn current_character_id(&self) -> Option<&String> {
-        self.context.current_character_id.as_ref()
     }
 
     pub fn set_global_val(&mut self, name: &str, val: VnslDataType) -> RuntimeResult<()> {
@@ -178,8 +193,7 @@ impl Runtime {
 
 impl From<Snapshot> for Runtime {
     fn from(value: Snapshot) -> Self {
-        let mut ctx = RunContext::default();
-        ctx.current_character_id = value.current_character_id;
+        let ctx = RunContext::default();
         ctx.lua_runtime
             .import_globals(value.lua_globals)
             .expect("import globals");

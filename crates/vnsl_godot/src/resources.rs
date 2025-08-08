@@ -17,6 +17,8 @@ pub struct VnslRuntimeChoice {
     pub text: GString,
     #[export]
     block_str: GString,
+    #[export]
+    condition: GString,
 }
 
 impl VnslRuntimeChoice {

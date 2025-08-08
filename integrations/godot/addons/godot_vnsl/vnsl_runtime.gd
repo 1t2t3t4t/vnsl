@@ -2,7 +2,6 @@ extends BaseVnslRuntime
 
 class_name VnslRuntime
 
-@export var vnsl_scripts_path: String = "res://scripts/"
 @export var persistent_store := PersistentStore.new()
 
 
@@ -20,8 +19,9 @@ func _register_services():
 func _ready() -> void:
 	_register_services()
 
-	var scripts := _scan_scripts(vnsl_scripts_path)
 
+func load_scripts(vnsl_scripts_path: String):
+	var scripts := _scan_scripts(vnsl_scripts_path)
 	construct_scene_map(scripts)
 
 
@@ -33,6 +33,7 @@ func _scan_scripts(current_path: String) -> Array[String]:
 		result.append_array(_scan_scripts(current_path.path_join(sub_dir)))
 
 	for file in dir.get_files():
-		result.append(current_path.path_join(file))
+		if file.get_extension() == "vnsl":
+			result.append(current_path.path_join(file))
 
 	return result

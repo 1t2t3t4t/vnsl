@@ -60,6 +60,7 @@ VnslScene {
                                             ),
                                         ],
                                     },
+                                    condition: None,
                                 },
                                 VnslChoice {
                                     id: "TestUuid",
@@ -75,6 +76,7 @@ VnslScene {
                                             ),
                                         ],
                                     },
+                                    condition: None,
                                 },
                             ],
                         },

@@ -24,7 +24,14 @@ pub enum ParseError {
 
 pub fn parse_scene_name(script: &str) -> anyhow::Result<String> {
     let mut scene = VnslParser::parse(Rule::scene, script)?;
-    anyhow::Ok(scene.next().ok_or(ParseError::NoSceneName)?.into_inner().as_str().to_string())
+    anyhow::Ok(
+        scene
+            .next()
+            .ok_or(ParseError::NoSceneName)?
+            .into_inner()
+            .as_str()
+            .to_string(),
+    )
 }
 
 pub fn parse_scene(script: &str) -> anyhow::Result<VnslScene> {

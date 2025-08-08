@@ -20,6 +20,7 @@ pub fn parse_command(rule: Pair<Rule>) -> anyhow::Result<VnslCommand> {
         Rule::global => VnslCommand::Global(global::parse_global(inner)?),
         Rule::goto => VnslCommand::GoTo(goto::parse_goto(inner)?),
         Rule::r#return => VnslCommand::Return,
+        Rule::pass => VnslCommand::Pass,
         _ => unreachable!(),
     };
     Ok(cmd)

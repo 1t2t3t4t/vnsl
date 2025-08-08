@@ -29,21 +29,25 @@ impl SceneSnapshotRunner {
             let cmd = runtime.step().unwrap();
             match cmd {
                 RuntimeCommand::ExecuteAction(action)
-                if action.name == "forceChoice".to_string() =>
-                    {
-                        let choices = action
-                            .args
-                            .into_iter()
-                            .map(|a| a.data_type.get_number() as usize);
-                        self.force_choice_pick = choices.collect();
-                    }
+                    if action.name == "forceChoice".to_string() =>
+                {
+                    let choices = action
+                        .args
+                        .into_iter()
+                        .map(|a| a.data_type.get_number() as usize);
+                    self.force_choice_pick = choices.collect();
+                }
                 RuntimeCommand::PromptChoices(vnsl_choices) => {
+                    result.push_str("Prompt choice\n");
+                    for choice in &vnsl_choices {
+                        result.push_str(&format!("\tChoice {}\n", choice.text));
+                    }
                     assert!(
                         self.force_choice_pick.len() > 0,
                         "No choice selection provided"
                     );
                     let selection = self.force_choice_pick.remove(0);
-                    let choice = vnsl_choices.choices.get(selection).unwrap();
+                    let choice = vnsl_choices.get(selection).unwrap();
                     result.push_str(&format!("Select choice {}\n", choice.text));
                     runtime.select_choice(choice);
                 }
@@ -53,6 +57,9 @@ impl SceneSnapshotRunner {
 
         result = result.replace("\r\n", "\n");
         let base_snapshot = Path::new(SNAPSHOT_BASE_DIR);
+        if !base_snapshot.join("records").exists() {
+            fs::create_dir_all(&base_snapshot.join("records")).expect("should create snapshot dir");
+        }
 
         let snapshot_path = base_snapshot.join("records").join(name.clone());
         let existing_result = fs::read_to_string(&snapshot_path);

@@ -1,0 +1,15 @@
+scene TestPass
+
+[forceChoice 1]
+
+pass
+
+"A"
+
+choice:
+    "A":
+        pass
+    "B":
+        pass
+
+"B"

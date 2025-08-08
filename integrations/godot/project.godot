@@ -11,9 +11,13 @@ config_version=5
 [application]
 
 config/name="godot_vnsl"
-run/main_scene="res://test_scene.tscn"
-config/features=PackedStringArray("4.3", "Forward Plus")
+run/main_scene="res://demo/demo_scene.tscn"
+config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="res://icon.svg"
+
+[display]
+
+window/stretch/scale=2.1
 
 [dotnet]
 

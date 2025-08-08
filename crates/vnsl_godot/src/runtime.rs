@@ -12,16 +12,17 @@ use crate::{
 use base64::engine::GeneralPurpose;
 use base64::prelude::BASE64_STANDARD;
 use base64::Engine;
+use godot::obj::WithUserSignals;
 use godot::{
     builtin::{Array, GString, StringName, VariantType},
     classes::{file_access::ModeFlags, FileAccess, INode, Node},
     global::{godot_warn, print},
     meta::ToGodot,
-    obj::{Base, Gd, NewGd, WithBaseField},
+    obj::{Base, Gd, NewGd},
     prelude::{godot_api, GodotClass},
 };
 use thiserror::Error;
-use vnsl_core::model::{VnslAction, VnslActionArg, VnslChoice};
+use vnsl_core::model::{VnslAction, VnslActionArg, VnslChoice, VnslLuaEvalExpr, VnslLuaEvalType};
 use vnsl_runtime::snapshot::Snapshot;
 use vnsl_runtime::{Runtime, RuntimeCommand};
 
@@ -64,33 +65,20 @@ impl INode for BaseVnslRuntime {
 #[godot_api]
 impl BaseVnslRuntime {
     #[signal]
-    fn set_character_id(id: String);
+    fn set_character_id(id: GString);
 
     #[signal]
-    fn show_text(text: String);
+    fn show_text(text: GString);
 
     #[signal]
-    fn change_scene(scene_name: String);
+    fn change_scene(scene_name: GString);
 
     #[signal]
     fn prompt_choices(choices: Array<Gd<VnslRuntimeChoice>>);
 
     #[func]
-    fn get_current_character_id(&self) -> GString {
-        self.runtime
-            .current_character_id()
-            .cloned()
-            .unwrap_or_default()
-            .to_godot()
-    }
-
-    #[func]
     fn register_action_handler(&mut self, handler: Gd<VnslActionHandler>) {
-        let result = self.action_handler.register_action_handler(handler);
-        if let Some(existing_handler) = result {
-            let name = existing_handler.bind().handle_action_name();
-            godot_warn!("The action with name {} is already register", name);
-        }
+        self.action_handler.register_action_handler(handler);
     }
 
     #[func]
@@ -147,6 +135,14 @@ impl BaseVnslRuntime {
             id: choice.bind().id.to_string(),
             text: choice.bind().text.to_string(),
             block: choice.bind().get_block().clone(),
+            condition: if choice.bind().get_condition().is_empty() {
+                None
+            } else {
+                Some(VnslLuaEvalExpr {
+                    code: choice.bind().get_condition().to_string(),
+                    return_type: VnslLuaEvalType::Bool,
+                })
+            },
         });
     }
 
@@ -174,13 +170,16 @@ impl BaseVnslRuntime {
             let snapshot_bytes = BASE64.decode(snapshot_str)?;
             let snapshot = Snapshot::decode(&snapshot_bytes)?;
             self.runtime = snapshot.into();
-            if let Some(char_id) = self.runtime.current_character_id().cloned() {
-                self.base_mut()
-                    .emit_signal("set_character_id", &[char_id.to_variant()]);
-            }
-            self.action_handler.restore(self.service_store.clone());
             Ok(())
         })
+    }
+
+    #[func]
+    fn scene_name(&self) -> String {
+        self.runtime
+            .get_current_scene()
+            .map(|s| s.name.to_owned())
+            .unwrap_or_default()
     }
 }
 
@@ -219,13 +218,11 @@ impl BaseVnslRuntime {
     fn process_command(&mut self, command: RuntimeCommand) -> anyhow::Result<bool> {
         match command {
             RuntimeCommand::SetCharacterId(char_id) => {
-                self.base_mut()
-                    .emit_signal("set_character_id", &[char_id.to_variant()]);
+                self.signals().set_character_id().emit(&char_id.to_godot());
                 return self._step();
             }
             RuntimeCommand::ShowText(text) => {
-                self.base_mut()
-                    .emit_signal("show_text", &[text.to_variant()]);
+                self.signals().show_text().emit(&text.to_godot());
             }
             RuntimeCommand::ExecuteAction(action) => {
                 let should_step_next = self.handle_action(action);
@@ -234,17 +231,11 @@ impl BaseVnslRuntime {
                 }
             }
             RuntimeCommand::PromptChoices(vnsl_choices) => {
-                let choices = vnsl_choices
-                    .choices
-                    .into_iter()
-                    .map(map_choice)
-                    .collect::<Vec<_>>();
-                self.base_mut()
-                    .emit_signal("prompt_choices", &[choices.to_variant()]);
+                let choices = vnsl_choices.into_iter().map(map_choice).collect::<Vec<_>>();
+                self.signals().prompt_choices().emit(&choices.to_godot());
             }
             RuntimeCommand::ChangeScene(name) => {
-                self.base_mut()
-                    .emit_signal("change_scene", &[name.to_variant()]);
+                self.signals().change_scene().emit(&name.to_godot());
             }
             RuntimeCommand::EndOfScene => return Ok(false),
         }

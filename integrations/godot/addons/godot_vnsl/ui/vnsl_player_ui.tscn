@@ -1,9 +1,11 @@
-[gd_scene load_steps=5 format=3 uid="uid://qnvctkhjptk"]
+[gd_scene load_steps=7 format=3 uid="uid://qnvctkhjptk"]
 
 [ext_resource type="Theme" uid="uid://t1b470k6xcr5" path="res://addons/godot_vnsl/ui/default_vnsl_theme.tres" id="1_5b6pp"]
-[ext_resource type="Script" path="res://addons/godot_vnsl/ui/vnsl_player_ui.gd" id="1_gbkn6"]
+[ext_resource type="Script" uid="uid://bgghri5qua0kc" path="res://addons/godot_vnsl/ui/vnsl_player_ui.gd" id="1_gbkn6"]
 [ext_resource type="PackedScene" uid="uid://b47vxt7ostmqx" path="res://addons/godot_vnsl/ui/choices_container.tscn" id="2_mg0gx"]
 [ext_resource type="PackedScene" uid="uid://d140mnmejyvbm" path="res://addons/godot_vnsl/ui/text_input_prompt.tscn" id="3_c7k16"]
+[ext_resource type="Script" uid="uid://cm7m8stegrwcb" path="res://addons/godot_vnsl/vnsl_player.gd" id="5_n3b4w"]
+[ext_resource type="Script" uid="uid://buykpvs0emsuk" path="res://addons/godot_vnsl/vnsl_runtime.gd" id="6_358fg"]
 
 [node name="UI" type="Control"]
 layout_mode = 3
@@ -17,6 +19,16 @@ size_flags_vertical = 3
 theme = ExtResource("1_5b6pp")
 script = ExtResource("1_gbkn6")
 metadata/_edit_use_anchors_ = true
+
+[node name="Companion" type="Node" parent="."]
+
+[node name="VnslPlayer" type="Node" parent="Companion"]
+unique_name_in_owner = true
+script = ExtResource("5_n3b4w")
+
+[node name="VnslRuntime" type="BaseVnslRuntime" parent="Companion/VnslPlayer"]
+unique_name_in_owner = true
+script = ExtResource("6_358fg")
 
 [node name="BackgroundTexture" type="TextureRect" parent="."]
 unique_name_in_owner = true
@@ -64,9 +76,7 @@ unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"DisplayRichTextLabel"
 bbcode_enabled = true
-text = "Hello World
-
-"
+text = "[color=red]Hello World[/color]"
 
 [node name="ChoicesContainer" parent="." instance=ExtResource("2_mg0gx")]
 unique_name_in_owner = true
@@ -93,3 +103,8 @@ offset_left = -40.0
 offset_top = -46.5
 offset_right = 40.0
 offset_bottom = 46.5
+
+[connection signal="change_scene" from="Companion/VnslPlayer/VnslRuntime" to="Companion/VnslPlayer" method="_on_vnsl_runtime_change_scene"]
+[connection signal="prompt_choices" from="Companion/VnslPlayer/VnslRuntime" to="Companion/VnslPlayer" method="_on_vnsl_runtime_prompt_choices"]
+[connection signal="set_character_id" from="Companion/VnslPlayer/VnslRuntime" to="Companion/VnslPlayer" method="_on_vnsl_runtime_set_character_id"]
+[connection signal="show_text" from="Companion/VnslPlayer/VnslRuntime" to="Companion/VnslPlayer" method="_on_vnsl_runtime_show_text"]

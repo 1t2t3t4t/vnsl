@@ -1,10 +1,18 @@
 ShowText(
     "A",
 )
+Prompt choice
+	Choice CA
+	Choice CB
+	Choice CC
 Select choice CA
 ShowText(
     "B",
 )
+Prompt choice
+	Choice CCA
+	Choice CCB
+	Choice CCC
 Select choice CCC
 ShowText(
     "C",

@@ -26,6 +26,7 @@ pub struct VnslChoice {
     pub id: String,
     pub text: String,
     pub block: VnslBlock,
+    pub condition: Option<VnslLuaEvalExpr>,
 }
 
 impl Default for VnslChoice {
@@ -34,6 +35,7 @@ impl Default for VnslChoice {
             id: "".to_string(),
             text: String::default(),
             block: VnslBlock::default(),
+            condition: None,
         }
     }
 }

@@ -111,6 +111,7 @@ fn exec_command(cmd: &VnslCommand) -> BlockCommand {
         VnslCommand::Jump(vnsl_jump) => BlockCommand::Jump(vnsl_jump.clone()),
         VnslCommand::Global(vnsl_global) => BlockCommand::Global(vnsl_global.clone()),
         VnslCommand::GoTo(vnsl_go_to) => BlockCommand::ChangeScene(vnsl_go_to.clone()),
+        VnslCommand::Pass => BlockCommand::NoOps,
         VnslCommand::Return => BlockCommand::Return,
     }
 }
