@@ -1,0 +1,40 @@
+VnslScene {
+    name: "TestDialogueSetChar",
+    main_block: VnslBlock {
+        statements: [
+            Command(
+                Dialogue(
+                    VnslDialogue {
+                        text: "test",
+                        set_char: Some(
+                            VnslSetCharacter {
+                                id: "MC",
+                            },
+                        ),
+                    },
+                ),
+            ),
+            Command(
+                Dialogue(
+                    VnslDialogue {
+                        text: "test2",
+                        set_char: None,
+                    },
+                ),
+            ),
+            Command(
+                Dialogue(
+                    VnslDialogue {
+                        text: "multi\nline\ntext",
+                        set_char: Some(
+                            VnslSetCharacter {
+                                id: "SOMECHAR",
+                            },
+                        ),
+                    },
+                ),
+            ),
+        ],
+    },
+    labels: {},
+}

@@ -22,13 +22,14 @@ bool      =  { "true" | "false" }
 data_type =  { string | number | bool }
 
 // Expressions
-lua_lang      = @{ (ASCII_ALPHANUMERIC | "\"" | "_" | " " | "+" | "-" | "*" | "/" | ">" | "<" | "=" | "(" | ")" | "." | ",")+ }
-lua_eval_expr = _{ "|" ~ spacer ~ lua_lang ~ spacer ~ "|" }
-lua_script    = @{ lua_lang ~ (NEWLINE ~ PEEK_ALL ~ lua_lang)* }
-lua_expr      =  { "||" ~ spacer ~ lua_script ~ spacer ~ "||" }
+lua_lang        = @{ (ASCII_ALPHANUMERIC | "\"" | "_" | " " | "+" | "-" | "*" | "/" | ">" | "<" | "=" | "(" | ")" | "." | ",")+ }
+lua_eval_expr   = _{ "|" ~ spacer ~ lua_lang ~ spacer ~ "|" }
+lua_script      = @{ lua_lang ~ (NEWLINE ~ PEEK_ALL ~ lua_lang)* }
+lua_expr        =  { "||" ~ spacer ~ lua_script ~ spacer ~ "||" }
+char_identifier = @{ !("choice" | "label") ~ identifier }
 
 // Commands
-dialogue      = { string }
+dialogue      = { (char_identifier ~ spacer ~ ":" ~ spacer)? ~ string }
 action        = { "[" ~ identifier ~ args ~ "]" }
 args          = { (spacer ~ action_arg)* }
 action_arg    = { (identifier ~ ":" ~ spacer)? ~ data_type }

@@ -6,6 +6,7 @@ VnslScene {
                 Dialogue(
                     VnslDialogue {
                         text: "Test",
+                        set_char: None,
                     },
                 ),
             ),
@@ -13,6 +14,7 @@ VnslScene {
                 Dialogue(
                     VnslDialogue {
                         text: "Yo",
+                        set_char: None,
                     },
                 ),
             ),
@@ -27,6 +29,7 @@ VnslScene {
                         Dialogue(
                             VnslDialogue {
                                 text: "Hello",
+                                set_char: None,
                             },
                         ),
                     ),

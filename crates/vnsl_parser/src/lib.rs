@@ -14,12 +14,14 @@ use vnsl_core::model::VnslScene;
 #[grammar = "grammar.pest"]
 struct VnslParser;
 
-#[derive(Debug, Clone, Copy, Error)]
+#[derive(Debug, Clone, Error)]
 pub enum ParseError {
     #[error("Parsing got empty rule")]
     EmptyRule,
     #[error("Parsing got invalid scene")]
     NoSceneName,
+    #[error("Unsupported rule {0:?} in line: {1}")]
+    UnsupportedRule(Rule, String),
 }
 
 pub fn parse_scene_name(script: &str) -> anyhow::Result<String> {

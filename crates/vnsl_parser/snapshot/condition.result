@@ -15,6 +15,7 @@ VnslScene {
                                     Dialogue(
                                         VnslDialogue {
                                             text: "A",
+                                            set_char: None,
                                         },
                                     ),
                                 ),
@@ -22,6 +23,7 @@ VnslScene {
                                     Dialogue(
                                         VnslDialogue {
                                             text: "AA",
+                                            set_char: None,
                                         },
                                     ),
                                 ),
@@ -29,6 +31,7 @@ VnslScene {
                                     Dialogue(
                                         VnslDialogue {
                                             text: "A\nAAA\nAAAAAA",
+                                            set_char: None,
                                         },
                                     ),
                                 ),
@@ -52,6 +55,7 @@ VnslScene {
                                     Dialogue(
                                         VnslDialogue {
                                             text: "A",
+                                            set_char: None,
                                         },
                                     ),
                                 ),
@@ -70,6 +74,7 @@ VnslScene {
                                         Dialogue(
                                             VnslDialogue {
                                                 text: "B",
+                                                set_char: None,
                                             },
                                         ),
                                     ),
@@ -93,6 +98,7 @@ VnslScene {
                                     Dialogue(
                                         VnslDialogue {
                                             text: "A",
+                                            set_char: None,
                                         },
                                     ),
                                 ),
@@ -111,6 +117,7 @@ VnslScene {
                                         Dialogue(
                                             VnslDialogue {
                                                 text: "B",
+                                                set_char: None,
                                             },
                                         ),
                                     ),
@@ -125,6 +132,7 @@ VnslScene {
                                     Dialogue(
                                         VnslDialogue {
                                             text: "C",
+                                            set_char: None,
                                         },
                                     ),
                                 ),
@@ -146,6 +154,7 @@ VnslScene {
                                     Dialogue(
                                         VnslDialogue {
                                             text: "A",
+                                            set_char: None,
                                         },
                                     ),
                                 ),
@@ -160,6 +169,7 @@ VnslScene {
                                     Dialogue(
                                         VnslDialogue {
                                             text: "B",
+                                            set_char: None,
                                         },
                                     ),
                                 ),
@@ -206,6 +216,7 @@ VnslScene {
                                                                                     Dialogue(
                                                                                         VnslDialogue {
                                                                                             text: "Lol",
+                                                                                            set_char: None,
                                                                                         },
                                                                                     ),
                                                                                 ),
@@ -227,6 +238,7 @@ VnslScene {
                                                                 Dialogue(
                                                                     VnslDialogue {
                                                                         text: "else of 2",
+                                                                        set_char: None,
                                                                     },
                                                                 ),
                                                             ),
@@ -262,6 +274,7 @@ VnslScene {
                                             Dialogue(
                                                 VnslDialogue {
                                                     text: "A",
+                                                    set_char: None,
                                                 },
                                             ),
                                         ),
@@ -280,6 +293,7 @@ VnslScene {
                                                 Dialogue(
                                                     VnslDialogue {
                                                         text: "B",
+                                                        set_char: None,
                                                     },
                                                 ),
                                             ),
@@ -297,6 +311,7 @@ VnslScene {
                                                 Dialogue(
                                                     VnslDialogue {
                                                         text: "C",
+                                                        set_char: None,
                                                     },
                                                 ),
                                             ),
@@ -311,6 +326,7 @@ VnslScene {
                                             Dialogue(
                                                 VnslDialogue {
                                                     text: "D",
+                                                    set_char: None,
                                                 },
                                             ),
                                         ),

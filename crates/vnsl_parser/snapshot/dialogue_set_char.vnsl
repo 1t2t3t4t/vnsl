@@ -1,0 +1,10 @@
+scene TestDialogueSetChar
+
+MC: "test"
+"test2"
+
+SOMECHAR: "
+multi
+line
+text
+"

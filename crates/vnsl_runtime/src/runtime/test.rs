@@ -16,6 +16,7 @@ fn create_test_scene(name: &str) -> VnslScene {
             statements: vec![VnslStatement::Command(VnslCommand::Dialogue(
                 VnslDialogue {
                     text: "Hello World".to_string(),
+                    set_char: None,
                 },
             ))],
         },
@@ -40,6 +41,7 @@ fn create_test_scene_with_labels(name: &str) -> VnslScene {
                 statements: vec![VnslStatement::Command(VnslCommand::Dialogue(
                     VnslDialogue {
                         text: "Label reached".to_string(),
+                        set_char: None,
                     },
                 ))],
             },
@@ -279,9 +281,11 @@ fn test_multiple_steps_until_scene_end() {
             statements: vec![
                 VnslStatement::Command(VnslCommand::Dialogue(VnslDialogue {
                     text: "First line".to_string(),
+                    set_char: None,
                 })),
                 VnslStatement::Command(VnslCommand::Dialogue(VnslDialogue {
                     text: "Second line".to_string(),
+                    set_char: None,
                 })),
             ],
         },

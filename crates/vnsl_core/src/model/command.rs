@@ -17,6 +17,7 @@ pub enum VnslCommand {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct VnslDialogue {
     pub text: String,
+    pub set_char: Option<VnslSetCharacter>,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]

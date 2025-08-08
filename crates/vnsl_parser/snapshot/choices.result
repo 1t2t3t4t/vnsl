@@ -14,6 +14,7 @@ VnslScene {
                                         Dialogue(
                                             VnslDialogue {
                                                 text: "aaaa",
+                                                set_char: None,
                                             },
                                         ),
                                     ),
@@ -45,6 +46,7 @@ VnslScene {
                                         Dialogue(
                                             VnslDialogue {
                                                 text: "bbbb\nbbbbb\nbbbbb",
+                                                set_char: None,
                                             },
                                         ),
                                     ),
@@ -69,6 +71,7 @@ VnslScene {
                                                                 Dialogue(
                                                                     VnslDialogue {
                                                                         text: "single\nchoice\nis\nenough",
+                                                                        set_char: None,
                                                                     },
                                                                 ),
                                                             ),
@@ -98,6 +101,7 @@ VnslScene {
                                         Dialogue(
                                             VnslDialogue {
                                                 text: "AA",
+                                                set_char: None,
                                             },
                                         ),
                                     ),
@@ -119,6 +123,7 @@ VnslScene {
                                         Dialogue(
                                             VnslDialogue {
                                                 text: "BB",
+                                                set_char: None,
                                             },
                                         ),
                                     ),
@@ -146,6 +151,7 @@ VnslScene {
                                         Dialogue(
                                             VnslDialogue {
                                                 text: "it works",
+                                                set_char: None,
                                             },
                                         ),
                                     ),
@@ -175,6 +181,7 @@ VnslScene {
                                                 Dialogue(
                                                     VnslDialogue {
                                                         text: "test text",
+                                                        set_char: None,
                                                     },
                                                 ),
                                             ),

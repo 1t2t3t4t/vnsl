@@ -12,6 +12,7 @@ fn create_block(label: &str) -> VnslBlock {
         statements: vec![VnslStatement::Command(
             vnsl_core::model::VnslCommand::Dialogue(VnslDialogue {
                 text: label.to_string(),
+                set_char: None,
             }),
         )],
     }
@@ -34,7 +35,8 @@ fn test_block_end() {
     assert_eq!(
         runner.step(&mut context),
         Ok(BlockCommand::DisplayText(VnslDialogue {
-            text: "Test".to_string()
+            text: "Test".to_string(),
+            set_char: None
         }))
     );
     assert_eq!(runner.block_ended(), true);

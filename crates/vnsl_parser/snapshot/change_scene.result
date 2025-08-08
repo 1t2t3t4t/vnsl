@@ -6,6 +6,7 @@ VnslScene {
                 Dialogue(
                     VnslDialogue {
                         text: "A",
+                        set_char: None,
                     },
                 ),
             ),

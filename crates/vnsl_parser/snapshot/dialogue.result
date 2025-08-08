@@ -6,6 +6,7 @@ VnslScene {
                 Dialogue(
                     VnslDialogue {
                         text: "test",
+                        set_char: None,
                     },
                 ),
             ),
@@ -13,6 +14,7 @@ VnslScene {
                 Dialogue(
                     VnslDialogue {
                         text: "this is it",
+                        set_char: None,
                     },
                 ),
             ),
@@ -20,6 +22,7 @@ VnslScene {
                 Dialogue(
                     VnslDialogue {
                         text: "Multiline\n    test\n        tset",
+                        set_char: None,
                     },
                 ),
             ),
@@ -27,6 +30,7 @@ VnslScene {
                 Dialogue(
                     VnslDialogue {
                         text: "split\nnew\nline\n\n\nstr",
+                        set_char: None,
                     },
                 ),
             ),
@@ -41,6 +45,7 @@ VnslScene {
                         Dialogue(
                             VnslDialogue {
                                 text: "single line text",
+                                set_char: None,
                             },
                         ),
                     ),
@@ -48,6 +53,7 @@ VnslScene {
                         Dialogue(
                             VnslDialogue {
                                 text: "Yoooo\nthis is it\nThis is what I'have been waiting for for a long time",
+                                set_char: None,
                             },
                         ),
                     ),
