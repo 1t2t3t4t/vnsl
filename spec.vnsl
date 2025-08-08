@@ -1,95 +1,327 @@
-# Visual Novel Scripting Language (VNSL) Draft
+# Visual Novel Scripting Language (VNSL) Specification v1.0
 
-## Basic Structure:
+## 1. Overview
+
+# VNSL (Visual Novel Scripting Language) is a domain-specific language designed for creating interactive visual novels and story-driven games. It provides a simple, readable syntax for defining scenes, dialogue, character interactions, choices, and game flow control.
+
+## 2. Basic Syntax
+
+### 2.1 Comments
+Comments start with `#` and continue to the end of the line:
+```
+# This is a comment
+global MC "Alice"  # This is also a comment
+```
+
+### 2.2 String Literals
+Strings are enclosed in double quotes and support variable interpolation:
+```
+"Simple string"
+"String with {{variable}} interpolation"
+```
+
+### 2.3 Variable Interpolation
+Variables can be interpolated in strings using double curly braces:
+```
+global playerName "Alice"
+"Hello, {{playerName}}!"
+```
+
+## 3. Scene Structure
+
+### 3.1 Scene Declaration
+Every VNSL file begins with a scene declaration:
+```
 scene SceneName
+```
 
-[ACTION "Action descriptions in square brackets"]
+### 3.2 Scene Flow
+Scenes can transition to other scenes using:
+- `goto SceneName` - Jump to another scene
+- `[transitionScene "SceneName"]` - Transition with animation/effects
 
-## Special Commands:
-# choice: Start a choice block
-# if/elif/else: Check conditions and control flow
-# global: Set a variable
-# jump: Jump to another label
-# label label_name: Define a label (anchor point within a scene)
+## 4. Variables and Data
 
-## Example Script:
+### 4.1 Global Variables
+Variables are declared and assigned using the `global` keyword:
+```
+global variableName value
+global playerScore 100
+global playerName "Alice"
+global hasKey true
+```
 
-global MC "Boss"
+### 4.2 Variable Types
+VNSL supports the following data types:
+- **String**: Text enclosed in double quotes
+- **Number**: Integer or floating-point numbers
+- **Boolean**: `true` or `false`
 
+### 4.3 Lua Expressions
+Lua code can be embedded for complex operations using `|| ||`:
+```
+|| global.score += 10 ||
+|| global.health = math.max(0, global.health - 5) ||
+```
+
+## 5. Characters and Dialogue
+
+### 5.1 Character Declaration
+Characters must be declared before use:
+```
+character CharacterName
+character DETECTIVE
 character Boss
+```
 
-"Dialogue goes here. {{MC}}"
-
-"This is not good...
-We should do better than this."
-
-global clues 4
-
-[transitionScene "EnterScript"]
-
+### 5.2 Dialogue
+Dialogue is written as strings, optionally preceded by a character name:
+```
+"This is narrator dialogue."
 character DETECTIVE
-"Let's see what we have here..."
+"This is character dialogue."
+```
 
-jump question_witness
-
-global victim_behavior "nervous"
-
-jump case_summary
-
+### 5.3 Multi-line Dialogue
+Dialogue can span multiple lines:
+```
 character DETECTIVE
-"I think I'm starting to piece this together."
+"This is a long piece of dialogue
+that spans multiple lines
+for better readability."
+```
 
-goto NextScene
+## 6. Actions and Commands
 
-label evidence_search:
-    choice:
-        "Check the window":
-            character DETECTIVE
-            "Hmm, the window's locked from the inside."
-            jump question_witness
-            global clues 1
-        "Examine the floor":
-            character DETECTIVE
-            "Interesting footprints here."
-        "Look at the desk":
-            character DETECTIVE
-            "A half-written letter... could be important."
+### 6.1 Action Syntax
+Actions are enclosed in square brackets and describe non-dialogue events:
+```
+[ACTION "Action descriptions"]
+[bg "backgroundImageId"]
+[someAction namedParam: 20]
+[ACTION summary: "Detective summarizes the findings"]
+```
 
-    if |clues < 3|:
+### 6.2 Common Actions
+- `[bg "imageId"]` - Set background image
+- `[ACTION "description"]` - General action description
+- `[transitionScene "sceneName"]` - Scene transition with effects
+
+## 7. Control Flow
+
+### 7.1 Labels
+Labels define anchor points within scenes for jumping:
+```
+label labelName:
+    # Content here
+```
+
+### 7.2 Jumps
+Jump to labels within the current scene:
+```
+jump labelName
+```
+
+### 7.3 Conditional Statements
+Conditional logic using `if`, `elif`, and `else`:
+```
+if |condition|:
+    # Content when condition is true
+elif |another_condition|:
+    # Content when another_condition is true
+else:
+    # Default content
+```
+
+### 7.4 Condition Syntax
+Conditions are enclosed in pipe characters `| |`:
+```
+if |clues < 3|:
+if |car_clue|:
+if |victim_behavior == "nervous"|:
+if |clues >= 3 and (car_clue or victim_behavior == "nervous")|:
+```
+
+## 8. Choice System
+
+### 8.1 Choice Blocks
+Interactive choices are defined using `choice:` blocks:
+```
+choice:
+    "Option 1 text":
+        # Content for option 1
+    "Option 2 text":
+        # Content for option 2
+    "Option 3 text":
+        # Content for option 3
+```
+
+### 8.2 Choice Actions
+Each choice can contain dialogue, actions, variable assignments, and flow control:
+```
+choice:
+    "Check the window":
         character DETECTIVE
-        "I should take another look around."
-        jump evidence_search
+        "Hmm, the window's locked from the inside."
+        global clues 1
+        jump question_witness
+    "Examine the floor":
+        character DETECTIVE
+        "Interesting footprints here."
+```
+
+## 9. Operators and Expressions
+
+### 9.1 Comparison Operators
+- `==` - Equal to
+- `!=` - Not equal to
+- `<` - Less than
+- `>` - Greater than
+- `<=` - Less than or equal to
+- `>=` - Greater than or equal to
+
+### 9.2 Logical Operators
+- `and` - Logical AND
+- `or` - Logical OR
+- `not` - Logical NOT
+
+### 9.3 Arithmetic Operators (in Lua expressions)
+- `+` - Addition
+- `-` - Subtraction
+- `*` - Multiplication
+- `/` - Division
+- `%` - Modulo
+
+## 10. Best Practices
+
+### 10.1 Naming Conventions
+- Scene names: PascalCase (`MainMenu`, `Chapter1`)
+- Variable names: camelCase (`playerScore`, `hasCompletedQuest`)
+- Character names: UPPERCASE (`DETECTIVE`, `WITNESS`)
+- Label names: snake_case (`evidence_search`, `question_witness`)
+
+### 10.2 Code Organization
+- Declare all characters at the beginning of scenes
+- Use meaningful label names
+- Group related choices and conditional logic
+- Add comments for complex logic
+
+### 10.3 Variable Management
+- Initialize variables before use
+- Use descriptive variable names
+- Keep track of variable state across scenes
+
+## 11. Example Complete Scene
+
+```
+scene Investigation
+
+# Character declarations
+character DETECTIVE
+character WITNESS
+character SUSPECT
+
+# Initialize variables
+global clues 0
+global evidence_found false
+global suspect_nervous false
+
+# Opening dialogue
+character DETECTIVE
+"Let's examine the crime scene carefully."
+
+[bg "crime_scene_interior"]
+
+# Main investigation loop
+label start_investigation:
+    choice:
+        "Question the witness":
+            jump question_witness
+        "Search for evidence":
+            jump search_evidence
+        "Confront the suspect":
+            if |clues >= 2|:
+                jump confront_suspect
+            else:
+                character DETECTIVE
+                "I need more evidence first."
+                jump start_investigation
 
 label question_witness:
     character WITNESS
-    "I saw something strange last night."
+    "I saw something strange that night..."
 
     choice:
-        "Ask about the strange occurrence":
-            char WITNESS
-            "There was a car parked outside for hours."
-            global victim_behavior 1
-        "Inquire about the victim":
+        "Ask about what they saw":
             character WITNESS
-            "They seemed nervous lately."
-            global victim_behavior 2
+            "There was a suspicious figure near the building."
+            || global.clues += 1 ||
+        "Ask about the time":
+            character WITNESS
+            "It was around midnight, I think."
 
-    if |car_clue|:
+    jump start_investigation
+
+label search_evidence:
+    character DETECTIVE
+    "Let me look around..."
+
+    [ACTION "Detective searches the room"]
+
+    global evidence_found true
+    || global.clues += 1 ||
+
+    character DETECTIVE
+    "This could be important evidence."
+
+    jump start_investigation
+
+label confront_suspect:
+    character DETECTIVE
+    "I have some questions for you."
+
+    character SUSPECT
+    "I... I don't know anything!"
+
+    global suspect_nervous true
+
+    if |evidence_found and clues >= 3|:
         character DETECTIVE
-        "That car might be crucial to the case."
-    elif |victim_behavior == 2|:
-        character DETECTIVE
-        "The victim's behavior could be a key factor."
+        "The evidence suggests otherwise."
+        goto SceneConclusion
     else:
         character DETECTIVE
-        "I need more information."
-        jump evidence_search
+        "We'll continue this later."
+        goto SceneEnd
+```
 
-label case_summary:
-    if |clues >= 3 and (car_clue or victim_behavior == "nervous")|:
-        character JOE
-        "Here's what we know so far..."
-        [ACTION summary: "Detective summarizes the findings"]
-    else:
-        character DETECTIVE
-        "Something's still missing. I should review the evidence."
+## 12. Error Handling
+
+### 12.1 Common Errors
+- Undefined characters
+- Undefined variables in conditions
+- Malformed choice blocks
+- Invalid jump targets
+- Syntax errors in Lua expressions
+
+### 12.2 Validation Rules
+- All referenced characters must be declared
+- All jump targets must exist as labels
+- Variable references in conditions should be defined
+- Choice blocks must have at least one option
+- Scene names must be valid identifiers
+
+## 13. File Structure
+
+### 13.1 File Extension
+VNSL files use the `.vnsl` extension.
+
+### 13.2 Encoding
+Files should be saved in UTF-8 encoding to support international characters.
+
+### 13.3 Line Endings
+Both Unix (LF) and Windows (CRLF) line endings are supported.
+
+---
+
+This specification defines the core features and syntax of VNSL v1.0. The language is designed to be simple yet powerful enough to create complex interactive narratives and visual novels.

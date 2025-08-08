@@ -1,12 +1,79 @@
-scene TestScene
+scene Investigation
 
-global MC "Boss"
+# Character declarations
+character DETECTIVE
+character WITNESS
+character SUSPECT
 
-char Boss
+# Initialize variables
+global clues 0
+global evidence_found false
+global suspect_nervous false
 
-"test"
-"this is it {{MC}}"
+# Opening dialogue
+character DETECTIVE
+"Let's examine the crime scene carefully."
 
-"Multiline
-test
-tset"
+[bg "crime_scene_interior"]
+
+# Main investigation loop
+label start_investigation:
+    choice:
+        "Question the witness":
+            jump question_witness
+        "Search for evidence":
+            jump search_evidence
+        "Confront the suspect":
+            if |clues >= 2|:
+                jump confront_suspect
+            else:
+                character DETECTIVE
+                "I need more evidence first."
+                jump start_investigation
+
+label question_witness:
+    character WITNESS
+    "I saw something strange that night..."
+
+    choice:
+        "Ask about what they saw":
+            character WITNESS
+            "There was a suspicious figure near the building."
+            || global.clues += 1 ||
+        "Ask about the time":
+            character WITNESS
+            "It was around midnight, I think."
+
+    jump start_investigation
+
+label search_evidence:
+    character DETECTIVE
+    "Let me look around..."
+
+    [ACTION "Detective searches the room"]
+
+    global evidence_found true
+    || global.clues += 1 ||
+
+    character DETECTIVE
+    "This could be important evidence."
+
+    jump start_investigation
+
+label confront_suspect:
+    character DETECTIVE
+    "I have some questions for you."
+
+    character SUSPECT
+    "I... I don't know anything!"
+
+    global suspect_nervous true
+
+    if |evidence_found and clues >= 3|:
+        character DETECTIVE
+        "The evidence suggests otherwise."
+        goto SceneConclusion
+    else:
+        character DETECTIVE
+        "We'll continue this later."
+        goto SceneEnd
