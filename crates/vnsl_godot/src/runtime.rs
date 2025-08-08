@@ -215,8 +215,16 @@ impl BaseVnslRuntime {
         self.process_command(cmd)
     }
 
+    // Return boolean may not be necessary
     fn process_command(&mut self, command: RuntimeCommand) -> anyhow::Result<bool> {
         match command {
+            RuntimeCommand::Batch(batch) => {
+                let mut last_step = true;
+                for command in batch {
+                    last_step = self.process_command(command)?;
+                }
+                return Ok(last_step);
+            }
             RuntimeCommand::SetCharacterId(char_id) => {
                 self.signals().set_character_id().emit(&char_id.to_godot());
                 return self._step();

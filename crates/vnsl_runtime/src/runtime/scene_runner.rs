@@ -50,6 +50,13 @@ impl SceneRunner {
                     result.push_str(&format!("Select choice {}\n", choice.text));
                     runtime.select_choice(choice);
                 }
+                RuntimeCommand::Batch(batch) => {
+                    result.push_str("==Start Batch==\n");
+                    for cmd in batch {
+                        result.push_str(&format!("{:#?}\n", cmd));
+                    }
+                    result.push_str("==End Batch==\n");
+                }
                 _ => result.push_str(&format!("{:#?}\n", cmd)),
             }
         }

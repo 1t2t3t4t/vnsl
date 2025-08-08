@@ -1,0 +1,14 @@
+ShowText(
+    "A",
+)
+==Start Batch==
+SetCharacterId(
+    "MC",
+)
+ShowText(
+    "B",
+)
+==End Batch==
+ShowText(
+    "C",
+)

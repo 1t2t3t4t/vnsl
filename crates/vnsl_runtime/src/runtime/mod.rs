@@ -26,12 +26,27 @@ pub struct Runtime {
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum RuntimeCommand {
+    Batch(Vec<RuntimeCommand>),
     SetCharacterId(String),
     ShowText(String),
     ExecuteAction(VnslAction),
     PromptChoices(Vec<VnslChoice>),
     ChangeScene(String),
     EndOfScene,
+}
+
+fn create_batch<const S: usize>(cmds: [Option<RuntimeCommand>; S]) -> RuntimeCommand {
+    let mut batch = Vec::with_capacity(S);
+    for cmd in cmds {
+        if let Some(cmd) = cmd {
+            batch.push(cmd);
+        }
+    }
+    if batch.len() == 1 {
+        batch[0].clone()
+    } else {
+        RuntimeCommand::Batch(batch)
+    }
 }
 
 impl Runtime {
@@ -108,9 +123,15 @@ impl Runtime {
                 self.step()
             }
 
-            BlockCommand::DisplayText(vnsl_dialogue) => Ok(RuntimeCommand::ShowText(
-                text::process_display_text(vnsl_dialogue.text, &self.context),
-            )),
+            BlockCommand::DisplayText(vnsl_dialogue) => Ok(create_batch([
+                vnsl_dialogue
+                    .set_char
+                    .map(|c| RuntimeCommand::SetCharacterId(c.id)),
+                Some(RuntimeCommand::ShowText(text::process_display_text(
+                    vnsl_dialogue.text,
+                    &self.context,
+                ))),
+            ])),
             BlockCommand::SetCharacter(vnsl_set_character) => {
                 let Some(name) = self
                     .context
