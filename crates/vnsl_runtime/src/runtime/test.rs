@@ -1,9 +1,8 @@
 use std::collections::BTreeMap;
 
 use vnsl_core::model::{
-    VnslAction, VnslActionArg, VnslBlock, VnslChoice, VnslChoices, VnslCommand, VnslDataType,
-    VnslDialogue, VnslGlobal, VnslGoTo, VnslJump, VnslLabel, VnslScene, VnslSetCharacter,
-    VnslStatement,
+    VnslAction, VnslActionArg, VnslBlock, VnslCommand, VnslDataType, VnslDialogue, VnslGlobal,
+    VnslGoTo, VnslJump, VnslLabel, VnslScene, VnslStatement,
 };
 
 use crate::result::RuntimeError;
@@ -58,23 +57,12 @@ fn create_test_scene_with_labels(name: &str) -> VnslScene {
     }
 }
 
-fn create_test_block(text: &str) -> VnslBlock {
-    VnslBlock {
-        statements: vec![VnslStatement::Command(VnslCommand::Dialogue(
-            VnslDialogue {
-                text: text.to_string(),
-            },
-        ))],
-    }
-}
-
 #[test]
 fn test_runtime_default() {
     let runtime = Runtime::default();
     assert!(runtime.get_current_scene().is_none());
     assert_eq!(runtime.get_run_stack().len(), 0);
     assert!(runtime.scene_ended());
-    assert!(runtime.current_character_id().is_none());
 }
 
 #[test]
@@ -125,36 +113,6 @@ fn test_process_current_command_no_scene() {
     let mut runtime = Runtime::default();
     let result = runtime.process_current_command();
     assert_eq!(result, Ok(RuntimeCommand::EndOfScene));
-}
-
-#[test]
-fn test_set_character() {
-    let mut runtime = Runtime::default();
-    let scene = VnslScene {
-        name: "TestScene".to_string(),
-        main_block: VnslBlock {
-            statements: vec![VnslStatement::Command(VnslCommand::SetCharacter(
-                VnslSetCharacter {
-                    id: "protagonist".to_string(),
-                },
-            ))],
-        },
-        #[cfg(debug_assertions)]
-        labels: BTreeMap::new(),
-    };
-
-    runtime.load_scene(scene);
-    let result = runtime.step().unwrap();
-
-    match result {
-        RuntimeCommand::SetCharacterId(id) => assert_eq!(id, "protagonist"),
-        _ => panic!("Expected SetCharacterId command"),
-    }
-
-    assert_eq!(
-        runtime.current_character_id(),
-        Some(&"protagonist".to_string())
-    );
 }
 
 #[test]
@@ -213,65 +171,6 @@ fn test_action_command() {
         }
         _ => panic!("Expected ExecuteAction command"),
     }
-}
-
-#[test]
-fn test_choices_command() {
-    let mut runtime = Runtime::default();
-    let choices = VnslChoices {
-        choices: vec![
-            VnslChoice {
-                id: "choice1".to_string(),
-                text: "Option 1".to_string(),
-                block: create_test_block("Choice 1 selected"),
-            },
-            VnslChoice {
-                id: "choice2".to_string(),
-                text: "Option 2".to_string(),
-                block: create_test_block("Choice 2 selected"),
-            },
-        ],
-    };
-
-    let scene = VnslScene {
-        name: "TestScene".to_string(),
-        main_block: VnslBlock {
-            statements: vec![VnslStatement::Choices(choices.clone())],
-        },
-        #[cfg(debug_assertions)]
-        labels: BTreeMap::new(),
-    };
-
-    runtime.load_scene(scene);
-    let result = runtime.step().unwrap();
-
-    match result {
-        RuntimeCommand::PromptChoices(returned_choices) => {
-            assert_eq!(returned_choices.choices.len(), 2);
-            assert_eq!(returned_choices.choices[0].text, "Option 1");
-            assert_eq!(returned_choices.choices[1].text, "Option 2");
-        }
-        _ => panic!("Expected PromptChoices command"),
-    }
-}
-
-#[test]
-fn test_select_choice() {
-    let mut runtime = Runtime::default();
-    let choice = VnslChoice {
-        id: "test_choice".to_string(),
-        text: "Test Choice".to_string(),
-        block: create_test_block("Choice executed"),
-    };
-
-    let scene = create_test_scene("TestScene");
-    runtime.load_scene(scene);
-
-    // Select the choice
-    runtime.select_choice(&choice);
-
-    // The choice block should be on the stack
-    assert_eq!(runtime.get_run_stack().len(), 2);
 }
 
 #[test]

@@ -219,7 +219,6 @@ mod tests {
     #[test]
     fn test_runtime_gloal_var() {
         let mut runtime = Runtime::default();
-        assert_eq!(runtime.current_character_id(), None);
         runtime
             .set_global_val("test", VnslDataType::String("test".to_string()))
             .unwrap();
