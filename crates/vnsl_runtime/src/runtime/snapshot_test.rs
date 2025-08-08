@@ -1,75 +1,9 @@
-use std::{
-    fs::{self},
-    path::Path,
-};
+use std::{fs, path::Path};
 
-use vnsl_core::model::VnslScene;
-
-use crate::RuntimeCommand;
-
-use super::Runtime;
+use crate::runtime::scene_runner::SceneRunner;
 
 const FORCE_RECORD: bool = false;
 const SNAPSHOT_BASE_DIR: &str = "./snapshot";
-
-#[derive(Debug, Default)]
-struct SceneSnapshotRunner {
-    force_choice_pick: Vec<usize>,
-}
-
-impl SceneSnapshotRunner {
-    fn run_scene(&mut self, scene: VnslScene, record: bool) {
-        let mut runtime = Runtime::default();
-        let name = scene.name.clone();
-        let mut result = String::new();
-        runtime.load_scene(scene);
-        println!("Testing {name}");
-
-        while !runtime.scene_ended() {
-            let cmd = runtime.step().unwrap();
-            match cmd {
-                RuntimeCommand::ExecuteAction(action)
-                    if action.name == "forceChoice".to_string() =>
-                {
-                    let choices = action
-                        .args
-                        .into_iter()
-                        .map(|a| a.data_type.get_number() as usize);
-                    self.force_choice_pick = choices.collect();
-                }
-                RuntimeCommand::PromptChoices(vnsl_choices) => {
-                    result.push_str("Prompt choice\n");
-                    for choice in &vnsl_choices {
-                        result.push_str(&format!("\tChoice {}\n", choice.text));
-                    }
-                    assert!(
-                        self.force_choice_pick.len() > 0,
-                        "No choice selection provided"
-                    );
-                    let selection = self.force_choice_pick.remove(0);
-                    let choice = vnsl_choices.get(selection).unwrap();
-                    result.push_str(&format!("Select choice {}\n", choice.text));
-                    runtime.select_choice(choice);
-                }
-                _ => result.push_str(&format!("{:#?}\n", cmd)),
-            }
-        }
-
-        result = result.replace("\r\n", "\n");
-        let base_snapshot = Path::new(SNAPSHOT_BASE_DIR);
-        if !base_snapshot.join("records").exists() {
-            fs::create_dir_all(&base_snapshot.join("records")).expect("should create snapshot dir");
-        }
-
-        let snapshot_path = base_snapshot.join("records").join(name.clone());
-        let existing_result = fs::read_to_string(&snapshot_path);
-        if existing_result.is_ok() && !record {
-            pretty_assertions::assert_str_eq!(existing_result.unwrap(), result);
-        } else {
-            fs::write(&snapshot_path, &result).expect("should write result to snapshot file");
-        }
-    }
-}
 
 #[test]
 fn test_snapshots() {
@@ -84,8 +18,25 @@ fn test_snapshots() {
         if is_file && file_name.ends_with(".vnsl") {
             let src = fs::read_to_string(entry.path()).unwrap();
             let scene = vnsl_compiler::compile(&src).unwrap();
-            let mut snapshot_runner = SceneSnapshotRunner::default();
-            snapshot_runner.run_scene(scene, FORCE_RECORD);
+            let scene_name = scene.name.clone();
+
+            let mut snapshot_runner = SceneRunner::default();
+            let mut result = snapshot_runner.run_scene(scene);
+
+            result = result.replace("\r\n", "\n");
+            let base_snapshot = Path::new(SNAPSHOT_BASE_DIR);
+            if !base_snapshot.join("records").exists() {
+                fs::create_dir_all(&base_snapshot.join("records"))
+                    .expect("should create snapshot dir");
+            }
+
+            let snapshot_path = base_snapshot.join("records").join(scene_name);
+            let existing_result = fs::read_to_string(&snapshot_path);
+            if existing_result.is_ok() && !FORCE_RECORD {
+                pretty_assertions::assert_str_eq!(existing_result.unwrap(), result);
+            } else {
+                fs::write(&snapshot_path, &result).expect("should write result to snapshot file");
+            }
         }
     }
 

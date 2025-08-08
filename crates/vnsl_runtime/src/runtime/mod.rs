@@ -3,6 +3,8 @@ mod snapshot_test;
 #[cfg(test)]
 mod test;
 
+#[cfg(debug_assertions)]
+pub mod scene_runner;
 mod text;
 
 use vnsl_core::model::{VnslAction, VnslBlock, VnslChoice, VnslDataType, VnslScene};

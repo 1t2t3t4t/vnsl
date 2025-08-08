@@ -1,79 +1,992 @@
-scene Investigation
+scene MurderInvestigation
 
 # Character declarations
 character DETECTIVE
-character WITNESS
-character SUSPECT
+character WITNESS_SARAH
+character SUSPECT_JAMES
+character VICTIM_BROTHER
+character FORENSIC_EXPERT
+character BARTENDER
+character MYSTERIOUS_WOMAN
+character POLICE_CHIEF
 
-# Initialize variables
+# Initialize comprehensive variables
 global clues 0
-global evidence_found false
-global suspect_nervous false
+global evidence_collected 0
+global reputation 100
+global time_remaining 120
+global case_difficulty "hard"
 
-# Opening dialogue
+# Evidence tracking
+global fingerprints_found false
+global murder_weapon_found false
+global alibi_broken false
+global motive_discovered false
+global witness_testimony_complete false
+global background_check_done false
+
+# Character relationship tracking
+global sarah_trust_level 50
+global james_suspicion_level 30
+global brother_cooperation 70
+
+# Investigation state
+global current_location "crime_scene"
+global interrogation_style "professional"
+global has_warrant false
+global case_breakthrough false
+
+# Story branching flags
+global red_herring_followed false
+global secret_affair_discovered false
+global financial_motive_found false
+global caught_lying false
+
+# Opening scene
 character DETECTIVE
-"Let's examine the crime scene carefully."
+"Another murder case. Victoria Blackwood, 34, found dead in her luxury apartment."
 
-[bg "crime_scene_interior"]
+[bg "apartment_crime_scene"]
+[ACTION "Detective examines the pristine apartment with signs of struggle"]
 
-# Main investigation loop
-label start_investigation:
+character DETECTIVE
+"The scene tells a story, but which story is true?"
+
+|| global.time_remaining = global.time_remaining - 5 ||
+
+# Initial examination
+choice:
+    "Examine the body carefully":
+        character DETECTIVE
+        "No obvious defensive wounds. Poison? Suffocation?"
+        character FORENSIC_EXPERT
+        "Preliminary examination suggests cardiac arrest, but..."
+        character DETECTIVE
+        "But something's not right."
+        global evidence_collected 1
+        || global.clues = global.clues + 1 ||
+        jump detailed_examination
+
+    "Survey the room for disturbances":
+        character DETECTIVE
+        "Expensive artwork still on walls, jewelry untouched. Not a robbery."
+        [ACTION "Detective notices a glass with lipstick marks"]
+        character DETECTIVE
+        "Two glasses. She had company."
+        global evidence_collected 1
+        || global.clues = global.clues + 1 ||
+        jump room_analysis
+
+    "Interview the witness immediately":
+        character DETECTIVE
+        "Sometimes the first account is the most honest."
+        jump initial_witness_interview
+
+label detailed_examination:
+    character FORENSIC_EXPERT
+    "Detective, there's something you should see."
+
+    [ACTION "Forensic expert points to victim's fingernails"]
+
+    character FORENSIC_EXPERT
+    "Skin under her nails. She fought someone."
+
     choice:
-        "Question the witness":
-            jump question_witness
-        "Search for evidence":
-            jump search_evidence
-        "Confront the suspect":
-            if |clues >= 2|:
-                jump confront_suspect
+        "Collect DNA evidence":
+            character DETECTIVE
+            "Bag it. This could break the case wide open."
+            global fingerprints_found true
+            global evidence_collected 2
+            || global.clues = global.clues + 2 ||
+            || global.reputation = global.reputation + 10 ||
+
+        "Check for defensive wounds elsewhere":
+            character DETECTIVE
+            "Look for bruising patterns, anything unusual."
+            character FORENSIC_EXPERT
+            "Bruising on her wrists suggests restraint."
+            global evidence_collected 1
+            || global.clues = global.clues + 1 ||
+
+    jump choose_next_action
+
+label room_analysis:
+    character DETECTIVE
+    "The devil's in the details."
+
+    [ACTION "Detective methodically examines the living room"]
+
+    choice:
+        "Analyze the two glasses":
+            character DETECTIVE
+            "Different lipstick shades. Victoria's was red, this one's pink."
+            global secret_affair_discovered true
+            || global.clues = global.clues + 2 ||
+            character DETECTIVE
+            "She was meeting another woman. But who?"
+
+        "Check the victim's phone":
+            if |global.has_warrant|:
+                character DETECTIVE
+                "Last call was to... interesting."
+                global background_check_done true
+                || global.clues = global.clues + 1 ||
             else:
                 character DETECTIVE
-                "I need more evidence first."
-                jump start_investigation
+                "I need a warrant for this. Can't compromise the case."
+                || global.reputation = global.reputation + 5 ||
 
-label question_witness:
-    character WITNESS
-    "I saw something strange that night..."
+        "Examine the balcony door":
+            character DETECTIVE
+            "Lock's been tampered with. Someone knew how to get in."
+            global murder_weapon_found true
+            || global.clues = global.clues + 1 ||
+
+    jump choose_next_action
+
+label initial_witness_interview:
+    character WITNESS_SARAH
+    "I... I found her this morning. The door was open."
+
+    character DETECTIVE
+    "Tell me exactly what you saw, Sarah."
+
+    || global.time_remaining = global.time_remaining - 10 ||
 
     choice:
-        "Ask about what they saw":
-            character WITNESS
-            "There was a suspicious figure near the building."
-            || global.clues += 1 ||
-        "Ask about the time":
-            character WITNESS
-            "It was around midnight, I think."
+        "Ask about her relationship with Victoria":
+            character WITNESS_SARAH
+            "We were... close friends. Very close."
+            character DETECTIVE
+            "How close, Sarah?"
+            if |global.interrogation_style == "aggressive"|:
+                character WITNESS_SARAH
+                "That's personal!"
+                || global.sarah_trust_level = global.sarah_trust_level - 20 ||
+            else:
+                character WITNESS_SARAH
+                "We were in love. It was complicated."
+                global secret_affair_discovered true
+                || global.sarah_trust_level = global.sarah_trust_level + 10 ||
+                || global.clues = global.clues + 2 ||
 
-    jump start_investigation
+        "Focus on the timeline":
+            character DETECTIVE
+            "When did you last see Victoria alive?"
+            character WITNESS_SARAH
+            "Yesterday evening. Around 8 PM."
+            character DETECTIVE
+            "And you didn't return until this morning?"
+            character WITNESS_SARAH
+            "I... I had somewhere else to be."
+            global caught_lying true
+            || global.clues = global.clues + 1 ||
 
-label search_evidence:
+        "Ask about Victoria's enemies":
+            character WITNESS_SARAH
+            "Victoria was involved in some... questionable business deals."
+            character DETECTIVE
+            "What kind of deals?"
+            character WITNESS_SARAH
+            "Her brother James would know better. They were partners."
+            global financial_motive_found true
+            || global.clues = global.clues + 1 ||
+
+    jump choose_next_action
+
+label choose_next_action:
+    || global.time_remaining = global.time_remaining - 5 ||
+
+    if |global.time_remaining <= 0|:
+        jump time_pressure_ending
+
     character DETECTIVE
-    "Let me look around..."
+    "Where to next? Time is ticking."
 
-    [ACTION "Detective searches the room"]
+    choice:
+        "Interrogate James (the brother)":
+            if |global.evidence_collected >= 2|:
+                jump confront_james_with_evidence
+            else:
+                jump basic_james_interview
 
-    global evidence_found true
-    || global.clues += 1 ||
+        "Return to question Sarah more thoroughly":
+            if |global.secret_affair_discovered|:
+                jump sarah_detailed_interrogation
+            else:
+                jump sarah_follow_up
 
+        "Visit the victim's workplace":
+            jump workplace_investigation
+
+        "Check the building's security footage":
+            jump security_footage_review
+
+        "Interview the bartender from Victoria's last known location":
+            jump bartender_interview
+
+label confront_james_with_evidence:
     character DETECTIVE
-    "This could be important evidence."
+    "James, we need to talk. I have evidence."
 
-    jump start_investigation
+    character SUSPECT_JAMES
+    "Evidence of what? I told you, I was at the casino all night."
 
-label confront_suspect:
-    character DETECTIVE
-    "I have some questions for you."
-
-    character SUSPECT
-    "I... I don't know anything!"
-
-    global suspect_nervous true
-
-    if |evidence_found and clues >= 3|:
+    if |global.fingerprints_found and global.murder_weapon_found|:
         character DETECTIVE
-        "The evidence suggests otherwise."
-        goto SceneConclusion
+        "Your DNA under her fingernails, forced entry, and your gambling debts."
+        character SUSPECT_JAMES
+        "You don't understand! She was going to cut me off!"
+        global case_breakthrough true
+        || global.james_suspicion_level = global.james_suspicion_level + 50 ||
+        jump dramatic_confession
+    elif |global.financial_motive_found and global.secret_affair_discovered|:
+        character DETECTIVE
+        "Your sister was planning to change her will. Cut you out completely."
+        character SUSPECT_JAMES
+        "That's... that's not possible."
+        character DETECTIVE
+        "For her girlfriend, Sarah. You knew about their relationship."
+        || global.james_suspicion_level = global.james_suspicion_level + 30 ||
+        jump partial_breakthrough
     else:
         character DETECTIVE
-        "We'll continue this later."
-        goto SceneEnd
+        "Your alibi doesn't check out, James."
+        character SUSPECT_JAMES
+        "Prove it."
+        || global.james_suspicion_level = global.james_suspicion_level + 10 ||
+        jump interrogation_standoff
+
+label interrogation_standoff:
+    character DETECTIVE
+    "We're at an impasse, James. But I'll find the truth."
+
+    character SUSPECT_JAMES
+    "Good luck with that, Detective."
+
+    [ACTION "James maintains his defiant stance"]
+
+    choice:
+        "Try a different approach":
+            character DETECTIVE
+            "Let's start over. Tell me about your relationship with Victoria."
+            jump basic_james_interview
+
+        "Apply more pressure":
+            character DETECTIVE
+            "Your gambling debts, the timing, the lies. It's all adding up."
+            || global.james_suspicion_level = global.james_suspicion_level + 15 ||
+            if |global.james_suspicion_level >= 50|:
+                character SUSPECT_JAMES
+                "Alright! Maybe I wasn't entirely honest about that night!"
+                jump partial_breakthrough
+            else:
+                character SUSPECT_JAMES
+                "You're fishing, Detective. And I'm done talking."
+                jump choose_investigation_path
+
+label dramatic_confession:
+    character SUSPECT_JAMES
+    "Alright! You want the truth? I killed her!"
+
+    character DETECTIVE
+    "James Blackwood, you're under arrest for murder."
+
+    [ACTION "James breaks down completely"]
+
+    character SUSPECT_JAMES
+    "She was going to destroy everything! Our family legacy, gone!"
+
+    jump confession_ending
+
+label partial_breakthrough:
+    character SUSPECT_JAMES
+    "Maybe I wasn't completely honest about that night."
+
+    character DETECTIVE
+    "Go on."
+
+    character SUSPECT_JAMES
+    "I did go to see Victoria. We argued about the money."
+
+    choice:
+        "Press for more details":
+            character DETECTIVE
+            "What happened during the argument?"
+            character SUSPECT_JAMES
+            "Things got heated. She threatened to cut me off completely."
+            || global.clues = global.clues + 2 ||
+            jump james_final_interrogation
+
+        "Ask about the timeline":
+            character DETECTIVE
+            "What time did you leave?"
+            character SUSPECT_JAMES
+            "Around 11 PM. She was alive when I left, I swear!"
+            || global.clues = global.clues + 1 ||
+            jump choose_investigation_path
+
+        "End the interrogation":
+            character DETECTIVE
+            "We'll continue this later, James."
+            jump choose_investigation_path
+
+label sarah_follow_up:
+    character DETECTIVE
+    "Sarah, I need to ask you a few more questions."
+
+    character WITNESS_SARAH
+    "Of course, Detective. Anything to help find Victoria's killer."
+
+    choice:
+        "Ask about Victoria's recent behavior":
+            character WITNESS_SARAH
+            "She seemed worried about something. Kept looking over her shoulder."
+            || global.clues = global.clues + 1 ||
+
+        "Inquire about potential threats":
+            character WITNESS_SARAH
+            "Victoria mentioned her brother was becoming desperate about money."
+            || global.james_suspicion_level = global.james_suspicion_level + 10 ||
+
+    jump choose_investigation_path
+
+label basic_james_interview:
+    character SUSPECT_JAMES
+    "Look, Detective, I already told the other officers everything."
+
+    character DETECTIVE
+    "Tell me again. Sometimes details change."
+
+    choice:
+        "Press him about his whereabouts":
+            character SUSPECT_JAMES
+            "I was at the Riverside Casino. Check the cameras."
+            character DETECTIVE
+            "For how long?"
+            character SUSPECT_JAMES
+            "All night. Lost a fortune too."
+            global alibi_broken true
+            || global.clues = global.clues + 1 ||
+
+        "Ask about Victoria's will":
+            character SUSPECT_JAMES
+            "Her will? Why would I know about that?"
+            character DETECTIVE
+            "Because you're her business partner and only living relative."
+            character SUSPECT_JAMES
+            "She never discussed it with me."
+            global caught_lying true
+            || global.james_suspicion_level = global.james_suspicion_level + 20 ||
+
+        "Inquire about their business relationship":
+            character SUSPECT_JAMES
+            "We owned several properties together. It was all legitimate."
+            character DETECTIVE
+            "Any disputes recently?"
+            character SUSPECT_JAMES
+            "Nothing serious."
+            if |global.financial_motive_found|:
+                character DETECTIVE
+                "That's not what Sarah told me."
+                || global.james_suspicion_level = global.james_suspicion_level + 15 ||
+
+    jump choose_investigation_path
+
+label sarah_detailed_interrogation:
+    character DETECTIVE
+    "Sarah, let's talk about your relationship with Victoria."
+
+    character WITNESS_SARAH
+    "I already told you we were close."
+
+    character DETECTIVE
+    "You told me you were in love. That's more than close."
+
+    || global.sarah_trust_level = global.sarah_trust_level - 5 ||
+
+    choice:
+        "Ask about Victoria's family situation":
+            character WITNESS_SARAH
+            "James was bleeding her dry. Gambling addiction."
+            character DETECTIVE
+            "Did Victoria plan to do something about it?"
+            character WITNESS_SARAH
+            "She was going to change her will. Leave everything to me."
+            global motive_discovered true
+            || global.clues = global.clues + 2 ||
+
+        "Question her about last night specifically":
+            character WITNESS_SARAH
+            "I was supposed to meet her, but..."
+            character DETECTIVE
+            "But what?"
+            character WITNESS_SARAH
+            "I got cold feet. About coming out publicly."
+            character DETECTIVE
+            "So you stood her up?"
+            character WITNESS_SARAH
+            "She was furious. Said she'd handle things herself."
+            || global.clues = global.clues + 1 ||
+
+        "Confront her about lying":
+            if |global.caught_lying|:
+                character DETECTIVE
+                "Your story keeps changing, Sarah."
+                character WITNESS_SARAH
+                "I'm scared! What if whoever killed Victoria comes after me?"
+                character DETECTIVE
+                "Who would want to hurt you both?"
+                character WITNESS_SARAH
+                "James knew about us. He threatened Victoria."
+                || global.james_suspicion_level = global.james_suspicion_level + 25 ||
+                || global.clues = global.clues + 2 ||
+
+    jump choose_investigation_path
+
+label workplace_investigation:
+    [bg "corporate_office"]
+    character DETECTIVE
+    "Victoria Blackwood's office. Let's see what secrets she kept here."
+
+    [ACTION "Detective searches through files and computer"]
+
+    choice:
+        "Examine financial records":
+            character DETECTIVE
+            "Massive withdrawals... all going to cover James's debts."
+            global financial_motive_found true
+            || global.clues = global.clues + 2 ||
+            character DETECTIVE
+            "She was planning to cut him off permanently."
+
+        "Check her computer emails":
+            character DETECTIVE
+            "Email to her lawyer... 'Need to update will urgently.'"
+            global motive_discovered true
+            || global.clues = global.clues + 1 ||
+            character DETECTIVE
+            "Date stamp: yesterday morning."
+
+        "Interview her secretary":
+            character MYSTERIOUS_WOMAN
+            "Victoria seemed upset lately. Stressed about family matters."
+            character DETECTIVE
+            "Did she mention anyone specifically?"
+            character MYSTERIOUS_WOMAN
+            "Her brother called constantly. She stopped taking his calls."
+            || global.james_suspicion_level = global.james_suspicion_level + 15 ||
+            || global.clues = global.clues + 1 ||
+
+    jump choose_investigation_path
+
+label security_footage_review:
+    [ACTION "Detective reviews security camera footage"]
+
+    character DETECTIVE
+    "Let's see who visited Victoria last night."
+
+    choice:
+        "Focus on the evening hours":
+            character DETECTIVE
+            "There! 9:47 PM. James entering the building."
+            character DETECTIVE
+            "But he said he was at the casino all night."
+            global alibi_broken true
+            || global.clues = global.clues + 3 ||
+            || global.james_suspicion_level = global.james_suspicion_level + 30 ||
+
+        "Check the early morning":
+            character DETECTIVE
+            "Sarah arriving at 7 AM. Seems genuine."
+            || global.sarah_trust_level = global.sarah_trust_level + 10 ||
+
+        "Look for any other visitors":
+            character DETECTIVE
+            "Unknown woman, 10:15 PM. Can't see her face clearly."
+            character DETECTIVE
+            "She's carrying something... a bag?"
+            global red_herring_followed true
+            || global.clues = global.clues + 1 ||
+
+    jump choose_investigation_path
+
+label bartender_interview:
+    [bg "upscale_bar"]
+    character BARTENDER
+    "Victoria? Yeah, she was here yesterday. Regular customer."
+
+    character DETECTIVE
+    "How did she seem?"
+
+    character BARTENDER
+    "Agitated. Kept checking her phone."
+
+    choice:
+        "Ask who she was with":
+            character BARTENDER
+            "That blonde woman. Sarah, I think? They looked... intense."
+            character DETECTIVE
+            "Intense how?"
+            character BARTENDER
+            "Like they were arguing. Sarah left first, around 8:30."
+            || global.witness_testimony_complete = true ||
+            || global.clues = global.clues + 1 ||
+
+        "Ask about other patrons that night":
+            character BARTENDER
+            "Business crowd mostly. Oh, and that guy who kept staring at Victoria."
+            character DETECTIVE
+            "Describe him."
+            character BARTENDER
+            "Tall, nervous energy. Left right after Victoria did."
+            global red_herring_followed true
+
+        "Inquire about Victoria's mood":
+            character BARTENDER
+            "She ordered three martinis. Victoria never had more than one."
+            character DETECTIVE
+            "Drowning her sorrows?"
+            character BARTENDER
+            "Or building courage for something difficult."
+            || global.clues = global.clues + 1 ||
+
+    jump choose_investigation_path
+
+label choose_investigation_path:
+    || global.time_remaining = global.time_remaining - 5 ||
+
+    if |global.clues >= 8 and global.case_breakthrough|:
+        jump final_confrontation
+    elif |global.clues >= 6|:
+        jump building_case
+    elif |global.time_remaining <= 30|:
+        jump pressure_decision
+    else:
+        jump continue_investigation
+
+label pressure_decision:
+    character DETECTIVE
+    "Time's running out. I need to make a decision."
+
+    choice:
+        "Arrest James with current evidence":
+            character DETECTIVE
+            "James Blackwood, you're under arrest on suspicion of murder."
+            jump rushed_arrest
+
+        "Focus on finding more evidence":
+            character DETECTIVE
+            "I need one more solid piece of evidence."
+            jump continue_investigation
+
+        "Confront both suspects together":
+            character DETECTIVE
+            "Time for a final confrontation."
+            jump confrontation_scene
+
+label continue_investigation:
+    character DETECTIVE
+    "There's still more to uncover. Back to work."
+
+    choice:
+        "Re-examine the crime scene":
+            character DETECTIVE
+            "Sometimes you miss things the first time."
+            || global.clues = global.clues + 1 ||
+            jump choose_investigation_path
+
+        "Review all evidence collected":
+            character DETECTIVE
+            "Let me piece together what I have."
+            if |global.clues >= 5|:
+                character DETECTIVE
+                "I think I'm ready for the final confrontation."
+                jump final_confrontation
+            else:
+                jump choose_investigation_path
+
+        "Interview witnesses again":
+            choice:
+                "Talk to Sarah again":
+                    jump sarah_detailed_interrogation
+                "Question James further":
+                    jump basic_james_interview
+
+label building_case:
+    character DETECTIVE
+    "The pieces are coming together, but I need one more break."
+
+    choice:
+        "Confront James with all evidence":
+            if |global.alibi_broken and global.financial_motive_found|:
+                jump james_final_interrogation
+            else:
+                character DETECTIVE
+                "Not enough. He'll lawyer up."
+                jump continue_investigation
+
+        "Get a warrant for James's apartment":
+            character POLICE_CHIEF
+            "Based on what you've shown me, warrant approved."
+            global has_warrant true
+            jump apartment_search
+
+        "Bring Sarah and James together":
+            jump confrontation_scene
+
+label james_final_interrogation:
+    character DETECTIVE
+    "James, it's over. We have security footage, financial records, motive."
+
+    character SUSPECT_JAMES
+    "You have circumstantial evidence!"
+
+    character DETECTIVE
+    "You lied about the casino. You were in her building at 9:47 PM."
+
+    character SUSPECT_JAMES
+    "I... I went to talk to her!"
+
+    choice:
+        "Press the advantage":
+            character DETECTIVE
+            "Talk about what? Her cutting you off financially?"
+            character SUSPECT_JAMES
+            "She was my sister! I deserved better!"
+            character DETECTIVE
+            "So you killed her for money?"
+            character SUSPECT_JAMES
+            "It was an accident! We argued, she fell, hit her head..."
+            jump confession_ending
+
+        "Let him explain":
+            character SUSPECT_JAMES
+            "Victoria was going to destroy our family business!"
+            character DETECTIVE
+            "By stopping your gambling addiction?"
+            character SUSPECT_JAMES
+            "I never meant for her to die. She just... wouldn't listen."
+            jump partial_confession
+
+label partial_confession:
+    character SUSPECT_JAMES
+    "I went there to ask for help with my debts."
+
+    character DETECTIVE
+    "And when she refused?"
+
+    character SUSPECT_JAMES
+    "I got angry. We struggled. She fell and hit her head."
+
+    character DETECTIVE
+    "That's involuntary manslaughter, not murder."
+
+    character SUSPECT_JAMES
+    "I panicked and left. I didn't mean to kill her!"
+
+    jump confession_ending
+
+label arrest_ending:
+    [ACTION "James is handcuffed and led away by police"]
+
+    character DETECTIVE
+    "Case closed. The evidence spoke louder than words."
+
+    character POLICE_CHIEF
+    "Good work, Detective. Justice has been served."
+
+    || global.reputation = global.reputation + 25 ||
+
+    goto CaseFileComplete
+
+label apartment_search:
+    [bg "james_apartment"]
+    [ACTION "Police search James's apartment with warrant"]
+
+    character DETECTIVE
+    "What do we have here?"
+
+    choice:
+        "Search the bedroom":
+            character DETECTIVE
+            "Bloodstained shirt hidden in the closet."
+            global murder_weapon_found true
+            || global.evidence_collected = global.evidence_collected + 3 ||
+            character DETECTIVE
+            "James, you're under arrest."
+            jump arrest_ending
+
+        "Check his computer":
+            character DETECTIVE
+            "Email drafts... 'Victoria, please reconsider the will change.'"
+            character DETECTIVE
+            "Sent but never received. She blocked his email."
+            || global.clues = global.clues + 1 ||
+
+        "Examine financial documents":
+            character DETECTIVE
+            "Gambling debts totaling $500,000. Victoria was his only lifeline."
+            global financial_motive_found true
+            || global.clues = global.clues + 2 ||
+
+    jump final_confrontation
+
+label confrontation_scene:
+    character DETECTIVE
+    "Sarah, James, we need to clear some things up."
+
+    [ACTION "Detective brings both suspects together"]
+
+    character WITNESS_SARAH
+    "Why is he here?"
+
+    character SUSPECT_JAMES
+    "Sarah? What's going on?"
+
+    choice:
+        "Reveal the affair":
+            character DETECTIVE
+            "James, did you know Victoria and Sarah were in love?"
+            character SUSPECT_JAMES
+            "That's impossible!"
+            character WITNESS_SARAH
+            "James, Victoria was going to leave everything to me."
+            character SUSPECT_JAMES
+            "You... you poisoned her against me!"
+            jump heated_confrontation
+
+        "Focus on the timeline":
+            character DETECTIVE
+            "Sarah, you said you last saw Victoria at 8 PM."
+            character DETECTIVE
+            "James, you claim you were at the casino all night."
+            character DETECTIVE
+            "But security footage shows James at Victoria's building at 9:47 PM."
+            jump timeline_collapse
+
+        "Present the financial evidence":
+            character DETECTIVE
+            "Victoria was cutting off James's funding for his gambling addiction."
+            character DETECTIVE
+            "She was changing her will to leave everything to Sarah."
+            character DETECTIVE
+            "Two motives, one victim. Who pulled the trigger?"
+            jump dual_motive_reveal
+
+label timeline_collapse:
+    character WITNESS_SARAH
+    "Wait, James was there that night?"
+
+    character SUSPECT_JAMES
+    "I can explain!"
+
+    character DETECTIVE
+    "The timeline doesn't lie. Security footage, witness testimony."
+
+    character SUSPECT_JAMES
+    "Alright! I was there! But I didn't kill her!"
+
+    jump partial_breakthrough
+
+label dual_motive_reveal:
+    character WITNESS_SARAH
+    "You think one of us killed Victoria for money?"
+
+    character SUSPECT_JAMES
+    "This is ridiculous! I would never hurt my sister!"
+
+    character DETECTIVE
+    "Someone did. And both of you had motive."
+
+    choice:
+        "Focus pressure on James":
+            character DETECTIVE
+            "James, your gambling debts were crushing you."
+            || global.james_suspicion_level = global.james_suspicion_level + 20 ||
+            jump james_final_interrogation
+
+        "Focus pressure on Sarah":
+            character DETECTIVE
+            "Sarah, inheriting everything would solve your problems."
+            || global.sarah_trust_level = global.sarah_trust_level - 30 ||
+            character WITNESS_SARAH
+            "I loved her! I would never..."
+            jump choose_investigation_path
+
+label heated_confrontation:
+    character SUSPECT_JAMES
+    "You manipulated my sister!"
+
+    character WITNESS_SARAH
+    "I loved her! You were bleeding her dry!"
+
+    character SUSPECT_JAMES
+    "She was family! You were just..."
+
+    character DETECTIVE
+    "Just what, James?"
+
+    character SUSPECT_JAMES
+    "I went there to reason with her. Things got heated."
+
+    character WITNESS_SARAH
+    "You killed her!"
+
+    character SUSPECT_JAMES
+    "It was an accident! She hit her head when we struggled!"
+
+    jump confession_ending
+
+label final_confrontation:
+    character DETECTIVE
+    "I've solved Victoria Blackwood's murder."
+
+    [ACTION "Detective assembles all parties in the apartment"]
+
+    if |global.case_breakthrough and global.evidence_collected >= 4|:
+        jump perfect_solution
+    elif |global.clues >= 6|:
+        jump good_solution
+    else:
+        jump incomplete_solution
+
+label good_solution:
+    character DETECTIVE
+    "I have enough evidence to make an arrest."
+
+    character DETECTIVE
+    "James Blackwood, based on the evidence collected, you're under arrest."
+
+    character SUSPECT_JAMES
+    "You can't prove I meant to kill her!"
+
+    character DETECTIVE
+    "The jury will decide that."
+
+    || global.reputation = global.reputation + 20 ||
+
+    goto CaseFileComplete
+
+label incomplete_solution:
+    character DETECTIVE
+    "I don't have enough concrete evidence for a conviction."
+
+    character POLICE_CHIEF
+    "Then we keep investigating until we do."
+
+    character DETECTIVE
+    "Victoria deserves justice. This case stays open."
+
+    || global.reputation = global.reputation - 10 ||
+
+    goto CaseFileComplete
+
+label perfect_solution:
+    character DETECTIVE
+    "James Blackwood, you murdered your sister Victoria."
+
+    character DETECTIVE
+    "Security footage places you at the scene. Financial records show motive."
+
+    character DETECTIVE
+    "DNA evidence under her fingernails confirms you struggled."
+
+    character SUSPECT_JAMES
+    "I... I can't deny it anymore."
+
+    character DETECTIVE
+    "You discovered she was cutting you off and leaving everything to Sarah."
+
+    character DETECTIVE
+    "In your rage, you confronted her. When she refused to change her mind..."
+
+    character SUSPECT_JAMES
+    "I didn't mean to kill her! She was my sister!"
+
+    || global.reputation = global.reputation + 50 ||
+
+    jump case_closed_success
+
+label confession_ending:
+    character SUSPECT_JAMES
+    "I never meant for it to happen. Victoria was all I had left."
+
+    character DETECTIVE
+    "James Blackwood, you're under arrest for the murder of Victoria Blackwood."
+
+    [ACTION "James is handcuffed and led away"]
+
+    character WITNESS_SARAH
+    "Thank you, Detective. Victoria would have wanted justice."
+
+    character DETECTIVE
+    "Case closed. Sometimes family is the most dangerous enemy of all."
+
+    || global.reputation = global.reputation + 30 ||
+
+    goto CaseFileComplete
+
+label case_closed_success:
+    character POLICE_CHIEF
+    "Outstanding work, Detective. Clean arrest, solid evidence."
+
+    character DETECTIVE
+    "Victoria Blackwood deserved justice. Her brother's gambling addiction cost more than money."
+
+    character DETECTIVE
+    "It cost a life."
+
+    [ACTION "Case file marked SOLVED"]
+
+    || global.reputation = global.reputation + 50 ||
+
+    goto CaseFileComplete
+
+label time_pressure_ending:
+    character POLICE_CHIEF
+    "Detective, we're out of time. District Attorney needs an arrest."
+
+    if |global.james_suspicion_level >= 60|:
+        character DETECTIVE
+        "Arrest James Blackwood. We have enough circumstantial evidence."
+        goto rushed_arrest
+    elif |global.clues >= 4|:
+        character DETECTIVE
+        "I need more time. This case isn't ready."
+        || global.reputation = global.reputation - 20 ||
+        goto incomplete_case
+    else:
+        character DETECTIVE
+        "The case has gone cold. Not enough evidence."
+        || global.reputation = global.reputation - 50 ||
+        goto cold_case_ending
+
+label rushed_arrest:
+    character DETECTIVE
+    "Sometimes you have to work with what you have."
+
+    [ACTION "James is arrested on circumstantial evidence"]
+
+    character DETECTIVE
+    "Justice isn't always perfect, but it's what we've got."
+
+    goto CaseFileComplete
+
+label incomplete_case:
+    character DETECTIVE
+    "Victoria Blackwood's murder remains unsolved."
+
+    character DETECTIVE
+    "Sometimes the truth stays buried with the victim."
+
+    goto CaseFileComplete
+
+label cold_case_ending:
+    character DETECTIVE
+    "Another case for the cold files."
+
+    character DETECTIVE
+    "Victoria Blackwood deserved better."
+
+    goto CaseFileComplete

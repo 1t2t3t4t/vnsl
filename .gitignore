@@ -1,2 +1,7 @@
 /target
 .DS_Store
+
+# Debug Files
+snapshot.json
+snapshot_encoded
+scene_play

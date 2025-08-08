@@ -1,5 +1,7 @@
 use std::time;
 
+use vnsl_runtime::scene_runner::SceneRunner;
+
 fn elapsed<T>(label: &str, f: impl FnOnce() -> T) -> T {
     let start = time::Instant::now();
     let res = f();
@@ -15,12 +17,12 @@ fn main() -> anyhow::Result<()> {
     let test_script = include_str!("./test.vnsl");
     let scene = elapsed("compile", || vnsl_compiler::compile(test_script))?;
 
+    let mut runner = SceneRunner::default();
+    let result = runner.run_scene(scene.clone());
+    std::fs::write("./scene_play", &result)?;
+
     let mut runtime = vnsl_runtime::Runtime::default();
     runtime.load_scene(scene);
-
-    runtime.step()?;
-    runtime.step()?;
-    runtime.step()?;
 
     let snapshot = elapsed("snapshot", || runtime.snapshot());
     let val = serde_json::to_string_pretty(&snapshot)?;

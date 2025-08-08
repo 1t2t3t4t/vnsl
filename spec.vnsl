@@ -60,7 +60,7 @@ VNSL supports the following data types:
 ### 4.3 Lua Expressions
 Lua code can be embedded for complex operations using `|| ||`:
 ```
-|| global.score += 10 ||
+|| global.score = global.score + 10 ||
 || global.health = math.max(0, global.health - 5) ||
 ```
 
@@ -136,10 +136,10 @@ else:
 ### 7.4 Condition Syntax
 Conditions are enclosed in pipe characters `| |`:
 ```
-if |clues < 3|:
-if |car_clue|:
-if |victim_behavior == "nervous"|:
-if |clues >= 3 and (car_clue or victim_behavior == "nervous")|:
+if |global.clues < 3|:
+if |global.car_clue|:
+if |global.victim_behavior == "nervous"|:
+if |global.clues >= 3 and (global.car_clue or global.victim_behavior == "nervous")|:
 ```
 
 ## 8. Choice System
@@ -240,7 +240,7 @@ label start_investigation:
         "Search for evidence":
             jump search_evidence
         "Confront the suspect":
-            if |clues >= 2|:
+            if |global.clues >= 2|:
                 jump confront_suspect
             else:
                 character DETECTIVE
@@ -255,7 +255,7 @@ label question_witness:
         "Ask about what they saw":
             character WITNESS
             "There was a suspicious figure near the building."
-            || global.clues += 1 ||
+            || global.clues = global.clues + 1 ||
         "Ask about the time":
             character WITNESS
             "It was around midnight, I think."
@@ -285,7 +285,7 @@ label confront_suspect:
 
     global suspect_nervous true
 
-    if |evidence_found and clues >= 3|:
+    if |global.evidence_found and global.clues >= 3|:
         character DETECTIVE
         "The evidence suggests otherwise."
         goto SceneConclusion

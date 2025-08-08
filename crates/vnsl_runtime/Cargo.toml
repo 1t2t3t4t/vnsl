@@ -12,6 +12,7 @@ vnsl_core.workspace = true
 bincode.workspace = true
 anyhow.workspace = true
 flate2 = "1.1.2"
+rand.workspace = true
 
 [dev-dependencies]
 vnsl_compiler.workspace = true
