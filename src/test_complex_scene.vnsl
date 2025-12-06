@@ -1,0 +1,850 @@
+# Complex VNSL Test Scene - The Midnight Museum Mystery
+# This script tests all major features of VNSL including:
+# - Complex nested blocks and indentation
+# - Multiple conditional branches
+# - Nested choices
+# - Variable interpolation
+# - Lua expressions
+# - Label jumps and gotos
+# - Multiple character interactions
+
+scene MidnightMuseumMystery
+
+# ============================================================================
+# CHARACTER DECLARATIONS
+# ============================================================================
+
+character DETECTIVE
+character CURATOR
+character GUARD
+character SUSPECT
+character WITNESS
+character NARRATOR
+
+# ============================================================================
+# GLOBAL VARIABLES - Testing all data types
+# ============================================================================
+
+# Player state
+global playerName "Detective Morgan"
+global playerRank "Inspector"
+global playerReputation 75
+
+# Investigation tracking
+global cluesFound 0
+global evidenceCollected 0
+global suspicionLevel 0
+global trustLevel 50
+
+# Boolean flags
+global hasFlashlight true
+global hasMagnifyingGlass false
+global hasAccessCard false
+global doorUnlocked false
+global alarmTriggered false
+global witnessInterviewed false
+global guardDistracted false
+global secretRoomFound false
+
+# Investigation paths
+global investigatedPainting false
+global investigatedVault false
+global investigatedSecurityRoom false
+global confrontedSuspect false
+
+# Time tracking
+global timeRemaining 60
+global turnsElapsed 0
+
+# Evidence specifics
+global foundFingerprints false
+global foundFootprints false
+global foundSecretPassage false
+global analyzedPaintingFrame false
+global checkedSecurityFootage false
+
+# ============================================================================
+# OPENING SCENE
+# ============================================================================
+
+[bg "museum_exterior_night"]
+
+character NARRATOR
+"The city clock strikes midnight as you arrive at the Grand Metropolitan Museum.
+A priceless artifact has been stolen, and you have been called to investigate.
+Time is of the essence."
+
+[bg "museum_entrance"]
+
+character CURATOR
+"Thank heavens you're here, {{playerName}}!
+The stolen item is the legendary Eye of Eternity diamond.
+It vanished from the vault just two hours ago."
+
+character DETECTIVE
+"I'll need to examine everything. Has anyone left the building?"
+
+character CURATOR
+"No, I've sealed all exits. The thief must still be inside."
+
+|| global.cluesFound = 0 ||
+|| global.timeRemaining = 60 ||
+
+jump investigation_hub
+
+# ============================================================================
+# MAIN INVESTIGATION LOOP
+# ============================================================================
+
+label investigation_hub:
+    || global.turnsElapsed = global.turnsElapsed + 1 ||
+    || global.timeRemaining = global.timeRemaining - 5 ||
+
+    if |global.timeRemaining <= 0|:
+        jump time_expired
+    elif |global.cluesFound >= 8 and global.evidenceCollected >= 5|:
+        jump solve_mystery
+    else:
+        character DETECTIVE
+        "I have {{global.cluesFound}} clues and {{global.evidenceCollected}} pieces of evidence.
+        Time remaining: {{global.timeRemaining}} minutes."
+
+        choice:
+            "Investigate the Vault (Crime Scene)":
+                if |global.investigatedVault|:
+                    character DETECTIVE
+                    "I've already thoroughly examined the vault."
+                    jump investigation_hub
+                else:
+                    jump investigate_vault
+
+            "Examine the Main Gallery":
+                jump investigate_gallery
+
+            "Check the Security Room":
+                if |global.hasAccessCard|:
+                    jump investigate_security_room
+                else:
+                    character DETECTIVE
+                    "The security room is locked. I need an access card."
+
+                    if |global.trustLevel > 60|:
+                        character GUARD
+                        "Here, take my card. I trust you'll find the truth."
+                        global hasAccessCard true
+                        || global.trustLevel = global.trustLevel + 10 ||
+                        jump investigate_security_room
+                    else:
+                        character GUARD
+                        "Sorry, {{playerRank}}, but that's restricted access."
+                        jump investigation_hub
+
+            "Interview the Night Guard":
+                jump interview_guard
+
+            "Confront the Suspect":
+                if |global.cluesFound >= 5 and global.suspicionLevel >= 40|:
+                    jump confront_suspect
+                else:
+                    character DETECTIVE
+                    "I need more evidence before confronting anyone."
+                    jump investigation_hub
+
+            "Search for Hidden Passages":
+                if |global.hasMagnifyingGlass and global.hasFlashlight|:
+                    jump search_passages
+                else:
+                    character DETECTIVE
+                    "I need better equipment to search for hidden passages."
+                    jump investigation_hub
+
+            "Review Evidence and Solve":
+                if |global.cluesFound >= 6|:
+                    jump review_evidence
+                else:
+                    character DETECTIVE
+                    "I need at least 6 clues before attempting to solve this."
+                    jump investigation_hub
+
+# ============================================================================
+# VAULT INVESTIGATION
+# ============================================================================
+
+label investigate_vault:
+    [bg "vault_interior"]
+
+    character DETECTIVE
+    "The vault door shows no signs of forced entry. This was an inside job."
+
+    global investigatedVault true
+    || global.cluesFound = global.cluesFound + 1 ||
+
+    choice:
+        "Examine the vault door mechanism":
+            character DETECTIVE
+            "Interesting... there are fresh scratches on the lock mechanism."
+
+            if |global.hasMagnifyingGlass|:
+                character DETECTIVE
+                "Under magnification, I can see these are from a specific tool.
+                Only someone with vault maintenance access would have this."
+
+                global foundFingerprints true
+                || global.cluesFound = global.cluesFound + 2 ||
+                || global.suspicionLevel = global.suspicionLevel + 15 ||
+            else:
+                character DETECTIVE
+                "I should get a magnifying glass for better examination."
+                || global.cluesFound = global.cluesFound + 1 ||
+
+        "Check for footprints":
+            if |global.hasFlashlight|:
+                character DETECTIVE
+                "Aha! Faint footprints leading toward the east wall."
+
+                [ACTION "Detective follows the footprints"]
+
+                global foundFootprints true
+                || global.evidenceCollected = global.evidenceCollected + 1 ||
+
+                choice:
+                    "Follow the footprints immediately":
+                        character DETECTIVE
+                        "They lead directly to... the ventilation shaft!"
+
+                        if |not global.alarmTriggered|:
+                            "I can climb up, but it might trigger an alarm."
+
+                            choice:
+                                "Risk climbing up":
+                                    [ACTION "Detective climbs into the shaft"]
+                                    global alarmTriggered true
+                                    jump secret_passage_found
+
+                                "Take note and continue investigation":
+                                    character DETECTIVE
+                                    "I'll mark this for later. Better to be thorough first."
+                                    || global.cluesFound = global.cluesFound + 1 ||
+
+                    "Document them first":
+                        [ACTION "Detective takes photos of the footprints"]
+                        character DETECTIVE
+                        "These prints match standard museum staff boots. Size 10."
+                        || global.cluesFound = global.cluesFound + 1 ||
+                        || global.evidenceCollected = global.evidenceCollected + 1 ||
+            else:
+                character DETECTIVE
+                "It's too dark to see any footprints clearly. I need better lighting."
+
+        "Examine the display case":
+            character DETECTIVE
+            "The case was opened with the correct security code.
+            No broken glass, no jimmied locks."
+
+            || global.cluesFound = global.cluesFound + 1 ||
+
+            if |global.checkedSecurityFootage|:
+                character DETECTIVE
+                "According to the security footage, only two people knew this code:
+                the curator and the head of security."
+                || global.suspicionLevel = global.suspicionLevel + 20 ||
+
+    jump investigation_hub
+
+# ============================================================================
+# GALLERY INVESTIGATION
+# ============================================================================
+
+label investigate_gallery:
+    [bg "main_gallery"]
+
+    character DETECTIVE
+    "The main gallery is filled with priceless paintings and sculptures."
+
+    choice:
+        "Examine the Renaissance painting":
+            character DETECTIVE
+            "This painting seems... off somehow."
+
+            choice:
+                "Look behind the painting":
+                    if |global.hasFlashlight|:
+                        [ACTION "Detective carefully moves the painting"]
+
+                        character DETECTIVE
+                        "There's a hidden switch behind here!"
+
+                        global foundSecretPassage true
+                        || global.cluesFound = global.cluesFound + 2 ||
+
+                        choice:
+                            "Press the switch":
+                                jump secret_passage_found
+                            "Note it and continue investigating":
+                                character DETECTIVE
+                                "I'll come back to this."
+                                || global.evidenceCollected = global.evidenceCollected + 1 ||
+                    else:
+                        character DETECTIVE
+                        "I can't see well enough behind it. I need a flashlight."
+
+                "Analyze the frame":
+                    if |global.hasMagnifyingGlass|:
+                        character DETECTIVE
+                        "There are fresh scratch marks on the frame's edge.
+                        Someone handled this recently."
+
+                        global analyzedPaintingFrame true
+                        || global.cluesFound = global.cluesFound + 1 ||
+                        || global.evidenceCollected = global.evidenceCollected + 1 ||
+
+                        if |global.foundFootprints|:
+                            character DETECTIVE
+                            "Wait... these scratches align with the footprint pattern!"
+                            || global.cluesFound = global.cluesFound + 1 ||
+                    else:
+                        character DETECTIVE
+                        "The frame looks suspicious, but I need magnification."
+
+        "Talk to the curator about the gallery":
+            character CURATOR
+            "This gallery contains our most valuable pieces, aside from the diamond.
+            We keep it under 24/7 surveillance."
+
+            character DETECTIVE
+            "Who has access to the surveillance system?"
+
+            character CURATOR
+            "Only myself and the head guard. His name is {{global.playerName}}...
+            wait, no, I mean... his name is Officer Blake."
+
+            || global.suspicionLevel = global.suspicionLevel + 10 ||
+            || global.cluesFound = global.cluesFound + 1 ||
+
+            if |global.suspicionLevel >= 30|:
+                character DETECTIVE
+                "You seem nervous, curator. Is there something you're not telling me?"
+
+                character CURATOR
+                "No, no! I'm just... stressed from the theft."
+
+                || global.trustLevel = global.trustLevel - 5 ||
+
+        "Search for tools or equipment":
+            [ACTION "Detective searches the gallery storage"]
+
+            character DETECTIVE
+            "Let's see what's in storage..."
+
+            if |not global.hasMagnifyingGlass|:
+                character DETECTIVE
+                "Perfect! A magnifying glass. This will help with detailed examination."
+                global hasMagnifyingGlass true
+                || global.evidenceCollected = global.evidenceCollected + 1 ||
+            else:
+                character DETECTIVE
+                "Nothing useful here that I don't already have."
+
+    jump investigation_hub
+
+# ============================================================================
+# SECURITY ROOM INVESTIGATION
+# ============================================================================
+
+label investigate_security_room:
+    [bg "security_room"]
+
+    if |global.investigatedSecurityRoom|:
+        character DETECTIVE
+        "I've already checked everything here."
+        jump investigation_hub
+    else:
+        global investigatedSecurityRoom true
+
+        character DETECTIVE
+        "The security room has monitors showing every corner of the museum."
+
+        choice:
+            "Review the security footage":
+                [ACTION "Detective reviews the recordings"]
+
+                character DETECTIVE
+                "Let me check the footage from tonight..."
+
+                global checkedSecurityFootage true
+                || global.cluesFound = global.cluesFound + 2 ||
+                || global.evidenceCollected = global.evidenceCollected + 2 ||
+
+                if |global.suspicionLevel >= 20|:
+                    character DETECTIVE
+                    "Wait! The footage shows the curator entering the vault at 10:47 PM.
+                    But he told me he discovered the theft at 11:00 PM!"
+
+                    || global.suspicionLevel = global.suspicionLevel + 30 ||
+                    || global.cluesFound = global.cluesFound + 2 ||
+
+                    choice:
+                        "Confront the curator immediately":
+                            jump confront_curator_early
+                        "Gather more evidence first":
+                            character DETECTIVE
+                            "I need to be absolutely certain before making accusations."
+                            || global.playerReputation = global.playerReputation + 10 ||
+                else:
+                    character DETECTIVE
+                    "The footage shows normal activity... but wait, there's a gap.
+                    Five minutes of footage are missing!"
+
+                    || global.cluesFound = global.cluesFound + 1 ||
+
+            "Check the alarm system logs":
+                character DETECTIVE
+                "The alarm logs show... interesting."
+
+                if |global.alarmTriggered|:
+                    character DETECTIVE
+                    "The ventilation alarm was triggered by me earlier.
+                    But there's another alert from 10:52 PM that was manually disabled."
+
+                    || global.cluesFound = global.cluesFound + 2 ||
+                else:
+                    character DETECTIVE
+                    "Someone disabled the vault alarm at 10:52 PM.
+                    This requires admin access."
+
+                    || global.cluesFound = global.cluesFound + 1 ||
+                    || global.suspicionLevel = global.suspicionLevel + 15 ||
+
+            "Examine the equipment":
+                character DETECTIVE
+                "Professional-grade surveillance equipment. Nothing seems tampered with."
+
+                if |global.foundFingerprints|:
+                    character DETECTIVE
+                    "But wait - there are fresh fingerprints on the footage control panel.
+                    Someone reviewed this footage recently and then tried to erase it."
+
+                    || global.cluesFound = global.cluesFound + 2 ||
+                    || global.evidenceCollected = global.evidenceCollected + 1 ||
+
+        jump investigation_hub
+
+# ============================================================================
+# GUARD INTERVIEW
+# ============================================================================
+
+label interview_guard:
+    [bg "museum_hallway"]
+
+    if |global.witnessInterviewed|:
+        character GUARD
+        "I've told you everything I know, {{playerRank}}."
+        jump investigation_hub
+    else:
+        global witnessInterviewed true
+
+        character DETECTIVE
+        "I need to ask you some questions about tonight."
+
+        character GUARD
+        "Of course, anything to help."
+
+        choice:
+            "Ask about his patrol route":
+                character GUARD
+                "I patrol the east wing every 30 minutes.
+                Tonight I was in the sculpture garden from 10:30 to 11:00."
+
+                character DETECTIVE
+                "So you were away from the vault during the theft?"
+
+                character GUARD
+                "Yes, but that's standard procedure. The vault has its own security."
+
+                || global.cluesFound = global.cluesFound + 1 ||
+
+                if |global.checkedSecurityFootage|:
+                    character DETECTIVE
+                    "The footage shows you were actually near the security room at 10:50."
+
+                    character GUARD
+                    "I... I went to check the monitors. Nothing unusual."
+
+                    || global.suspicionLevel = global.suspicionLevel + 10 ||
+
+            "Ask about the curator":
+                character GUARD
+                "The curator? He's been acting strange lately.
+                Financial troubles, I've heard."
+
+                || global.cluesFound = global.cluesFound + 1 ||
+                || global.suspicionLevel = global.suspicionLevel + 15 ||
+                || global.trustLevel = global.trustLevel + 10 ||
+
+                character DETECTIVE
+                "Tell me more about these financial troubles."
+
+                character GUARD
+                "Well, it's just rumors, but I heard the museum might be closing.
+                He's been taking a lot of personal calls."
+
+            "Ask about security protocols":
+                character GUARD
+                "The vault requires two-factor authentication:
+                a code and a biometric scan. Only three people have access."
+
+                character DETECTIVE
+                "Three people?"
+
+                character GUARD
+                "The curator, the head of security, and the museum director.
+                But the director is out of the country."
+
+                || global.cluesFound = global.cluesFound + 2 ||
+
+        jump investigation_hub
+
+# ============================================================================
+# SECRET PASSAGE
+# ============================================================================
+
+label search_passages:
+    [bg "museum_corridor"]
+
+    character DETECTIVE
+    "Let me search for any hidden passages or escape routes."
+
+    [ACTION "Detective examines walls and floors carefully"]
+
+    if |global.foundSecretPassage or global.foundFootprints|:
+        character DETECTIVE
+        "My earlier clues point to... there!"
+        jump secret_passage_found
+    else:
+        character DETECTIVE
+        "Nothing obvious here. I need more information."
+        jump investigation_hub
+
+label secret_passage_found:
+    [bg "secret_passage"]
+
+    character DETECTIVE
+    "I found it! A hidden passage behind the painting!"
+
+    global secretRoomFound true
+    || global.cluesFound = global.cluesFound + 3 ||
+    || global.evidenceCollected = global.evidenceCollected + 2 ||
+
+    [ACTION "Detective enters the passage"]
+
+    character DETECTIVE
+    "This passage leads to... a hidden office!"
+
+    [bg "hidden_office"]
+
+    choice:
+        "Search the desk":
+            character DETECTIVE
+            "Documents... financial records... and a receipt for a private jet ticket!"
+
+            || global.cluesFound = global.cluesFound + 2 ||
+            || global.evidenceCollected = global.evidenceCollected + 2 ||
+            || global.suspicionLevel = global.suspicionLevel + 25 ||
+
+            if |global.suspicionLevel >= 60|:
+                character DETECTIVE
+                "This is it! The curator was planning to flee the country.
+                I have enough evidence now!"
+                jump solve_mystery
+
+        "Examine the safe":
+            character DETECTIVE
+            "There's a small safe hidden in the wall."
+
+            choice:
+                "Try to open it":
+                    if |global.hasMagnifyingGlass and global.hasFlashlight|:
+                        [ACTION "Detective carefully cracks the safe"]
+
+                        character DETECTIVE
+                        "Got it!"
+
+                        [ACTION "Safe opens, revealing the diamond"]
+
+                        character DETECTIVE
+                        "The Eye of Eternity! It's here!"
+
+                        global evidenceCollected 10
+                        global cluesFound 10
+
+                        jump mystery_solved_perfect
+                    else:
+                        character DETECTIVE
+                        "I can't crack it without the right tools."
+
+                "Leave it for now":
+                    character DETECTIVE
+                    "I'll come back with backup."
+
+    jump investigation_hub
+
+# ============================================================================
+# CONFRONTATION SCENES
+# ============================================================================
+
+label confront_suspect:
+    if |global.confrontedSuspect|:
+        character DETECTIVE
+        "I've already spoken with the suspect."
+        jump investigation_hub
+    else:
+        global confrontedSuspect true
+        jump confront_curator_early
+
+label confront_curator_early:
+    [bg "curator_office"]
+
+    character DETECTIVE
+    "Curator, I need to speak with you about some inconsistencies."
+
+    character CURATOR
+    "What do you mean?"
+
+    if |global.cluesFound >= 6 and global.suspicionLevel >= 50|:
+        character DETECTIVE
+        "You claimed you discovered the theft at 11:00 PM,
+        but security footage shows you near the vault at 10:47.
+        You had financial troubles and planned to flee the country.
+        The vault was opened with correct credentials - yours."
+
+        character CURATOR
+        "I... I can explain..."
+
+        choice:
+            "Let him explain":
+                character CURATOR
+                "Yes, I took it. The museum was bankrupt. I was desperate.
+                But I never meant for it to go this far."
+
+                || global.playerReputation = global.playerReputation + 20 ||
+                jump mystery_solved_confession
+
+            "Arrest him immediately":
+                character DETECTIVE
+                "Save it for the judge. You're under arrest."
+
+                || global.playerReputation = global.playerReputation + 15 ||
+                jump mystery_solved_arrest
+    else:
+        character CURATOR
+        "I don't appreciate these accusations without proof, {{playerRank}}."
+
+        || global.trustLevel = global.trustLevel - 20 ||
+        || global.playerReputation = global.playerReputation - 10 ||
+
+        character DETECTIVE
+        "I need more evidence before making formal accusations."
+
+        jump investigation_hub
+
+# ============================================================================
+# EVIDENCE REVIEW
+# ============================================================================
+
+label review_evidence:
+    [bg "evidence_room"]
+
+    character DETECTIVE
+    "Let me review everything I've discovered..."
+
+    character DETECTIVE
+    "Clues found: {{global.cluesFound}}
+    Evidence collected: {{global.evidenceCollected}}
+    Suspicion level: {{global.suspicionLevel}}
+    Trust level: {{global.trustLevel}}"
+
+    if |global.cluesFound >= 8 and global.evidenceCollected >= 5|:
+        character DETECTIVE
+        "I have enough to solve this case!"
+        jump solve_mystery
+    elif |global.cluesFound >= 6 and global.suspicionLevel >= 60|:
+        character DETECTIVE
+        "I'm fairly certain who did this. Time to make the arrest."
+        jump solve_mystery
+    else:
+        character DETECTIVE
+        "I need more evidence. Back to investigating."
+        jump investigation_hub
+
+# ============================================================================
+# SOLVE MYSTERY
+# ============================================================================
+
+label solve_mystery:
+    [bg "museum_main_hall"]
+
+    character DETECTIVE
+    "Everyone, gather around. I know who stole the Eye of Eternity."
+
+    [ACTION "All suspects gather"]
+
+    character CURATOR
+    character GUARD
+    character WITNESS
+
+    character DETECTIVE
+    "Based on my investigation..."
+
+    if |global.checkedSecurityFootage and global.suspicionLevel >= 60|:
+        character DETECTIVE
+        "The thief is... the curator!"
+
+        if |global.secretRoomFound|:
+            character DETECTIVE
+            "The hidden passage, the financial records, the plane tickets.
+            You planned this for months."
+
+            jump mystery_solved_perfect
+        else:
+            character DETECTIVE
+            "The security footage, the motive, the access codes.
+            It all points to you."
+
+            jump mystery_solved_good
+    else:
+        character DETECTIVE
+        "I... I need more time to be certain."
+
+        jump mystery_failed
+
+# ============================================================================
+# ENDINGS
+# ============================================================================
+
+label mystery_solved_perfect:
+    [bg "museum_exterior_dawn"]
+
+    character NARRATOR
+    "With overwhelming evidence and the recovered diamond,
+    {{playerName}} successfully solved the case of the Midnight Museum Mystery."
+
+    || global.playerReputation = global.playerReputation + 50 ||
+
+    character DETECTIVE
+    "Another case closed. Final reputation: {{global.playerReputation}}"
+
+    "PERFECT ENDING ACHIEVED"
+    "Clues found: {{global.cluesFound}}"
+    "Evidence collected: {{global.evidenceCollected}}"
+    "Time remaining: {{global.timeRemaining}} minutes"
+
+    goto GameComplete
+
+label mystery_solved_good:
+    [bg "museum_exterior_dawn"]
+
+    character NARRATOR
+    "Through careful investigation, {{playerName}} identified the culprit
+    and brought them to justice."
+
+    || global.playerReputation = global.playerReputation + 30 ||
+
+    character DETECTIVE
+    "The case is solved. Final reputation: {{global.playerReputation}}"
+
+    "GOOD ENDING ACHIEVED"
+    "Clues found: {{global.cluesFound}}"
+
+    goto GameComplete
+
+label mystery_solved_confession:
+    [bg "police_station"]
+
+    character NARRATOR
+    "The curator's confession made the case straightforward,
+    though some evidence was never recovered."
+
+    || global.playerReputation = global.playerReputation + 25 ||
+
+    "CONFESSION ENDING"
+
+    goto GameComplete
+
+label mystery_solved_arrest:
+    [bg "police_station"]
+
+    character NARRATOR
+    "A swift arrest brought the case to a close."
+
+    || global.playerReputation = global.playerReputation + 20 ||
+
+    "ARREST ENDING"
+
+    goto GameComplete
+
+label mystery_failed:
+    [bg "museum_exterior_night"]
+
+    character NARRATOR
+    "Without sufficient evidence, the case remains unsolved.
+    The thief escaped, and the diamond was never recovered."
+
+    || global.playerReputation = global.playerReputation - 30 ||
+
+    character DETECTIVE
+    "I failed this time. Reputation: {{global.playerReputation}}"
+
+    "FAILED ENDING"
+
+    goto GameOver
+
+label time_expired:
+    [bg "museum_exterior_dawn"]
+
+    character NARRATOR
+    "Time ran out before {{playerName}} could solve the case.
+    The trail went cold."
+
+    || global.playerReputation = global.playerReputation - 20 ||
+
+    "TIME EXPIRED ENDING"
+    "Clues found: {{global.cluesFound}}"
+    "Turns elapsed: {{global.turnsElapsed}}"
+
+    goto GameOver
+
+label GameComplete:
+    character NARRATOR
+    "Thank you for playing The Midnight Museum Mystery!"
+
+    if |global.playerReputation >= 100|:
+        "Legendary Detective Achievement Unlocked!"
+    elif |global.playerReputation >= 80|:
+        "Master Detective Achievement Unlocked!"
+    elif |global.playerReputation >= 60|:
+        "Expert Detective Achievement Unlocked!"
+    else:
+        "Detective Achievement Unlocked!"
+
+    goto Credits
+
+label GameOver:
+    character NARRATOR
+    "Case closed... unsuccessfully."
+    goto Credits
+
+label Credits:
+    [bg "black"]
+
+    "THE END"
+    ""
+    "VNSL Complex Scene Test"
+    "Testing all language features:"
+    "✓ Nested blocks and indentation"
+    "✓ Complex conditionals with boolean logic"
+    "✓ Multiple choice branches"
+    "✓ Variable interpolation"
+    "✓ Lua expressions and calculations"
+    "✓ Label jumps and scene gotos"
+    "✓ Character dialogue and actions"
+    "✓ State tracking across scenes"

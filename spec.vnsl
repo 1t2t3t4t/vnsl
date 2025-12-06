@@ -27,6 +27,76 @@ global playerName "Alice"
 "Hello, {{playerName}}!"
 ```
 
+### 2.4 Blocks and Indentation
+VNSL uses Python-style indentation to define code blocks. Indentation is significant and determines the scope of statements within control structures.
+
+#### 2.4.1 Indentation Rules
+- Use consistent indentation (recommended: 4 spaces or 1 tab)
+- All statements within a block must be indented at the same level
+- Blocks are created after colons (`:`) in labels, conditionals, and choices
+- Nested blocks require additional indentation levels
+
+#### 2.4.2 Block Contexts
+Blocks are used in the following contexts:
+
+**Labels**: Define a section of code that can be jumped to
+```
+label investigation:
+    character DETECTIVE
+    "Let's investigate the scene."
+    [ACTION "Looking around"]
+```
+
+**Conditionals**: Group statements executed when a condition is met
+```
+if |global.clues > 5|:
+    character DETECTIVE
+    "I have enough clues now."
+    goto conclusion
+else:
+    "Need more evidence."
+```
+
+**Choices**: Define options and their consequences
+```
+choice:
+    "Option 1":
+        "You chose option 1."
+        global choice1_taken true
+    "Option 2":
+        "You chose option 2."
+        global choice2_taken true
+```
+
+#### 2.4.3 Nested Blocks
+Blocks can be nested within other blocks:
+```
+label complex_scene:
+    character DETECTIVE
+    "What should I do?"
+
+    choice:
+        "Investigate the room":
+            "You search the room carefully."
+
+            if |global.hasFlashlight|:
+                "The flashlight reveals hidden markings."
+                global foundSecret true
+            else:
+                "It's too dark to see clearly."
+
+        "Leave the room":
+            "You decide to leave."
+            jump next_scene
+```
+
+#### 2.4.4 Indentation Best Practices
+- Be consistent with your indentation style throughout the file
+- Use spaces rather than tabs to avoid mixed indentation issues
+- Ensure all lines in a block have the same indentation level
+- Empty lines within blocks do not require indentation
+- The first non-empty line after a colon determines the indentation level for that block
+
 ## 3. Scene Structure
 
 ### 3.1 Scene Declaration
@@ -142,6 +212,8 @@ label labelName:
     # Content here
 ```
 
+Labels create a block that contains all indented statements following the colon. See section 2.4 for details on blocks and indentation.
+
 ### 7.2 Jumps
 Jump to labels within the current scene:
 ```
@@ -158,6 +230,8 @@ elif |global.another_condition|:
 else:
     # Default content
 ```
+
+Conditionals create blocks that must be properly indented. See section 2.4 for details on blocks and indentation.
 
 ### 7.4 Condition Syntax
 Conditions are enclosed in pipe characters `| |`:
@@ -181,6 +255,8 @@ choice:
     "Option 3 text":
         # Content for option 3
 ```
+
+Choices use nested blocks - the first level of indentation contains the choice options, and the second level contains the content for each option. See section 2.4 for details on blocks and indentation.
 
 ### 8.2 Choice Actions
 Each choice can contain dialogue, actions, variable assignments, and flow control:
@@ -237,6 +313,7 @@ choice:
 - Use meaningful label names
 - Group related choices and conditional logic
 - Add comments for complex logic
+- Maintain consistent indentation (4 spaces recommended)
 
 ### 10.3 Variable Management
 - Initialize variables before use with `global variableName value`
@@ -365,6 +442,33 @@ if |global.score > 50|:
 || global.score = global.score + 10 ||
 ```
 
+#### 12.1.4 Indentation Errors
+**Wrong**: Inconsistent or missing indentation in blocks
+```
+label myLabel:
+character DETECTIVE
+"This should be indented."
+```
+**Correct**: All statements in a block must be consistently indented
+```
+label myLabel:
+    character DETECTIVE
+    "This is properly indented."
+```
+
+**Wrong**: Mixed indentation levels
+```
+if |global.score > 50|:
+    "First line with 4 spaces"
+      "Second line with 6 spaces"  # Incorrect
+```
+**Correct**: Consistent indentation throughout the block
+```
+if |global.score > 50|:
+    "First line with 4 spaces"
+    "Second line with 4 spaces"  # Correct
+```
+
 ### 12.2 Common Runtime Errors
 - Undefined characters referenced in dialogue
 - Undefined variables in conditions
@@ -372,6 +476,7 @@ if |global.score > 50|:
 - Invalid jump targets (missing labels)
 - Syntax errors in Lua expressions
 - Missing character declarations
+- Inconsistent or incorrect indentation in blocks
 
 ### 12.3 Validation Rules
 - All referenced characters must be declared with `character Name`
@@ -381,6 +486,8 @@ if |global.score > 50|:
 - Choice blocks must have at least one option
 - Scene names must be valid identifiers
 - Labels must be unique within a scene
+- All statements within a block must have consistent indentation
+- Blocks must be properly indented after colons (`:`)
 
 ## 13. File Structure
 

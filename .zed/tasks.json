@@ -13,6 +13,10 @@
     "hide": "on_success"
   },
   {
+    "label": "Run Playground",
+    "command": "cargo run"
+  },
+  {
     "label": "Build Godot (Win)",
     "command": "./buildGodot.bat"
   },

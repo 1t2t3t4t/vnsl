@@ -14,7 +14,7 @@ fn elapsed<T>(label: &str, f: impl FnOnce() -> T) -> T {
 }
 
 fn main() -> anyhow::Result<()> {
-    let test_script = include_str!("./test.vnsl");
+    let test_script = include_str!("./test_complex_scene.vnsl");
     let scene = elapsed("compile", || vnsl_compiler::compile(test_script))?;
 
     let mut runner = SceneRunner::default();
