@@ -28,6 +28,7 @@ mod tests {
 
     #[test]
     fn test_compile_dir() {
-        compile_dir("./test_scripts").unwrap();
+        let results = compile_dir("./test_scripts").unwrap();
+        assert_eq!(results.len(), 4);
     }
 }

@@ -8,7 +8,7 @@ pub mod snapshot;
 use lua_runtime::LuaRuntime;
 pub use runtime::*;
 
-#[derive(Debug, Default)]
+#[derive(Debug, Default, Clone)]
 pub struct RunContext {
     lua_runtime: LuaRuntime,
 }

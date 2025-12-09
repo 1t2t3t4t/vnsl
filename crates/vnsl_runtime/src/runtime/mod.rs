@@ -3,7 +3,6 @@ mod snapshot_test;
 #[cfg(test)]
 mod test;
 
-#[cfg(debug_assertions)]
 pub mod scene_runner;
 mod text;
 
@@ -17,7 +16,7 @@ use crate::{
     RunContext,
 };
 
-#[derive(Debug, Default)]
+#[derive(Debug, Default, Clone)]
 pub struct Runtime {
     current_scene: Option<VnslScene>,
     context: RunContext,

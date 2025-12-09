@@ -5,7 +5,7 @@ use vnsl_core::model::VnslDataType;
 
 use crate::result::{RuntimeError, RuntimeResult};
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct LuaRuntime {
     lua: Lua,
     global_table: Table,
