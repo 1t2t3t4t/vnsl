@@ -5,6 +5,7 @@ mod label;
 mod statement;
 mod utils;
 
+use error::{unexpected_rule, ParsingError, ParsingErrorKind, ParsingResult};
 use pest::Parser;
 use pest_derive::Parser;
 use thiserror::Error;
@@ -24,22 +25,37 @@ pub enum ParseError {
     UnsupportedRule(Rule, String),
 }
 
-pub fn parse_scene_name(script: &str) -> anyhow::Result<String> {
-    let mut scene = VnslParser::parse(Rule::scene, script)?;
-    anyhow::Ok(
-        scene
-            .next()
-            .ok_or(ParseError::NoSceneName)?
-            .into_inner()
-            .as_str()
-            .to_string(),
-    )
+pub fn parse_scene_name(script: &str) -> ParsingResult<String> {
+    let mut scene = VnslParser::parse(Rule::scene, script).map_err(|e| ParsingError {
+        rule: Rule::scene,
+        span: (0, script.len()),
+        code: script.to_string(),
+        kind: ParsingErrorKind::Other(e.into()),
+    })?;
+    let pair = scene.next().ok_or_else(|| ParsingError {
+        rule: Rule::scene,
+        span: (0, script.len()),
+        code: script.to_string(),
+        kind: ParsingErrorKind::MissingRequired("scene name".to_string()),
+    })?;
+    Ok(pair.into_inner().as_str().to_string())
 }
 
-pub fn parse_scene(script: &str) -> anyhow::Result<VnslScene> {
-    let scene = VnslParser::parse(Rule::script, script)?
+pub fn parse_scene(script: &str) -> ParsingResult<VnslScene> {
+    let scene = VnslParser::parse(Rule::script, script)
+        .map_err(|e| ParsingError {
+            rule: Rule::script,
+            span: (0, script.len()),
+            code: script.to_string(),
+            kind: ParsingErrorKind::Other(e.into()),
+        })?
         .next()
-        .ok_or(ParseError::EmptyRule)?;
+        .ok_or_else(|| ParsingError {
+            rule: Rule::script,
+            span: (0, script.len()),
+            code: script.to_string(),
+            kind: ParsingErrorKind::MissingRequired("script content".to_string()),
+        })?;
     let rules = scene.into_inner();
     let mut scene = VnslScene::default();
 
@@ -58,11 +74,17 @@ pub fn parse_scene(script: &str) -> anyhow::Result<VnslScene> {
                 scene.labels.insert(label.name.clone(), label);
             }
             Rule::EOI => (),
-            _ => unreachable!("Got unexpected rule {:?} in main loop", rule.as_rule()),
+            _ => {
+                return unexpected_rule(
+                    &rule,
+                    &[Rule::scene, Rule::stmt, Rule::label_scope, Rule::EOI],
+                    "main parsing loop",
+                );
+            }
         }
     }
 
-    anyhow::Ok(scene)
+    Ok(scene)
 }
 
 #[cfg(test)]

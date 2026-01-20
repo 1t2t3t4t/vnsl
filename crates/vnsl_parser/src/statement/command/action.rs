@@ -1,11 +1,14 @@
 use std::vec;
 
-use crate::{data_type, Rule};
-use anyhow::Ok;
+use crate::{
+    data_type,
+    error::{unexpected_rule, ParsingResult},
+    Rule,
+};
 use pest::iterators::Pair;
 use vnsl_core::model::{VnslAction, VnslActionArg, VnslDataType};
 
-pub fn parse_action(rule: Pair<Rule>) -> anyhow::Result<VnslAction> {
+pub fn parse_action(rule: Pair<Rule>) -> ParsingResult<VnslAction> {
     let inner = rule.into_inner();
     let mut action = VnslAction::default();
     for rule in inner {
@@ -14,13 +17,15 @@ pub fn parse_action(rule: Pair<Rule>) -> anyhow::Result<VnslAction> {
             Rule::args => {
                 action.args = parse_action_args(rule)?;
             }
-            _ => unreachable!(),
+            _ => {
+                return unexpected_rule(&rule, &[Rule::identifier, Rule::args], "action");
+            }
         }
     }
     Ok(action)
 }
 
-fn parse_action_args(rule: Pair<Rule>) -> anyhow::Result<Vec<VnslActionArg>> {
+fn parse_action_args(rule: Pair<Rule>) -> ParsingResult<Vec<VnslActionArg>> {
     let mut args = vec![];
     let inner = rule.into_inner();
     for rule in inner {
@@ -29,7 +34,7 @@ fn parse_action_args(rule: Pair<Rule>) -> anyhow::Result<Vec<VnslActionArg>> {
     Ok(args)
 }
 
-fn parse_action_arg(rule: Pair<Rule>) -> anyhow::Result<VnslActionArg> {
+fn parse_action_arg(rule: Pair<Rule>) -> ParsingResult<VnslActionArg> {
     let mut name = None;
     let mut arg_data_type = VnslDataType::Bool(false);
 
@@ -42,7 +47,13 @@ fn parse_action_arg(rule: Pair<Rule>) -> anyhow::Result<VnslActionArg> {
             Rule::data_type => {
                 arg_data_type = data_type::parse_data_type(a_rule)?;
             }
-            _ => unreachable!("Unexpected rules {:?} in arg", a_rule.as_rule()),
+            _ => {
+                return unexpected_rule(
+                    &a_rule,
+                    &[Rule::identifier, Rule::data_type],
+                    "action argument",
+                );
+            }
         }
     }
 

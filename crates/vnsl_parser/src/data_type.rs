@@ -1,5 +1,5 @@
 use crate::{
-    error::{wrap_parsing_result, ParsingResult},
+    error::{unexpected_rule, wrap_parsing_result, ParsingResult},
     Rule,
 };
 use pest::iterators::Pair;
@@ -14,13 +14,17 @@ pub fn parse_data_type(rule: Pair<Rule>) -> ParsingResult<VnslDataType> {
         Rule::number => wrap_parsing_result(inner, |inner| {
             let num_str = inner.as_str().trim();
             let num = num_str.parse::<f64>()?;
-            Ok(VnslDataType::Number(num))
+            Ok::<VnslDataType, anyhow::Error>(VnslDataType::Number(num))
         }),
         Rule::bool => {
             let bool_val = inner.as_str() == "true";
             Ok(VnslDataType::Bool(bool_val))
         }
-        _ => unreachable!(),
+        _ => unexpected_rule(
+            &inner,
+            &[Rule::string, Rule::number, Rule::bool],
+            "data_type",
+        ),
     }
 }
 

@@ -1,4 +1,8 @@
-use crate::{block, data_type, Rule};
+use crate::{
+    block, data_type,
+    error::{unexpected_rule, ParsingResult},
+    Rule,
+};
 use pest::iterators::Pair;
 use uuid::Uuid;
 use vnsl_core::model::{VnslChoice, VnslChoices, VnslLuaEvalType};
@@ -13,7 +17,7 @@ fn gen_uuid() -> String {
     }
 }
 
-pub fn parse_choices(rule: Pair<Rule>) -> anyhow::Result<VnslChoices> {
+pub fn parse_choices(rule: Pair<Rule>) -> ParsingResult<VnslChoices> {
     let inner = rule.into_inner();
     let mut choices = vec![];
     for rule in inner {
@@ -21,13 +25,15 @@ pub fn parse_choices(rule: Pair<Rule>) -> anyhow::Result<VnslChoices> {
             Rule::choice => {
                 choices.push(parse_choice(rule)?);
             }
-            _ => unreachable!(),
+            _ => {
+                return unexpected_rule(&rule, &[Rule::choice], "choices");
+            }
         }
     }
     Ok(VnslChoices { choices })
 }
 
-fn parse_choice(rule: Pair<Rule>) -> anyhow::Result<VnslChoice> {
+fn parse_choice(rule: Pair<Rule>) -> ParsingResult<VnslChoice> {
     let inner = rule.into_inner();
     let mut choice = VnslChoice::default();
     choice.id = gen_uuid();
@@ -43,7 +49,13 @@ fn parse_choice(rule: Pair<Rule>) -> anyhow::Result<VnslChoice> {
                 choice.condition =
                     Some(lua_expr::parse_lua_eval_expr(rule, VnslLuaEvalType::Bool)?);
             }
-            _ => unreachable!("Found unexpected rule {:?} for choice", rule.as_rule()),
+            _ => {
+                return unexpected_rule(
+                    &rule,
+                    &[Rule::string, Rule::block, Rule::choice_condition],
+                    "choice",
+                );
+            }
         }
     }
     Ok(choice)

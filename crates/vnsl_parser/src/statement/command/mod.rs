@@ -1,5 +1,5 @@
+use crate::error::{unexpected_rule, ParsingResult};
 use crate::Rule;
-use anyhow::Ok;
 use pest::iterators::Pair;
 use vnsl_core::model::VnslCommand;
 
@@ -10,7 +10,7 @@ mod global;
 mod goto;
 mod jump;
 
-pub fn parse_command(rule: Pair<Rule>) -> anyhow::Result<VnslCommand> {
+pub fn parse_command(rule: Pair<Rule>) -> ParsingResult<VnslCommand> {
     let inner = rule.into_inner().next().unwrap();
     let cmd = match inner.as_rule() {
         Rule::dialogue => VnslCommand::Dialogue(dialogue::parse_dialogue(inner)?),
@@ -21,7 +21,22 @@ pub fn parse_command(rule: Pair<Rule>) -> anyhow::Result<VnslCommand> {
         Rule::goto => VnslCommand::GoTo(goto::parse_goto(inner)?),
         Rule::r#return => VnslCommand::Return,
         Rule::pass => VnslCommand::Pass,
-        _ => unreachable!(),
+        _ => {
+            return unexpected_rule(
+                &inner,
+                &[
+                    Rule::dialogue,
+                    Rule::set_character,
+                    Rule::action,
+                    Rule::jump,
+                    Rule::global,
+                    Rule::goto,
+                    Rule::r#return,
+                    Rule::pass,
+                ],
+                "command",
+            );
+        }
     };
     Ok(cmd)
 }

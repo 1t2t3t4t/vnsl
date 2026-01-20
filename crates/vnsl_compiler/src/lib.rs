@@ -19,7 +19,7 @@ pub fn compile_scripts(scripts: &[String]) -> anyhow::Result<Vec<VnslScene>> {
 
 pub fn compile(script: &str) -> anyhow::Result<VnslScene> {
     // TODO: - Impl some validation of the script
-    vnsl_parser::parse_scene(script)
+    Ok(vnsl_parser::parse_scene(script)?)
 }
 
 #[cfg(test)]

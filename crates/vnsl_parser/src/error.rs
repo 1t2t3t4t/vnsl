@@ -3,74 +3,169 @@ use thiserror::Error;
 
 use crate::Rule;
 
-macro_rules! impl_parsing_error {
-    ($($key:ident: $type:ty: $tag:expr),+) => {
-        #[derive(Debug, Error)]
-        pub struct ParsingError {
-            $(pub $key: $type,)+
-            source: anyhow::Error,
-        }
+// Re-export for convenience - these traits may be used by consumers of the crate
+#[allow(dead_code)]
 
-        impl std::fmt::Display for ParsingError {
-            fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-                writeln!(f, "Parsing failed:")?;
-                $(
-                    writeln!(f, "{}: {:?}", $tag, self.$key)?;
-                )+
-                writeln!(f, "Source Error:")?;
-                writeln!(f, "msg: {}", self.source)?;
-                write!(f, "source: {:#?}", self.source)?;
-                Ok(())
-            }
-        }
-
-        pub trait IntoParsingError {
-            fn into_parsing_err(self, $($key: $type,)+) -> ParsingError;
-        }
-
-        impl<T> IntoParsingError for T
-        where
-            T: Into<anyhow::Error>,
-        {
-            fn into_parsing_err(self, $($key: $type,)+) -> ParsingError {
-                ParsingError {
-                    $($key,)+
-                    source: self.into(),
-                }
-            }
-        }
-
-        pub trait IntoParsingResult {
-            type OkType;
-            fn into_parsing_result(self, $($key: $type,)+) -> ParsingResult<Self::OkType>;
-        }
-
-        impl<T, E> IntoParsingResult for Result<T, E>
-        where
-            E: Into<anyhow::Error>,
-        {
-            type OkType = T;
-
-            fn into_parsing_result(self, $($key: $type,)+) -> ParsingResult<Self::OkType> {
-                self.map_err(|err| err.into_parsing_err($($key,)+))
-            }
-        }
-    };
-}
-
+/// The unified result type for all parsing operations.
 pub type ParsingResult<T> = Result<T, ParsingError>;
 
-impl_parsing_error!(
-    rule: Rule: "Rule",
-    code: String: "Raw code string"
-);
+/// A parsing error with context about where and what failed.
+#[derive(Debug, Error)]
+#[error("{kind}")]
+pub struct ParsingError {
+    /// The rule being parsed when the error occurred.
+    pub rule: Rule,
+    /// The span (start, end) byte positions in the source.
+    pub span: (usize, usize),
+    /// The raw source code that caused the error.
+    pub code: String,
+    /// The specific kind of parsing error.
+    #[source]
+    pub kind: ParsingErrorKind,
+}
 
+impl ParsingError {
+    /// Create a new parsing error from a rule pair and error kind.
+    pub fn new(pair: &Pair<Rule>, kind: ParsingErrorKind) -> Self {
+        let span = pair.as_span();
+        Self {
+            rule: pair.as_rule(),
+            span: (span.start(), span.end()),
+            code: pair.as_str().to_string(),
+            kind,
+        }
+    }
+
+    /// Create an unexpected rule error.
+    pub fn unexpected_rule(pair: &Pair<Rule>, expected: &[Rule], context: &'static str) -> Self {
+        Self::new(
+            pair,
+            ParsingErrorKind::UnexpectedRule {
+                expected: expected.to_vec(),
+                found: pair.as_rule(),
+                context,
+            },
+        )
+    }
+
+    /// Create a missing required element error.
+    pub fn missing_required(pair: &Pair<Rule>, element: impl Into<String>) -> Self {
+        Self::new(pair, ParsingErrorKind::MissingRequired(element.into()))
+    }
+
+    /// Create an invalid value error.
+    pub fn invalid_value(pair: &Pair<Rule>, message: impl Into<String>) -> Self {
+        Self::new(pair, ParsingErrorKind::InvalidValue(message.into()))
+    }
+}
+
+/// The specific kind of parsing error that occurred.
+#[derive(Debug, Error)]
+pub enum ParsingErrorKind {
+    #[error("Unexpected rule in {context}: expected one of {expected:?}, found {found:?}")]
+    UnexpectedRule {
+        expected: Vec<Rule>,
+        found: Rule,
+        context: &'static str,
+    },
+
+    #[error("Missing required element: {0}")]
+    MissingRequired(String),
+
+    #[error("Invalid value: {0}")]
+    InvalidValue(String),
+
+    #[error("Extra element found: {0}")]
+    ExtraElement(String),
+
+    #[error(transparent)]
+    Other(#[from] anyhow::Error),
+}
+
+/// Trait for converting errors into ParsingError with context.
+#[allow(dead_code)]
+pub trait IntoParsingError {
+    fn into_parsing_error(self, pair: &Pair<Rule>) -> ParsingError;
+}
+
+impl<E> IntoParsingError for E
+where
+    E: Into<anyhow::Error>,
+{
+    fn into_parsing_error(self, pair: &Pair<Rule>) -> ParsingError {
+        ParsingError::new(pair, ParsingErrorKind::Other(self.into()))
+    }
+}
+
+/// Trait for converting Result types into ParsingResult with context.
+#[allow(dead_code)]
+pub trait IntoParsingResult<T> {
+    fn into_parsing_result(self, pair: &Pair<Rule>) -> ParsingResult<T>;
+}
+
+impl<T, E> IntoParsingResult<T> for Result<T, E>
+where
+    E: Into<anyhow::Error>,
+{
+    fn into_parsing_result(self, pair: &Pair<Rule>) -> ParsingResult<T> {
+        self.map_err(|e| e.into_parsing_error(pair))
+    }
+}
+
+/// Wraps a parsing operation, converting any error into a ParsingError with context.
+///
+/// This is the preferred way to call nested parsing functions that return `anyhow::Result`
+/// or any other error type, as it captures the rule context for better error messages.
 #[inline(always)]
-pub fn wrap_parsing_result<T>(
+pub fn wrap_parsing_result<T, E>(
     rule_pair: Pair<Rule>,
-    ops_fn: impl FnOnce(Pair<Rule>) -> anyhow::Result<T>,
-) -> ParsingResult<T> {
+    ops_fn: impl FnOnce(Pair<Rule>) -> Result<T, E>,
+) -> ParsingResult<T>
+where
+    E: Into<anyhow::Error>,
+{
+    let span = rule_pair.as_span();
     let rule = rule_pair.as_rule();
     let code = rule_pair.as_str().to_string();
-    ops_fn(rule_pair).into_parsing_result(rule, code)
+    ops_fn(rule_pair).map_err(|e| ParsingError {
+        rule,
+        span: (span.start(), span.end()),
+        code,
+        kind: ParsingErrorKind::Other(e.into()),
+    })
+}
+
+/// Helper function to create an unexpected rule error and return it as a Result.
+///
+/// Use this to replace `unreachable!()` calls in match arms.
+#[inline]
+pub fn unexpected_rule<T>(
+    pair: &Pair<Rule>,
+    expected: &[Rule],
+    context: &'static str,
+) -> ParsingResult<T> {
+    Err(ParsingError::unexpected_rule(pair, expected, context))
+}
+
+/// Helper function to create an unexpected rule error from just the found rule.
+///
+/// Use this when you don't have the pair available but know the rule.
+#[inline]
+#[allow(dead_code)]
+pub fn unexpected_rule_simple<T>(
+    found: Rule,
+    expected: &[Rule],
+    context: &'static str,
+    code: &str,
+) -> ParsingResult<T> {
+    Err(ParsingError {
+        rule: found,
+        span: (0, code.len()),
+        code: code.to_string(),
+        kind: ParsingErrorKind::UnexpectedRule {
+            expected: expected.to_vec(),
+            found,
+            context,
+        },
+    })
 }

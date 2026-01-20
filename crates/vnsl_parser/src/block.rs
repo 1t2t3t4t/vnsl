@@ -1,5 +1,5 @@
 use crate::{
-    error::{wrap_parsing_result, ParsingResult},
+    error::{unexpected_rule, wrap_parsing_result, ParsingResult},
     statement, Rule,
 };
 use pest::iterators::Pair;
@@ -14,7 +14,9 @@ pub fn parse_block(rule: Pair<Rule>) -> ParsingResult<VnslBlock> {
                 let statement = wrap_parsing_result(rule, statement::parse_statement)?;
                 block.statements.push(statement);
             }
-            _ => unreachable!(),
+            _ => {
+                return unexpected_rule(&rule, &[Rule::stmt], "block");
+            }
         }
     }
     Ok(block)
