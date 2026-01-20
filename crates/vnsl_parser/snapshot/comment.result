@@ -1,0 +1,55 @@
+VnslScene {
+    name: "CommentTest",
+    main_block: VnslBlock {
+        statements: [
+            Command(
+                Dialogue(
+                    VnslDialogue {
+                        text: "MAIN",
+                        set_char: None,
+                    },
+                ),
+            ),
+        ],
+    },
+    labels: {
+        "myLabel": VnslLabel {
+            name: "myLabel",
+            block: VnslBlock {
+                statements: [
+                    Command(
+                        Dialogue(
+                            VnslDialogue {
+                                text: "LABEL",
+                                set_char: None,
+                            },
+                        ),
+                    ),
+                    Choices(
+                        VnslChoices {
+                            choices: [
+                                VnslChoice {
+                                    id: "TestUuid",
+                                    text: "A",
+                                    block: VnslBlock {
+                                        statements: [
+                                            Command(
+                                                Dialogue(
+                                                    VnslDialogue {
+                                                        text: "CHOICE",
+                                                        set_char: None,
+                                                    },
+                                                ),
+                                            ),
+                                        ],
+                                    },
+                                    condition: None,
+                                },
+                            ],
+                        },
+                    ),
+                ],
+            },
+        },
+    },
+}

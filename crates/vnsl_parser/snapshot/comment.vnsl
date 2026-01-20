@@ -1,0 +1,13 @@
+scene CommentTest
+
+# Comment A
+# Another Comment
+"MAIN"
+
+label myLabel:
+    # Comment B
+    "LABEL"
+    choice:
+        "A":
+            # Comment C
+            "CHOICE"

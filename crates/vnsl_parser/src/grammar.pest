@@ -1,7 +1,7 @@
 script = { SOI ~ scene ~ (stmt | label_scope)* ~ EOI }
 
 WHITESPACE  = _{ NEWLINE }
-COMMENT     = _{ "#" ~ (!"\n" ~ ANY)* }
+COMMENT     = _{ (" " | "\t")* ~ "#" ~ (!"\n" ~ ANY)* }
 spacer      = _{ " "* }
 indentation = _{ "\t" | " "{4} }
 
