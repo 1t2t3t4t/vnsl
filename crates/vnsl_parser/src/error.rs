@@ -3,9 +3,6 @@ use thiserror::Error;
 
 use crate::Rule;
 
-// Re-export for convenience - these traits may be used by consumers of the crate
-#[allow(dead_code)]
-
 /// The unified result type for all parsing operations.
 pub type ParsingResult<T> = Result<T, ParsingError>;
 
@@ -70,36 +67,6 @@ pub enum ParsingErrorKind {
     Other(#[from] anyhow::Error),
 }
 
-/// Trait for converting errors into ParsingError with context.
-#[allow(dead_code)]
-pub trait IntoParsingError {
-    fn into_parsing_error(self, pair: &Pair<Rule>) -> ParsingError;
-}
-
-impl<E> IntoParsingError for E
-where
-    E: Into<anyhow::Error>,
-{
-    fn into_parsing_error(self, pair: &Pair<Rule>) -> ParsingError {
-        ParsingError::new(pair, ParsingErrorKind::Other(self.into()))
-    }
-}
-
-/// Trait for converting Result types into ParsingResult with context.
-#[allow(dead_code)]
-pub trait IntoParsingResult<T> {
-    fn into_parsing_result(self, pair: &Pair<Rule>) -> ParsingResult<T>;
-}
-
-impl<T, E> IntoParsingResult<T> for Result<T, E>
-where
-    E: Into<anyhow::Error>,
-{
-    fn into_parsing_result(self, pair: &Pair<Rule>) -> ParsingResult<T> {
-        self.map_err(|e| e.into_parsing_error(pair))
-    }
-}
-
 /// Wraps a parsing operation, converting any error into a ParsingError with context.
 ///
 /// This is the preferred way to call nested parsing functions that return `anyhow::Result`
@@ -127,23 +94,4 @@ pub fn unexpected_rule<T>(
     context: &'static str,
 ) -> ParsingResult<T> {
     Err(ParsingError::unexpected_rule(pair, expected, context))
-}
-
-/// Helper function to create an unexpected rule error from just the found rule.
-///
-/// Use this when you don't have the pair available but know the rule.
-#[inline]
-#[allow(dead_code)]
-pub fn unexpected_rule_simple<T>(
-    found: Rule,
-    expected: &[Rule],
-    context: &'static str,
-) -> ParsingResult<T> {
-    Err(ParsingError {
-        kind: ParsingErrorKind::UnexpectedRule {
-            expected: expected.to_vec(),
-            found,
-            context,
-        },
-    })
 }
