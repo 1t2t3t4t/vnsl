@@ -27,15 +27,9 @@ pub enum ParseError {
 
 pub fn parse_scene_name(script: &str) -> ParsingResult<String> {
     let mut scene = VnslParser::parse(Rule::scene, script).map_err(|e| ParsingError {
-        rule: Rule::scene,
-        span: (0, script.len()),
-        code: script.to_string(),
         kind: ParsingErrorKind::Other(e.into()),
     })?;
     let pair = scene.next().ok_or_else(|| ParsingError {
-        rule: Rule::scene,
-        span: (0, script.len()),
-        code: script.to_string(),
         kind: ParsingErrorKind::MissingRequired("scene name".to_string()),
     })?;
     Ok(pair.into_inner().as_str().to_string())
@@ -44,16 +38,10 @@ pub fn parse_scene_name(script: &str) -> ParsingResult<String> {
 pub fn parse_scene(script: &str) -> ParsingResult<VnslScene> {
     let scene = VnslParser::parse(Rule::script, script)
         .map_err(|e| ParsingError {
-            rule: Rule::script,
-            span: (0, script.len()),
-            code: script.to_string(),
             kind: ParsingErrorKind::Other(e.into()),
         })?
         .next()
         .ok_or_else(|| ParsingError {
-            rule: Rule::script,
-            span: (0, script.len()),
-            code: script.to_string(),
             kind: ParsingErrorKind::MissingRequired("script content".to_string()),
         })?;
     let rules = scene.into_inner();

@@ -13,12 +13,6 @@ pub type ParsingResult<T> = Result<T, ParsingError>;
 #[derive(Debug, Error)]
 #[error("{kind}")]
 pub struct ParsingError {
-    /// The rule being parsed when the error occurred.
-    pub rule: Rule,
-    /// The span (start, end) byte positions in the source.
-    pub span: (usize, usize),
-    /// The raw source code that caused the error.
-    pub code: String,
     /// The specific kind of parsing error.
     #[source]
     pub kind: ParsingErrorKind,
@@ -26,14 +20,8 @@ pub struct ParsingError {
 
 impl ParsingError {
     /// Create a new parsing error from a rule pair and error kind.
-    pub fn new(pair: &Pair<Rule>, kind: ParsingErrorKind) -> Self {
-        let span = pair.as_span();
-        Self {
-            rule: pair.as_rule(),
-            span: (span.start(), span.end()),
-            code: pair.as_str().to_string(),
-            kind,
-        }
+    pub fn new(_pair: &Pair<Rule>, kind: ParsingErrorKind) -> Self {
+        Self { kind }
     }
 
     /// Create an unexpected rule error.
@@ -124,13 +112,7 @@ pub fn wrap_parsing_result<T, E>(
 where
     E: Into<anyhow::Error>,
 {
-    let span = rule_pair.as_span();
-    let rule = rule_pair.as_rule();
-    let code = rule_pair.as_str().to_string();
     ops_fn(rule_pair).map_err(|e| ParsingError {
-        rule,
-        span: (span.start(), span.end()),
-        code,
         kind: ParsingErrorKind::Other(e.into()),
     })
 }
@@ -156,12 +138,8 @@ pub fn unexpected_rule_simple<T>(
     found: Rule,
     expected: &[Rule],
     context: &'static str,
-    code: &str,
 ) -> ParsingResult<T> {
     Err(ParsingError {
-        rule: found,
-        span: (0, code.len()),
-        code: code.to_string(),
         kind: ParsingErrorKind::UnexpectedRule {
             expected: expected.to_vec(),
             found,
